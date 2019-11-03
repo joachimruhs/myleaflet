@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-11-16T16:57:13Z" product-name="myleaflet">
+		<header/>
+		<body>
+
+<!-- messages -->
+
+			<trans-unit id="noLocationsFound">
+				<target>Es wurden keine Lokationen gefunden!</target>
+			</trans-unit>
+			<trans-unit id="errorInCategories">
+				<target>Kategorieeingabefehler!</target>
+			</trans-unit>
+			
+			<trans-unit id="address">
+				<target>Adresse</target>
+			</trans-unit>
+			<trans-unit id="zip">
+				<target>PLZ</target>
+			</trans-unit>
+			<trans-unit id="city">
+				<target>Stadt</target>
+			</trans-unit>
+			<trans-unit id="country">
+				<target>Land</target>
+			</trans-unit>
+			<trans-unit id="search">
+				<target>Suchen</target>
+			</trans-unit>
+			<trans-unit id="distance">
+				<target>Entfernung</target>
+			</trans-unit>
+			<trans-unit id="youAreHere">
+				<target>Sie befinden sich hier</target>
+			</trans-unit>
+			<trans-unit id="showMore">
+				<target>Mehr anzeigen...</target>
+			</trans-unit>
+
+			<trans-unit id="noStartingPointCoordinatesFound">
+				<target>Keine Ausgangspunktkoordinaten gefunden!</target>
+			</trans-unit>
+			<trans-unit id="distance">
+				<target>Entfernung</target>
+			</trans-unit>
+			<trans-unit id="youAreHere">
+				<target>Sie befinden sich hier</target>
+			</trans-unit>
+
+
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,48 @@
+
+
+<h1>Location List</h1>
+
+<script type="text/javascript">
+	maxPage = Math.ceil({locationsCount}/{settings.resultLimit});
+</script>
+
+<div class="searchResultContainer">
+	<f:for each="{locations}" as="location" iteration="iter">
+		<div class="searchResultTile">
+		
+			<f:for each="{location.images}" as="image">
+				<div><f:image src="fileadmin/{image.originalResource.originalFile.identifier}"  width="50" alt=""/></div>			
+			</f:for>
+
+			<div>
+				<f:link.action action="show" extensionName="myleaflet" pluginName="SingleView" controller="Address" pageUid="{settings.detailsPageId}" arguments="{locationUid : location.uid}"><strong>{location.name}</strong>
+				</f:link.action>
+			</div>
+	
+			<div class="categories">{location.categories}</div>
+
+		
+			<div><f:format.raw>{location.address}</f:format.raw></div>
+			<div>{location.zip}</div>
+			<div>{location.city}</div>
+			<div>{location.phone}</div>
+
+			<div>{location.email}</div>
+			<div>{location.fax}</div>
+			
+			<div><f:format.raw>{location.description}</f:format.raw></div>
+			
+			<div>{labels.distance}: <f:format.number decimals="2">{location.distance}</f:format.number> km</div>
+
+		</div>
+	</f:for>
+</div>
+<div class="clearer"></div>
+
+
+
+
+
+
+
+

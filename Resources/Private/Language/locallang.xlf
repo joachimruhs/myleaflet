@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet">
+		<header/>
+		<body>
+			<trans-unit id="tx_myleaflet_domain_model_ajaxmap">
+				<source>MyLeaflet (AjaxMap)</source>
+			</trans-unit>
+			<trans-unit id="tx_myleaflet_domain_model_ajaxmap.description">
+				<source>Leaflet maps for tt_address data</source>
+			</trans-unit>
+
+<!-- messages -->
+			<trans-unit id="noLocationsFound">
+				<source>No locations found!</source>
+			</trans-unit>
+			<trans-unit id="errorInCategories">
+				<source>Error in categories!</source>
+			</trans-unit>
+
+
+			<trans-unit id="address">
+				<source>Address</source>
+			</trans-unit>
+			<trans-unit id="zip">
+				<source>Zip</source>
+			</trans-unit>
+			<trans-unit id="city">
+				<source>City</source>
+			</trans-unit>
+			<trans-unit id="country">
+				<source>Country</source>
+			</trans-unit>
+
+			<trans-unit id="search">
+				<source>Search</source>
+			</trans-unit>
+
+			<trans-unit id="noStartingPointCoordinatesFound">
+				<source>No starting point coordinates found!</source>
+			</trans-unit>
+
+			<trans-unit id="distance">
+				<source>Distance</source>
+			</trans-unit>
+			<trans-unit id="youAreHere">
+				<source>You are here</source>
+			</trans-unit>
+
+
+			<trans-unit id="tx_myleaflet_domain_model_address.name">
+				<source>Name</source>
+			</trans-unit>
+
+			<trans-unit id="showMore">
+				<source>Show more</source>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

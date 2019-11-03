@@ -1,0 +1,95 @@
+{
+    "modules": [
+        {
+            "config": {
+                "position": [
+                    23,
+                    45
+                ]
+            },
+            "name": "New Model Object",
+            "value": {
+                "actionGroup": {
+                    "_default0_list": true,
+                    "_default1_show": true,
+                    "_default2_new_create": false,
+                    "_default3_edit_update": false,
+                    "_default4_delete": false,
+                    "customActions": [
+                        "ajaxSearch"
+                    ]
+                },
+                "name": "Address",
+                "objectsettings": {
+                    "addDeletedField": true,
+                    "addHiddenField": true,
+                    "addStarttimeEndtimeFields": true,
+                    "aggregateRoot": true,
+                    "categorizable": false,
+                    "description": "",
+                    "mapToTable": "",
+                    "parentClass": "",
+                    "sorting": false,
+                    "type": "Entity",
+                    "uid": "1524486753007"
+                },
+                "propertyGroup": {
+                    "properties": [
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "name",
+                            "propertyType": "String",
+                            "uid": "1296865360186"
+                        }
+                    ]
+                },
+                "relationGroup": {
+                    "relations": []
+                }
+            }
+        }
+    ],
+    "properties": {
+        "backendModules": [],
+        "description": "Leaflet maps for tt_address data",
+        "emConf": {
+            "category": "plugin",
+            "custom_category": "",
+            "dependsOn": "typo3 => 7.6.0-8.7.99\n",
+            "disableLocalization": true,
+            "disableVersioning": true,
+            "skipGenerateDocumentationTemplate": true,
+            "sourceLanguage": "en",
+            "state": "beta",
+            "targetVersion": "7.6.0-7.6.99",
+            "version": "0.1.0"
+        },
+        "extensionKey": "myleaflet",
+        "name": "MyLeaflet",
+        "originalExtensionKey": "myleaflet",
+        "originalVendorName": "WSR",
+        "persons": [],
+        "plugins": [
+            {
+                "actions": {
+                    "controllerActionCombinations": "Address =>ajaxSearch",
+                    "noncacheableActions": "address =>ajaxSearch",
+                    "switchableActions": ""
+                },
+                "key": "ajaxmap",
+                "name": "MyLeaflet (AjaxMap)"
+            }
+        ],
+        "vendorName": "WSR"
+    },
+    "wires": [],
+    "log": {
+        "last_modified": "2018-05-04 05:02",
+        "extension_builder_version": "7.6.17",
+        "be_user": " (1)"
+    }
+}

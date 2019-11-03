@@ -1,0 +1,16 @@
+/*
+ *
+ * css for myleaflet extension
+ *
+ */
+
+
+.tx-myleaflet .ajaxMessage {
+	background-color: #0000f0;
+	color: white;
+	padding: 10px;
+}
+
+.tx-myleaflet .hidden {
+	display: none;
+}

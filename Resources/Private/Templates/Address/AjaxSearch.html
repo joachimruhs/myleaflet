@@ -1,0 +1,287 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	  xmlns:map="http://typo3.org/ns/WSR/Myleaflet/ViewHelpers"
+	  data-namespace-typo3-fluid="true">
+
+
+
+<f:layout name="Default" />
+
+This template displays a EDIT form for the current domain object.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        Edit.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="main">
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+   crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+   integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+   crossorigin="">
+</script>
+ 
+<script src="typo3conf/ext/myleaflet/Resources/Public/JavaScript/leaflet-providers.js"></script>
+
+
+	<div class="ajaxSearch">
+	
+	<f:comment>
+	<f:debug>{_all}</f:debug>
+	</f:comment>
+	
+	<div id="Lvar" class="hidden">{Lvar}</div>
+	
+
+	<h1>Leaflet Ajax Search MyLeaflet</h1>
+	
+	<div id="flashMessages">
+		<f:flashMessages />
+	</div>
+	
+
+	<div id="mapContainer" style="width: 100%;">
+		<div id="map">MAP</div>
+	</div>	
+
+
+	<input id="tx_myleaflet_city" type="text" value="" size="30" onchange="$('#tx_myleaflet_lat').val('');$('#tx_myleaflet_lon').val('');$('#tx_myleaflet_page').val('0');"/>
+	<select id="tx_myleaflet_country" onchange="$('#tx_myleaflet_page').val('0');geocodeByClient();">
+		<option value="DE" selected="selected">Land</option>
+		<option value="DE">DE</option>
+		<option value="AT">AT</option>
+		<option value="US">US</option>	
+		<option value="CH">CH</option>
+		<option value="FR">FR</option>
+		<option value="NL">NL</option>
+		<option value="GB">UK</option>
+		<option value="AU">AU</option>
+		<option value="CA">CA</option>
+		<option value="IT">IT</option>
+	</select>
+
+	<input id="tx_myleaflet_radius" type="text" value="50" class="hidden"/>
+	<input id="tx_myleaflet_message" type="text" value="DE" class="hidden"/>
+	
+	<input id="tx_myleaflet_page" type="text" value="0" class="hidden"/>
+	<input id="tx_myleaflet_language" type="text" value="{L}" class="hidden"/>
+
+	<f:render section="categoryList" arguments="{categories: categories}" />
+	<f:section name="categoryList">
+		<ul>
+			<f:for each="{categories}" as="category">
+				<li>
+					<input type="checkbox" id="{category.title}" name="tx_myleaflet_categories"  value="{category.uid}" onclick="$('#tx_myleaflet_page').val(0); geocodeByClient();"/>
+					<label for="{category.title}">{category.title}</label>
+					<f:if condition="{category.children}">
+						<f:render section="categoryList" arguments="{categories: category.children}" />
+					</f:if>
+				</li>
+			</f:for>
+		</ul>
+	</f:section>
+
+
+
+	<button id="ajaxSearchButton"><f:translate key="search" /></button>
+	<button id="tx_myleaflet_more" onclick="geocodeByClient(); scrollto('#map');"><f:translate key="showMore" /></button>
+
+	<div id="ajaxResult"></div>
+
+	<div class="clearer"></div>
+
+
+
+
+<script>
+	var maxPage = Math.ceil({locationsCount}/{settings.resultLimit});
+
+	function scrollto(element){
+		 $('html, body').animate({ scrollTop: ($(element).offset().top)}, 'slow');
+	};
+
+
+	
+
+	function geocodeByClient() {
+		var id = <f:format.raw>{id}</f:format.raw>;
+	
+		var country = $('#tx_myleaflet_country').val();
+		var address = $('#tx_myleaflet_city').val();
+
+		var categories  = new Array();
+
+		$("input[name='tx_myleaflet_categories']:checked").each(function() {
+			categories.push($(this).val());
+		});		
+ 		
+		var ajaxRequestUrl = "index.php?eID=myleaflet&id=" + id,
+			requestParameter = {
+				tx_myleaflet_ajax : {
+					controller : 'Ajax',
+					action : 'ajaxEid',
+					address: address,
+					country: country,
+					
+					radius: $('#tx_myleaflet_radius').val(),
+					page: $('#tx_myleaflet_page').val(),
+					language: $('#tx_myleaflet_language').val(),
+					categories: categories,				
+					
+					b : location.href
+				}
+			};
+
+
+		$.post(ajaxRequestUrl, requestParameter, function (data) {
+			$('#ajaxResult').html(data);
+			
+			$('#tx_myleaflet_more').css('display', 'none');
+			var page = parseInt($('#tx_myleaflet_page').val());
+			if(page != -1)	{		
+						if (page + 1 < maxPage) {
+							var n = page + 1;
+							$('#tx_myleaflet_page').val(n);
+							$('#tx_myleaflet_more').css('display', 'block');
+						} else {
+							$('#tx_myleaflet_more').css('display', 'none');
+						}
+			}
+
+			
+//			if (marker.length <= 1)
+//				map.setZoom(16);
+
+		});
+
+		return false;
+	}
+
+	
+	
+
+	
+	var map = '';
+	var marker = [];
+	var group = '';
+	var markerArray = [];
+
+	$(document).ready(function () {
+
+
+
+// openstreetmap providers
+// http://leaflet-extras.github.io/leaflet-providers/preview/
+
+		var osmMap = L.tileLayer.provider('OpenStreetMap.DE');
+		var mapnik = L.tileLayer.provider('OpenStreetMap.Mapnik');
+//		var esri = L.tileLayer.provider('Esri.WorldImagery');
+		var mtbMap = L.tileLayer.provider('MtbMap');
+		var osmHot = L.tileLayer.provider('OpenStreetMap.HOT');
+		var osmFrance = L.tileLayer.provider('OpenStreetMap.France');
+		
+		
+		map = L.map('map', {
+			center: [<f:format.raw>{settings.initialMapCoordinates}</f:format.raw>],
+			zoom: 14,
+			layers: [osmMap] // only 1 layer here
+		});
+		
+		var baseMaps = {
+//			"OSM Hot": osmHot,
+			"OSM DE": osmMap,
+			"OSM FR": osmFrance,
+			"OSM Mapnik": mapnik,
+//			"Imagery": esri,
+			"MTB": mtbMap,
+		};
+		
+		L.control.layers(baseMaps).addTo(map);
+
+		L.control.scale({
+			'imperial': false
+		}).addTo(map);
+
+		
+		// show all locations when page is loaded
+		// if this is activated then a radial search is done
+		// otherwise the locations of the country are shown
+		$('#tx_myleaflet_city').val('Köln');
+
+		$('#tx_myleaflet_country').val('DE');
+		// if you want manually set the search radius comment the following line and
+		// set the text field tx_myleaflet_radius to another class, not hidden!
+		$('#tx_myleaflet_radius').val('10000');
+	
+		$('#tx_myleaflet_page').val('-1'); //  shows all locations in the map without result list
+//		$('#tx_myleaflet_page').val('0'); //  shows all locations in the map with result list
+
+
+		// if you don't want to show POI's at page onload, comment the following line
+		geocodeByClient();
+
+//		$('#tx_myleaflet_city').val('');
+	
+		// do the ajax-call on click
+		$("#ajaxSearchButton").click(function (evt) {
+			$('#tx_myleaflet_page').val(0);
+			geocodeByClient();
+			evt.preventDefault();
+		});
+
+	});
+
+</script>
+
+
+
+
+
+<script>
+	$(document).ready(function(){
+		$('#flashMessages').fadeIn(2000);
+
+	});
+
+<!-- responsive map -->
+
+	function resizeMap() {
+	    var mapContainerWidth = $('#mapContainer').width();
+	    var mapContainerHeight = $('#mapContainer').height();
+	    $('#map').width(mapContainerWidth - 10);
+	    $('#map').height(mapContainerWidth/4*3);
+
+		if (group.getBounds) {
+			map.fitBounds(group.getBounds());
+		}
+
+	}
+
+
+//	geocodeByClient();
+	
+	$(window).resize(resizeMap);
+	resizeMap();
+
+
+
+</script>
+
+
+
+</div>
+
+<f:comment><div class="ajaxSearch"></f:comment>
+
+
+
+</f:section>
+</html>
