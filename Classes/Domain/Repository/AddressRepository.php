@@ -25,6 +25,12 @@ namespace WSR\Myleaflet\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+ 
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+ 
+ 
 /**
  * The repository for Addresses
  */
@@ -117,8 +123,100 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 		
 	}		
 
+/* testing */
+/*
+	for ($i = 0; $i < count($result) ; $i++) {
+	}
+
+	$fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
+	$fileObjects = $fileRepository->findByRelation('sys_category', 'images', 4);	
+
+	for ($i = 0; $i < count($fileObjects) ; $i++) {
+		print_r($fileObjects[$i]->getOriginalFile()->getPublicUrl());
+	}
+*/
+	
+	
 		return $result;
 	}
+
+
+
+	/**
+	 * Get the first categoryImage of a location
+	 *
+	 * @param int  $locationUid
+	 * @param int $storagePid
+	 * 
+	 * @return mixed $image
+	 */
+	public function getFirstCategoryImage($locationUid, $storagePid) {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('sys_category');
+        $query = $queryBuilder
+            ->select('uid')
+            ->from('sys_category', 'c');
+
+//		$arrayOfUids = \TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(',', $locationUid, TRUE);
+
+        if (is_int($locationUid)) {
+			$expression = $queryBuilder->expr();
+			$queryBuilder->innerJoin(
+				'c',
+				'sys_category_record_mm',
+				'm',
+                $expression->andX(
+                    $expression->eq('c.uid', 'm.uid_local'),
+  
+                    $expression->eq(
+						'm.tablenames',
+						$queryBuilder->createNamedParameter('tt_address')
+                    ),
+					$expression->eq(
+						'm.fieldname',
+						$queryBuilder->createNamedParameter('categories')
+					)
+/*
+					$expression->eq(
+						'm.uid_foreign',
+						$queryBuilder->createNamedParameter($locationUid, \PDO::PARAM_INT)
+					)
+*/					
+                )
+            );
+
+			$queryBuilder->andWhere(
+				$expression->eq(
+					'm.uid_foreign',
+					$queryBuilder->createNamedParameter($locationUid, \PDO::PARAM_INT)
+				)
+			);
+
+/*
+			$queryBuilder->andWhere(
+				$expression->in(
+					'm.uid_foreign',
+					$queryBuilder->createNamedParameter($arrayOfUids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+				)
+			);
+*/			
+			
+		}
+		
+		$result =  $queryBuilder->execute()->fetchAll();
+
+		$fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
+		for ($i = 0; $i < count($result); $i++) {
+			$categoryUid = $result[$i]['uid'];
+			if (is_array($fileObjects))
+				$fileObjects = array_merge($fileObjects, $fileRepository->findByRelation('sys_category', 'images', intval($categoryUid)));
+			else $fileObjects = $fileRepository->findByRelation('sys_category', 'images', intval($categoryUid));
+		}
+
+		if ($fileObjects[0])
+			return $fileObjects[0]->getOriginalFile()->getPublicUrl();
+		
+		
+	}		
 
 
 

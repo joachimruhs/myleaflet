@@ -26,8 +26,10 @@ in the constants of myleaflet with the constant editor of TYPO3.
 
 What's new?
 ^^^^^^^^^^^
-
-First public version.
+New configuration option "categorySelectMode" implemented -> see administratormanual. 
+Mapicon handling changed. You have to create the directories fileadmin/ext/myleaflet/Resources/Public/Icons.
+Insert here your mapIcons. These icons can then be selected in the tt_address record (leafletmapicon).
+The templates AjaxSearch.html and Show.html changed.
 
 
 Screenshots

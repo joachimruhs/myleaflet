@@ -1,6 +1,10 @@
 <?php
 namespace WSR\Myleaflet\ViewHelpers;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+
+
 /***************************************************************
  *  Copyright notice
  *
@@ -34,44 +38,28 @@ namespace WSR\Myleaflet\ViewHelpers;
  */
 
 
-class GetCategoriesViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class GetCategoryImageViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 	protected $categoryRepository;
 	
 	public function initializeArguments() {
-		$this->registerArgument('parentCategory', 'integer', 'The parent category', true, 0);
-		$this->registerArgument('excludeCategories', 'string', 'Exclude categories', false);
-		$this->registerArgument('as', 'string', 'Name of the template variable that will contain the categories', true);
+		$this->registerArgument('categoryUid', 'integer', 'The category', true, 0);
+		$this->registerArgument('settings', 'array', 'The settings', true, null);
 	}
 
 	/**
-	 * Return child categories
+	 * Return category images
 	 *
 	 * @return mixed 
 	 * @api
 	 */
 	public function render() {
-		$parent = $this->categoryRepository->findByUid($this->arguments['parentCategory']);
-		$excludeCategories = ($this->arguments['excludeCategories'] ? explode(',', $this->arguments['excludeCategories']) : array());
-		$children = $this->categoryRepository->findChildrenByParent($this->arguments['parentCategory'], $excludeCategories);
-		$as = (string)$this->arguments['as'];
-		$options = array(); // for dropdown select
+		$categoryUid = $this->arguments['categoryUid'];
 		
-		$options[0] = $parent->getTitle();
+		$fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
+		$fileObjects = $fileRepository->findByRelation('sys_category', 'images', intval($categoryUid));		
 		
-		foreach ($children as $child) {
-			$options[$child->getUid()] = $child->getTitle();
-		}
-			
-		$this->templateVariableContainer->add($as, array(
-			'parent' => $parent,
-			'children' => $children,
-			'options' => $options
-		));
-		
-		$output = $this->renderChildren();
-		$this->templateVariableContainer->remove($as);
-		
-		return $output;
+		return $fileObjects;
+ 		
 	}	 
 
 

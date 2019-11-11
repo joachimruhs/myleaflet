@@ -25,8 +25,7 @@ Create some pages as shown below.
 	:width: 200px
 	:alt: Pages for myleaflet
 
-On the page 'Ajax Map' install plugin MyLeaflet (Map), 
-
+On the page 'Ajax Map' install plugin MyLeaflet (Map). Make sure you have installed jQuery.
 
 On page 'myleaflet' or on your root page insert 'Typoscript Include static' (from extension) MyLeaflet (myleaflet).
 With the constant editor insert the desired settings of the extension like storage Pid, your page ID's, 
@@ -38,6 +37,9 @@ the correct "Default storage PID" of the tt_address records.
 
 Then insert at least one sys_category in the page Data. Now insert some tt_address data records with latitude and longitude values and
 assign them to sys_categories. The extension did not fetch the coordinates by itself like the mymap extension.
+
+To use your own mapIcons create the directories fileadmin/ext/myleaflet/Resources/Public/Icons.
+Insert in this directory your icons which then can be selected in your tt_address data records.
 
 
 When everything is ok - test it...

@@ -6,6 +6,7 @@ $tmp_myleaflet_columns = array(
 	'leafletmapicon' => array(
 		'exclude' => 1,
 		'label' => 'LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_address.leafletmapicon',
+/*
 		'config' => array(
 			"type" => "group",
 			"internal_type" => "file",
@@ -19,6 +20,22 @@ $tmp_myleaflet_columns = array(
 			"default" => '',
 
 		),
+*/
+		'config' => [
+		    'type' => 'select',
+		    'items' => [
+		        [ '', 0 ],
+			],
+//			'fileFolder' => 'EXT:myleaflet/Resources/Public/Icons/',
+			'fileFolder' => 'fileadmin/ext/myleaflet/Resources/Public/Icons/',
+			'fileFolder_extList' => 'png,jpg,jpeg,gif',
+			'fileFolder_recursions' => 0,
+			'showIconTable' => 1,
+		    'size' => 1,
+		    'minitems' => 0,
+		    'maxitems' => 1,
+		],
+
 	),
 	'mapgeocode' => array(
 		'exclude' => 1,

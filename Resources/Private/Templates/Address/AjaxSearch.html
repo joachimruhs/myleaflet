@@ -1,5 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
 	  xmlns:map="http://typo3.org/ns/WSR/Myleaflet/ViewHelpers"
+      xmlns:myutils="http://typo3.org/ns/WSR/Myleaflet/ViewHelpers"
 	  data-namespace-typo3-fluid="true">
 
 
@@ -80,6 +81,9 @@ Otherwise your changes will be overwritten the next time you save the extension 
 			<f:for each="{categories}" as="category">
 				<li>
 					<input type="checkbox" id="{category.title}" name="tx_myleaflet_categories"  value="{category.uid}" onclick="$('#tx_myleaflet_page').val(0); geocodeByClient();"/>
+	    <f:for each='<myutils:getCategoryImage categoryUid="{category.uid}" settings="{settings}"/>' as="image" > 	
+	    <f:image src="{image.uid}" alt="{image.title}" width='20' treatIdAsReference="1"/> 	
+	    </f:for >                  
 					<label for="{category.title}">{category.title}</label>
 					<f:if condition="{category.children}">
 						<f:render section="categoryList" arguments="{categories: category.children}" />

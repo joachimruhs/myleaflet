@@ -233,6 +233,10 @@ max 1 call/sec
 				$images = $this->addressRepository->findByUid($locations[$i]['uid'])->getImage();
 				$locations[$i]['images'] =	$images;				
 			}
+
+/* test of mapIcon derived from category image */
+//			$locations[$i]['leafletmapicon'] = $this->addressRepository->getFirstCategoryImage($locations[$i]['uid'], $this->conf['storagePid']);
+
 		}
 
 
@@ -247,7 +251,7 @@ max 1 call/sec
 			</script>';
 			return $out;
 		}
-			
+
 		$out .= $this->getMarkerJS($locations, $categories, $latLon, $this->_GP['radius']);
 		
 		// get  the loctions list
@@ -312,7 +316,10 @@ max 1 call/sec
 			$out .= '
 		
 				var mapIcon' . $i . ' = L.icon({
-					iconUrl: "/uploads/tx_myleaflet/icons/' . $locations[$i]['leafletmapicon'] .'",
+//					iconUrl: "/uploads/tx_myleaflet/icons/' . $locations[$i]['leafletmapicon'] .'",
+//					iconUrl: "/typo3conf/ext/myleaflet/Resources/Public/Icons/' . $locations[$i]['leafletmapicon'] .'",
+					iconUrl: "fileadmin/ext/myleaflet/Resources/Public/Icons/' . $locations[$i]['leafletmapicon'] .'",
+//					iconUrl: "' . $locations[$i]['leafletmapicon'] .'",
 					iconSize:     [25, 41], // size of the icon
 					iconAnchor:   [12, 41]
 				

@@ -183,6 +183,12 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
 		$categories = $this->categoryRepository->findAll();
 */
+		$iconPath = 'fileadmin/ext/myleaflet/Resources/Public/Icons/';
+		if (!is_dir(PATH_site . $iconPath)) {
+			$this->addFlashMessage('Please create directories "fileadmin/ext/myleaflet/Resources/Public/Icons/" for your mapIcons!', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+//			GeneralUtility::mkdir_deep(PATH_site . $iconPath);
+		}
+
 
 		// Get the default Settings
 		$customStoragePid = $this->conf['storagePid'];

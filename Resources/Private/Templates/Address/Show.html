@@ -20,6 +20,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <f:section name="main">
 
 
+<f:debug>{_all}</f:debug>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
@@ -49,12 +50,10 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <script>
 
 	var map = '';
-	var marker = [];
 	var group = '';
 	
 	$(document).ready(function () {
 //		map = L.map('map').setView([48.2, 7.7], 13);	
-		//var marker = [];
 		var markerArray = [];
 		
 		// openstreetmap providers
@@ -95,9 +94,9 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		}).addTo(map);
 		
 
-		if ("{address.leafletmapicon}") {
+		if ("{address.leafletmapicon}" > '0') {
 			var mapIcon = L.icon({
-				iconUrl: "/uploads/tx_myleaflet/icons/{address.leafletmapicon}",
+				iconUrl: "fileadmin/ext/myleaflet/Resources/Public/Icons/{address.leafletmapicon}",
 				iconSize:     [25, 41], // size of the icon
 				iconAnchor:   [12, 41]
 			});
@@ -106,7 +105,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
 			markerArray.push(L.marker([{address.latitude}, {address.longitude}]));
 		}
 
-		marker[0] = L.marker([{address.latitude}, {address.longitude}]).addTo(map);
 		info =  '';
 		info += "{address.name}<br />";
 		info += "<div><f:format.raw><map:nl2br text="<f:format.raw>{address.address}</f:format.raw>" htmlSpecialChars="1"/></f:format.raw></div>";
@@ -114,7 +112,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		info += "<div>{address.phone}</div>";
 		info += "<div>{address.email}</div>";
 
-		marker[0].bindPopup(info).openPopup();
 		markerArray[0].bindPopup(info).openPopup();
 		
 		group = L.featureGroup(markerArray).addTo(map);
