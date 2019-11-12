@@ -188,8 +188,8 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 			$this->addFlashMessage('Please create directories "fileadmin/ext/myleaflet/Resources/Public/Icons/" for your mapIcons!', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 //			GeneralUtility::mkdir_deep(PATH_site . $iconPath);
 		}
-
-
+		
+		
 		// Get the default Settings
 		$customStoragePid = $this->conf['storagePid'];
 		$querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');

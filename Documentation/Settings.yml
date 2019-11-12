@@ -6,8 +6,8 @@
 conf.py:
   copyright: 2018
   project: Myleaflet
-  version: 0.3
-  release: 0.3.2
+  version: 0.4
+  release: 0.4.0
   latex_documents:
   - - Index
     - myleaflet.tex
