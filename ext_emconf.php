@@ -20,7 +20,7 @@ $EM_CONF[$_EXTKEY] = array (
   'uploadfolder' => true,
   'createDirs' => 'uploads/tx_myleaflet/icons',
   'clearCacheOnLoad' => 0,
-  'version' => '0.4.0',
+  'version' => '0.4.1',
   'constraints' => 
   array (
     'depends' => 

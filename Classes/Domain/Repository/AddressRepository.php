@@ -105,8 +105,8 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 				having distance <=" . intval($radius) . " order by " . $orderBy . " limit " . $limit )->execute(TRUE);
 
-	} else {
-		$result = $query->statement("SELECT distinct a.*, (((acos(sin(($lat*$pi/180)) * sin((latitude*$pi/180)) + cos(($lat*$pi/180)) *
+		} else {
+			$result = $query->statement("SELECT distinct a.*, (((acos(sin(($lat*$pi/180)) * sin((latitude*$pi/180)) + cos(($lat*$pi/180)) *
 					cos((latitude*$pi/180)) * cos((($lon - longitude)*$pi/180)))))*6370) as distance,
 					(SELECT GROUP_CONCAT(e.title ORDER BY e.title SEPARATOR ', ') from tt_address d, sys_category 
 						e, sys_category_record_mm f
@@ -121,22 +121,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 				WHERE a.latitude != 0 AND a.longitude != 0 AND a.hidden = 0 AND a.deleted = 0 AND a.pid in (" . $storagePid . ")
                 having distance <=" . intval($radius) . " order by " . $orderBy . " limit " . $limit )->execute(TRUE);
 		
-	}		
-
-/* testing */
-/*
-	for ($i = 0; $i < count($result) ; $i++) {
-	}
-
-	$fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
-	$fileObjects = $fileRepository->findByRelation('sys_category', 'images', 4);	
-
-	for ($i = 0; $i < count($fileObjects) ; $i++) {
-		print_r($fileObjects[$i]->getOriginalFile()->getPublicUrl());
-	}
-*/
-	
-	
+		}		
 		return $result;
 	}
 

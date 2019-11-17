@@ -168,9 +168,6 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 // alternative geocoder
 //https://nominatim.openstreetmap.org/search/elzstr.%2010%20rheinhausen?format=json&addressdetails=1&limit=1&polygon_svg=1//
 //			$addressData = $this->get_webpage($apiURL);
-    
-//krexx($latLon);
-    
 //        $addresses = $this->addressRepository->findAll();
     
 /*
@@ -185,8 +182,13 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 */
 		$iconPath = 'fileadmin/ext/myleaflet/Resources/Public/Icons/';
 		if (!is_dir(PATH_site . $iconPath)) {
-			$this->addFlashMessage('Please create directories "fileadmin/ext/myleaflet/Resources/Public/Icons/" for your mapIcons!', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-//			GeneralUtility::mkdir_deep(PATH_site . $iconPath);
+			$this->addFlashMessage('Directory ' . $iconPath . ' created for use with own mapIcons!', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
+			GeneralUtility::mkdir_deep(PATH_site . $iconPath);
+			$sourceDir = 'typo3conf/ext/myleaflet/Resources/Public/MapIcons/';
+			$files = GeneralUtility::getFilesInDir($sourceDir, 'png,gif,jpg');			
+			foreach ($files as $file) {
+				copy($sourceDir . $file, $iconPath . $file);
+			}
 		}
 		
 		
@@ -219,10 +221,6 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		}
 		$categories = $this->buildTree($arr);
 
-
-
-
-//Krexx($addresses);    
 		$this->view->assign('L', $GLOBALS['TSFE']->config['config']['language']);
         $this->view->assign('id' , $GLOBALS['TSFE']->id);
         $this->view->assign('categories' , $categories);
@@ -233,7 +231,6 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
 
 	function get_webpage($url) {
-		//global $db;
 		if (ini_get('allow_url_fopen'))
 			$this->conf['useCurl'] = 0;
 		else
@@ -247,7 +244,6 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 			$data = curl_exec($sessions);
 			curl_close($sessions);
 		} else {
-//			$data = t3lib_div::getUrl($url);
 			$data = \TYPO3\CMS\Core\Utility\GeneralUtility::getURL($url); 
 		}
 		return $data;
