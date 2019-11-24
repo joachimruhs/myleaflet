@@ -1,0 +1,28 @@
+{
+  "name": "WSR/myleaflet",
+  "description": "Openstreetmap / leaflet maps with radial search and hierarchic categories.",
+  "keywords": ["TYPO3", "Openstreet map", "extension", "radial search"],
+  "homepage": "https://www.web-services-ruhs.de",
+  "authors": [
+    {
+      "name": "Joachim Ruhs",
+      "email": "postmaster@joachim-ruhs.de"
+    }
+  ],
+  "license": "GPL-3.0+",
+  "type": "typo3-cms-extension",
+  "require": {
+    "typo3/cms-core": ">=8.7.0 <9.5.99",
+    "typo3/cms-frontend": ">=8.7.0 <9.5.99",
+    "typo3/cms-scheduler": ">=8.7.0 <9.5.99"
+  },
+  "replace": {
+    "ext_key": "self.version",
+    "typo3-ter/ext-key": "self.version"
+  },
+  "autoload": {
+    "psr-4": {
+      "WSR\\Myleaflet\\": "Classes/"
+    }
+  }
+}
