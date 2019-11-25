@@ -38,7 +38,7 @@ the correct "Default storage PID" of the tt_address records.
 Then insert at least one sys_category in the page Data. Now insert some tt_address data records with latitude and longitude values and
 assign them to sys_categories. The extension did not fetch the coordinates by itself like the mymap extension.
 
-To use your own mapIcons create the directories fileadmin/ext/myleaflet/Resources/Public/Icons.
+To use your own mapIcons insert your mapIcons to the directory fileadmin/ext/myleaflet/Resources/Public/Icons.
 Insert in this directory your icons which then can be selected in your tt_address data records.
 
 
