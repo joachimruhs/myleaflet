@@ -8,6 +8,7 @@ $tmp_myleaflet_columns = array(
 		'label' => 'LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_address.leafletmapicon',
 		'config' => [
 		    'type' => 'select',
+			'renderType' => 'selectSingle',
 		    'items' => [
 		        [ '', 0 ],
 			],

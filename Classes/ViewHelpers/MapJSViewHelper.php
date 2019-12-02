@@ -2,6 +2,7 @@
 namespace WSR\Myleaflet\ViewHelpers;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /***************************************************************
  *  Copyright notice
@@ -28,7 +29,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  ***************************************************************/
 
 
-class MapJSViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class MapJSViewHelper extends AbstractViewHelper {
 	/**
 	* Arguments Initialization
 	*/

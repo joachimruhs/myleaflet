@@ -1,6 +1,8 @@
 <?php
 namespace WSR\Myttaddressmap\ViewHelpers;
 
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -34,7 +36,7 @@ namespace WSR\Myttaddressmap\ViewHelpers;
  */
 
 
-class AddSlashesViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class AddSlashesViewHelper extends AbstractViewHelper {
 	
 	public function initializeArguments() {
 		$this->registerArgument('text', 'string', 'text for addslashes', true, 0);

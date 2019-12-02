@@ -2,6 +2,7 @@
 namespace WSR\Myttaddressmap\ViewHelpers;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /***************************************************************
  *  Copyright notice
@@ -28,7 +29,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  ***************************************************************/
 
 
-class MapShowJSViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class MapShowJSViewHelper extends AbstractViewHelper {
 	/**
 	* Arguments Initialization
 	*/

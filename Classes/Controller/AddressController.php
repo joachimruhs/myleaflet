@@ -1,6 +1,7 @@
 <?php
 namespace WSR\Myleaflet\Controller;
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -181,9 +182,9 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		$categories = $this->categoryRepository->findAll();
 */
 		$iconPath = 'fileadmin/ext/myleaflet/Resources/Public/Icons/';
-		if (!is_dir(PATH_site . $iconPath)) {
+		if (!is_dir(Environment::getPublicPath() . '/' . $iconPath)) {
 			$this->addFlashMessage('Directory ' . $iconPath . ' created for use with own mapIcons!', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
-			GeneralUtility::mkdir_deep(PATH_site . $iconPath);
+			GeneralUtility::mkdir_deep(Environment::getPublicPath() . '/' . $iconPath);
 			$sourceDir = 'typo3conf/ext/myleaflet/Resources/Public/MapIcons/';
 			$files = GeneralUtility::getFilesInDir($sourceDir, 'png,gif,jpg');			
 			foreach ($files as $file) {

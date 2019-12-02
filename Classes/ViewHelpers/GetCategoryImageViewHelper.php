@@ -4,6 +4,8 @@ namespace WSR\Myleaflet\ViewHelpers;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 /***************************************************************
  *  Copyright notice
@@ -38,7 +40,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
  */
 
 
-class GetCategoryImageViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class GetCategoryImageViewHelper extends AbstractViewHelper {
 	protected $categoryRepository;
 	
 	public function initializeArguments() {

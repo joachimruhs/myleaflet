@@ -1,6 +1,8 @@
 <?php
 namespace WSR\Myleaflet\ViewHelpers;
 
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -34,7 +36,7 @@ namespace WSR\Myleaflet\ViewHelpers;
  */
 
 
-class Nl2brViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class Nl2brViewHelper extends AbstractViewHelper {
 	
 	public function initializeArguments() {
 		$this->registerArgument('text', 'string', 'text for nl2br', true, 0);

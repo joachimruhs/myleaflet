@@ -1,6 +1,8 @@
 <?php
 namespace WSR\Myleaflet\ViewHelpers;
 
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -34,7 +36,7 @@ namespace WSR\Myleaflet\ViewHelpers;
  */
 
 
-class GetCategoriesViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class GetCategoriesViewHelper extends AbstractViewHelper {
 	protected $categoryRepository;
 	
 	public function initializeArguments() {

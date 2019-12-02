@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "myleaflet".
  *
- * Auto generated 03-12-2018 16:56
+ * Auto generated 28-11-2019 15:00
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -20,13 +20,13 @@ $EM_CONF[$_EXTKEY] = array (
   'uploadfolder' => true,
   'createDirs' => 'uploads/tx_myleaflet/icons',
   'clearCacheOnLoad' => 0,
-  'version' => '0.4.4',
+  'version' => '0.5.0',
   'constraints' => 
   array (
     'depends' => 
     array (
-      'typo3' => '8.7.0-9.5.99',
-      'tt_address' => '4.0.0-0.0.0',
+      'typo3' => '9.5.0-9.5.99',
+      'tt_address' => '4.0.0',
     ),
     'conflicts' => 
     array (

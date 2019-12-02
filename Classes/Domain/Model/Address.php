@@ -35,7 +35,7 @@ class Address extends \FriendsOfTYPO3\TtAddress\Domain\Model\Address
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
-     * @lazy
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $categories;
 
