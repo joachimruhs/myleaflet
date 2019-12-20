@@ -3,8 +3,8 @@
         {
             "config": {
                 "position": [
-                    23,
-                    45
+                    17,
+                    72
                 ]
             },
             "name": "New Model Object",
@@ -31,7 +31,7 @@
                     "parentClass": "",
                     "sorting": false,
                     "type": "Entity",
-                    "uid": "1524486753007"
+                    "uid": "15950888676"
                 },
                 "propertyGroup": {
                     "properties": [
@@ -40,10 +40,44 @@
                             "maxItems": "1",
                             "propertyDescription": "",
                             "propertyIsExcludeField": true,
+                            "propertyIsL10nModeExclude": false,
                             "propertyIsRequired": false,
                             "propertyName": "name",
                             "propertyType": "String",
-                            "uid": "1296865360186"
+                            "uid": "785374015110"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsL10nModeExclude": false,
+                            "propertyIsRequired": false,
+                            "propertyName": "leafletmapicon",
+                            "propertyType": "String",
+                            "uid": "1506429624883"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsL10nModeExclude": false,
+                            "propertyIsRequired": false,
+                            "propertyName": "mapgeocode",
+                            "propertyType": "String",
+                            "uid": "876995475010"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsL10nModeExclude": false,
+                            "propertyIsRequired": false,
+                            "propertyName": "categories",
+                            "propertyType": "String",
+                            "uid": "180673080659"
                         }
                     ]
                 },
@@ -51,45 +85,104 @@
                     "relations": []
                 }
             }
+        },
+        {
+            "config": {
+                "position": [
+                    251,
+                    71
+                ]
+            },
+            "name": "New Model Object",
+            "value": {
+                "actionGroup": {
+                    "_default0_list": false,
+                    "_default1_show": false,
+                    "_default2_new_create": false,
+                    "_default3_edit_update": false,
+                    "_default4_delete": false,
+                    "customActions": []
+                },
+                "name": "Category",
+                "objectsettings": {
+                    "addDeletedField": true,
+                    "addHiddenField": true,
+                    "addStarttimeEndtimeFields": true,
+                    "aggregateRoot": false,
+                    "categorizable": false,
+                    "description": "",
+                    "mapToTable": "",
+                    "parentClass": "",
+                    "sorting": false,
+                    "type": "Entity",
+                    "uid": "1031656981518"
+                },
+                "propertyGroup": {
+                    "properties": []
+                },
+                "relationGroup": {
+                    "relations": [
+                        {
+                            "foreignRelationClass": "",
+                            "lazyLoading": false,
+                            "propertyIsExcludeField": true,
+                            "relationDescription": "",
+                            "relationName": "name",
+                            "relationType": "zeroToOne",
+                            "relationWire": "",
+                            "renderType": "selectSingleBox",
+                            "uid": "980577484775"
+                        }
+                    ]
+                }
+            }
         }
     ],
     "properties": {
         "backendModules": [],
-        "description": "Leaflet maps for tt_address data",
+        "description": "Leaflet \/ OpenStreetMap for tt_address data with radial search and categories. No registration and no API-keys necessary.",
         "emConf": {
             "category": "plugin",
             "custom_category": "",
-            "dependsOn": "typo3 => 7.6.0-8.7.99\n",
-            "disableLocalization": true,
+            "dependsOn": "typo3 => 9.5.0-9.5.99\n",
+            "disableLocalization": false,
             "disableVersioning": true,
             "skipGenerateDocumentationTemplate": true,
             "sourceLanguage": "en",
             "state": "beta",
-            "targetVersion": "7.6.0-7.6.99",
-            "version": "0.1.0"
+            "targetVersion": "9.5.0-9.5.99",
+            "version": "0.6.0"
         },
         "extensionKey": "myleaflet",
         "name": "MyLeaflet",
         "originalExtensionKey": "myleaflet",
         "originalVendorName": "WSR",
-        "persons": [],
+        "persons": [
+            {
+                "company": "",
+                "email": "postmaster@joachim-ruhs.de",
+                "name": "Joachim Ruhs",
+                "role": "Developer"
+            }
+        ],
         "plugins": [
             {
                 "actions": {
-                    "controllerActionCombinations": "Address =>ajaxSearch",
-                    "noncacheableActions": "address =>ajaxSearch",
+                    "controllerActionCombinations": "Address=>ajaxSearch",
+                    "noncacheableActions": "Address=>ajaxSearch",
                     "switchableActions": ""
                 },
+                "description": "",
                 "key": "ajaxmap",
-                "name": "MyLeaflet (AjaxMap)"
+                "name": "MyLeaflet \/AjaxMap)"
             }
         ],
         "vendorName": "WSR"
     },
     "wires": [],
     "log": {
-        "last_modified": "2018-05-04 05:02",
-        "extension_builder_version": "7.6.17",
+        "last_modified": "2019-12-06 07:08",
+        "extension_builder_version": "9.10.2",
         "be_user": " (1)"
     }
 }

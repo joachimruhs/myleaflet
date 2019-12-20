@@ -3,12 +3,13 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet">
 		<header/>
 		<body>
-			<trans-unit id="tx_myleaflet_domain_model_ajaxmap">
+			<trans-unit id="tx_myleaflet_ajaxmap.name">
 				<source>MyLeaflet (AjaxMap)</source>
 			</trans-unit>
-			<trans-unit id="tx_myleaflet_domain_model_ajaxmap.description">
+			<trans-unit id="tx_myleaflet_ajaxmap.description">
 				<source>Leaflet maps for tt_address data</source>
 			</trans-unit>
+
 
 <!-- messages -->
 			<trans-unit id="noLocationsFound">

@@ -2,8 +2,8 @@
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
-    function($extKey)
-	{
+    function()
+    {
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'WSR.Myleaflet',
@@ -13,65 +13,61 @@ call_user_func(
             ],
             // non-cacheable actions
             [
-                'address' => 'ajaxSearch'
+                'Address' => 'ajaxSearch'
             ]
         );
 
 		
-		// Plugin for AJAX-calls
-		\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-				'WSR.' . $extKey,
-				'Ajax',
-				array(
-						'Ajax' => 'ajaxEid'
-				),
-				// non-cacheable actions
-				array(
-						'Ajax' => 'ajaxEid'
-				)
-		);
-		
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'WSR.Myleaflet',
+			'WSR.Myleaflet',
             'SingleView',
             [
                 'Address' => 'show'
             ],
             // non-cacheable actions
             [
-                'address' => 'show'
+                'Address' => 'show'
             ]
         );
 		
 
+		
+		
+    // wizards
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+        'mod {
+            wizards.newContentElement.wizardItems.plugins {
+                elements {
+                    ajaxmap {
+                        iconIdentifier = myleaflet-plugin-ajaxmap
+                        title = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.name
+                        description = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.description
+                        tt_content_defValues {
+                            CType = list
+                            list_type = myleaflet_ajaxmap
+                        }
+                    }
+                }
+                show = *
+            }
+       }'
+    );
 
+		$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+		
+		$iconRegistry->registerIcon(
+			'myleaflet-plugin-ajaxmap',
+			\TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+			['source' => 'EXT:myleaflet/Resources/Public/Icons/pointergreen.png']
+		);
 
 
 		
-	// wizards
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-		'mod {
-			wizards.newContentElement.wizardItems.plugins {
-				elements {
-					ajaxmap {
-						iconIdentifier = extension-myleaflet-content-element
-						title = LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_ajaxmap
-						description = LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_ajaxmap.description
-						tt_content_defValues {
-							CType = list
-							list_type = myleaflet_ajaxmap
-						}
-					}
-				}
-				show = *
-			}
-	   }'
-	);
-    },
-    $_EXTKEY
+    }
 );
 
-/**
- * Register eID for ajax action-call
- */
-$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include']['myleaflet'] = 'EXT:myleaflet/Classes/Eid/AjaxBootstrap.php';
+// for use with extension extender 
+//$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_address']['extender'][\FriendsOfTYPO3\TtAddress\Domain\Model\Address::class]['ext_ttaddress']
+//    = 'EXT:myleaflet/Classes/Domain/Model/Address.php';
+
+	

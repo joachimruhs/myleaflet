@@ -5,7 +5,7 @@ namespace WSR\Myleaflet\Domain\Model;
  *
  *  Copyright notice
  *
- *  (c) 2018 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
+ *  (c) 2018-2019 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
  *
  *  All rights reserved
  *
@@ -33,21 +33,6 @@ class Address extends \FriendsOfTYPO3\TtAddress\Domain\Model\Address
 {
 
 
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
-     */
-    protected $categories;
-
-
-    /**
-     * name
-     * 
-     * @var string
-     */
-    protected $name = '';
-
-
 	/**
 	 * leafletmapicon
 	 * 
@@ -63,9 +48,9 @@ class Address extends \FriendsOfTYPO3\TtAddress\Domain\Model\Address
 	protected $mapgeocode = '';
 
 	/**
-	 * Returns the mapicon
+	 * Returns the leafletmapicon
 	 * 
-	 * @return string $mapicon
+	 * @return string $this->leafletmapicon
 	 */
 	public function getLeafletmapicon() {
 		return $this->leafletmapicon;
@@ -85,7 +70,7 @@ class Address extends \FriendsOfTYPO3\TtAddress\Domain\Model\Address
 	/**
 	 * Returns mapgeocode
 	 * 
-	 * @return string $mapgeocode
+	 * @return string $this->mapgeocode
 	 */
 	public function getmapgeocode() {
 		return $this->mapgeocode;
@@ -101,20 +86,6 @@ class Address extends \FriendsOfTYPO3\TtAddress\Domain\Model\Address
 		$this->mapgeocode = $mapgeocode;
 	}
 
-
-
-
-
-
-    /**
-     * Get categories
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
 
     /**
      * Get first category
@@ -133,33 +104,4 @@ class Address extends \FriendsOfTYPO3\TtAddress\Domain\Model\Address
     }
 
 
-
-
-
-
-
-
-
-
-
-    /**
-     * Returns the name
-     * 
-     * @return string $name
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Sets the name
-     * 
-     * @param string $name
-     * @return void
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
 }

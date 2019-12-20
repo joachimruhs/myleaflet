@@ -1,5 +1,4 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-	  xmlns:map="http://typo3.org/ns/WSR/Myleaflet/ViewHelpers"
       xmlns:myutils="http://typo3.org/ns/WSR/Myleaflet/ViewHelpers"
 	  data-namespace-typo3-fluid="true">
 
@@ -68,8 +67,18 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		<option value="CA">CA</option>
 		<option value="IT">IT</option>
 	</select>
+	<!--
+	<input id="tx_myleaflet_radiusx" type="text" value="50" class="hidden1"/>
+	-->
+	<select id="tx_myleaflet_radius" onchange="$('#tx_myleaflet_page').val('0');geocodeByClient();">
+		<option value="20">20 km</option>
+		<option value="40">40 km</option>
+		<option value="60">60 km</option>
+		<option value="100">100 km</option>
+		<option value="500" selected="selected">500 km</option>
+	</select>
 
-	<input id="tx_myleaflet_radius" type="text" value="50" class="hidden"/>
+
 	<input id="tx_myleaflet_message" type="text" value="DE" class="hidden"/>
 	
 	<input id="tx_myleaflet_page" type="text" value="0" class="hidden"/>
@@ -116,6 +125,9 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	
 
 	function geocodeByClient() {
+		$("#ajaxSearchButton").animate({'opacity': 0.2}, 300).animate({'opacity': 0.5}, 300).animate({'opacity': 1}, 300);
+		$('#ajaxResult').html('...working...');
+
 		var id = <f:format.raw>{id}</f:format.raw>;
 	
 		var country = $('#tx_myleaflet_country').val();
@@ -127,11 +139,11 @@ Otherwise your changes will be overwritten the next time you save the extension 
 			categories.push($(this).val());
 		});		
  		
-		var ajaxRequestUrl = "index.php?eID=myleaflet&id=" + id,
+		var ajaxRequestUrl = "index.php?eIDx=myleaflet&id=" + id,
 			requestParameter = {
 				tx_myleaflet_ajax : {
 					controller : 'Ajax',
-					action : 'ajaxEid',
+					action : 'ajaxPsr',
 					address: address,
 					country: country,
 					
@@ -223,7 +235,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		$('#tx_myleaflet_country').val('DE');
 		// if you want manually set the search radius comment the following line and
 		// set the text field tx_myleaflet_radius to another class, not hidden!
-		$('#tx_myleaflet_radius').val('10000');
+//		$('#tx_myleaflet_radius').val('500');
 	
 		$('#tx_myleaflet_page').val('-1'); //  shows all locations in the map without result list
 //		$('#tx_myleaflet_page').val('0'); //  shows all locations in the map with result list
@@ -232,7 +244,8 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		// if you don't want to show POI's at page onload, comment the following line
 		geocodeByClient();
 
-//		$('#tx_myleaflet_city').val('');
+		$('#tx_myleaflet_radius').val('500');
+		$('#tx_myleaflet_city').val('Köln');
 	
 		// do the ajax-call on click
 		$("#ajaxSearchButton").click(function (evt) {
@@ -251,6 +264,8 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 <script>
 	$(document).ready(function(){
+//		$('#tx_myleaflet_radius').val(500);
+
 		$('#flashMessages').fadeIn(2000);
 
 	});

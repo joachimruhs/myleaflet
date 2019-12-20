@@ -18,14 +18,14 @@ Target group: **Administrators**
 
 Installation
 ^^^^^^^^^^^^
-Import the extension from TER (TYPO3 Extension Repository) like any other extension.
+Import. the extension from TER (TYPO3 Extension Repository) like any other extension.
 Create some pages as shown below.
 
 .. figure:: ../Images/AdministratorManual/InstallPages.png
 	:width: 200px
 	:alt: Pages for myleaflet
 
-On the page 'Ajax Map' install plugin MyLeaflet (Map). Make sure you have installed jQuery.
+On the page 'Ajax Map' install plugin MyLeaflet (Map). Make sure you have installed jQuery on *top* of the page.
 
 On page 'myleaflet' or on your root page insert 'Typoscript Include static' (from extension) MyLeaflet (myleaflet).
 With the constant editor insert the desired settings of the extension like storage Pid, your page ID's, 
@@ -125,14 +125,29 @@ layoutRootPath
          EXT:myleaflet/Resources/Private/Layouts/
 
      
+includejQueryCore
+"""""""""""""""""
+
+.. container:: table-row
+
+   Property
+        includejQeryCore
+
+   Data type
+         int
+
+   Description
+         include the jQuery library of myleaflet
+
+   Default
+        0
+
 
 
 
 
 plugin.tx\_myleaflet.settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
 
 
 detailsPageId
@@ -165,7 +180,7 @@ singleViewUid
         int
 
    Description
-        Uid of the loaction record to be shown with the single view plugin.
+        Uid of the location record to be shown with the single view plugin.
 
    Default
         1
@@ -233,8 +248,10 @@ categorySelectMode
 Known problems
 ^^^^^^^^^^^^^^
 
+*No map loaded - ReferenceError: $ is not defined*
 
-
+Make sure, you have loaded the jQuery on top of the page. This can be done with the constant editor of TYPO3 and the myleaflet
+category (plugin.tx_myleaflet.view.includejQueryCore).
 
 FAQ
 ^^^

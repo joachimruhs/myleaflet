@@ -30,7 +30,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
    crossorigin="">
  </script>
  
- <script src="/typo3conf/ext/myleaflet/Resources/Public/JavaScript/leaflet-providers.js"></script>
+ <script src="typo3conf/ext/myleaflet/Resources/Public/JavaScript/leaflet-providers.js"></script>
 
 
 
@@ -45,6 +45,21 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	<div id="mapContainer" style="width: 98%;">
 		<div id="map">MAP</div>
 	</div>	
+
+
+	<f:for each="{address.image}" as="image">
+		<div><f:image src="fileadmin/{image.originalResource.originalFile.identifier}"  width="50" alt=""/></div>			
+	</f:for>
+
+
+
+<f:comment>
+<style>.extbase-debugger {top:300px;}</style>
+<f:debug>{_all}</f:debug>
+</f:comment>
+
+
+
 
 <script>
 
@@ -71,9 +86,9 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		var osmHot = L.tileLayer.provider('OpenStreetMap.HOT');
 		var osmFrance = L.tileLayer.provider('OpenStreetMap.France');
 		
-		
+		var center = [{settings.initialMapCoordinates}];
 		map = L.map('map', {
-			center: [{settings.initialMapCoordinates}],
+			center: center,
 			zoom: 14,
 			layers: [osmMap] // only 1 layer here
 		});
@@ -93,29 +108,33 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		}).addTo(map);
 		
 
-		if ("{address.leafletmapicon}" > '0') {
-			var mapIcon = L.icon({
-				iconUrl: "fileadmin/ext/myleaflet/Resources/Public/Icons/{address.leafletmapicon}",
+      var addressName = "{address.name}";
+      var icon = "{address.leafletmapicon}";
+      var lat = {address.latitude};
+      var lon = {address.longitude};
+      
+		if (icon > '0') {
+          var mapIcon = L.icon({
+				iconUrl: "fileadmin/ext/myleaflet/Resources/Public/Icons/" + icon,
 				iconSize:     [25, 41], // size of the icon
 				iconAnchor:   [12, 41]
 			});
-			markerArray.push(L.marker([{address.latitude}, {address.longitude}], {icon: mapIcon}));
-		} else { 
-			markerArray.push(L.marker([{address.latitude}, {address.longitude}]));
-		}
 
+          markerArray.push(L.marker([lat, lon], {icon: mapIcon}));
+		} else { 
+          markerArray.push(L.marker([lat, lon]));
+		}
 		info =  '';
-		info += "{address.name}<br />";
+		info += addressName + "<br /> ";
 		info += "<div><f:format.raw><map:nl2br text="<f:format.raw>{address.address}</f:format.raw>" htmlSpecialChars="1"/></f:format.raw></div>";
 		info += "{address.zip} {address.city}";
 		info += "<div>{address.phone}</div>";
 		info += "<div>{address.email}</div>";
-
 		markerArray[0].bindPopup(info).openPopup();
 		
 		group = L.featureGroup(markerArray).addTo(map);
 
-		map.flyTo([{address.latitude}, {address.longitude}]);
+		map.flyTo([lat, lon]);
 		map.fitBounds(group.getBounds());
 
 	});	
@@ -144,11 +163,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	resizeMap();
 
 </script>
-
-
-
-
-
 
 
 </f:section>

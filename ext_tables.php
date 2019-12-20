@@ -2,7 +2,7 @@
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
-    function($extKey)
+    function()
     {
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
@@ -12,21 +12,15 @@ call_user_func(
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-            'WSR.Myleaflet',
+			'WSR.Myleaflet',
             'SingleView',
             'MyLeaflet (SingleView)'
         );
-
-        
-        
-        
-
-        
-        
-
+		
 /**
  * Register icons
  */
+
 $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
 $iconRegistry->registerIcon(
 	'extension-myleaflet-content-element',
@@ -34,10 +28,19 @@ $iconRegistry->registerIcon(
 	['source' => 'EXT:myleaflet/Resources/Public/Icons/contentElementIcon.png']
 );
 
+		
 
 
-        
-        
-    },
-    $_EXTKEY
+
+
+		
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('myleaflet', 'Configuration/TypoScript', 'MyLeaflet');
+
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_myleaflet_domain_model_address', 'EXT:myleaflet/Resources/Private/Language/locallang_csh_tx_myleaflet_domain_model_address.xlf');
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_myleaflet_domain_model_address');
+
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_myleaflet_domain_model_category', 'EXT:myleaflet/Resources/Private/Language/locallang_csh_tx_myleaflet_domain_model_category.xlf');
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_myleaflet_domain_model_category');
+
+    }
 );

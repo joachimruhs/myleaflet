@@ -35,6 +35,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 	public function initializeObject() {
+
 		//		$this->_GP = $this->request->getArguments();
 		$configuration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 		$this->conf['storagePid'] = $configuration['persistence']['storagePid'];
@@ -59,7 +60,26 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
 	
+	/**
+	 * categoryRepository
+	 * not used anymore
+	 *
+	 * @var \WSR\Myleaflet\Domain\Repository\CategoryRepository
+	 */
+	protected $categoryRepository;
+
 	
+    /**
+     * Inject a categoryRepository to enable DI
+	 * not used anymore
+     *
+     * @param \WSR\Myleaflet\Domain\Repository\CategoryRepository $categoryRepository
+     * @return void
+     */
+    public function injectCategoryRepository(\WSR\Myleaflet\Domain\Repository\CategoryRepository $categoryRepository) {
+        $this->categoryRepository = $categoryRepository;
+    }
+
 
 	/**
 	 * typo3CategoryRepository
@@ -79,27 +99,23 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 	
 
-
-
 	/**
-	 * categoryRepository
+	 * TTAddressRepository
 	 *
-	 * @var \WSR\Myleaflet\Domain\Repository\CategoryRepository
+	 * @var \FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository
 	 */
-	protected $categoryRepository;
+	protected $ttaddressRepository;
+
 	
     /**
-     * Inject a categoryRepository to enable DI
+     * Inject a ttaddressRepository to enable DI
      *
-     * @param \WSR\Myleaflet\Domain\Repository\CategoryRepository $categoryRepository
+     * @param \FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository
      * @return void
      */
-    public function injectCategoryRepository(\WSR\Myleaflet\Domain\Repository\CategoryRepository $categoryRepository) {
-        $this->categoryRepository = $categoryRepository;
+    public function injectTtAddressRepository(\FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository) {
+        $this->ttaddressRepository = $ttaddressRepository;
     }
-	
-
-
 
 
     /**
@@ -110,9 +126,9 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function showAction()
     {
 		$this->_GP = $this->request->getArguments();
-
 		if ($this->_GP['locationUid']) {// called from list link
 			$address = $this->addressRepository->findByUid(intval($this->_GP['locationUid']));
+//			$address = $this->ttaddressRepository->findAll();
 		}
 		else {
 			$address = $this->addressRepository->findByUid(intval($this->settings['singleViewUid']));
@@ -202,10 +218,11 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
 		$addresses = $this->addressRepository->findAll();
 
-
-
+		/*
 		$this->categoryRepository->setDefaultQuerySettings($querySettings);
-		$categories = $this->categoryRepository->findAll();
+*/
+		$this->typo3CategoryRepository->setDefaultQuerySettings($querySettings);
+		$categories = $this->typo3CategoryRepository->findAll();
 
 
 		for($i = 0; $i < count($categories); $i++) {

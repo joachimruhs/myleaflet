@@ -3,12 +3,22 @@
 namespace WSR\Myleaflet\Controller;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Core\Environment;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+//use Psr\Http\Server\MiddlewareInterface;
+//use Psr\Http\Server\RequestHandlerInterface;
+
+use FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository;
+
+//use TYPO3\CMS\Core\Http\NullResponse;
+//use TYPO3\CMS\Core\Http\Response;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) Joachim Ruhs 2018
+ *  (c) Joachim Ruhs 2018-2019
  *  
  *  All rights reserved
  *
@@ -48,8 +58,8 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	 */
 	public function __construct()
 	{
-		/** @var LanguageService $languageService */
-		$this->languageService = GeneralUtility::makeInstance('TYPO3\\CMS\\Lang\\LanguageService');
+		/** @var LanguageService $this->languageService */
+		$this->languageService = GeneralUtility::makeInstance('TYPO3\CMS\Core\Localization\LanguageService');
 		$this->languageService->init(trim($_POST['tx_myleaflet_ajax']['language']));
 	}
 
@@ -60,7 +70,6 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	 * @var \WSR\Myleaflet\Domain\Repository\AddressRepository
 	 */
 	protected $addressRepository;
-
 	
     /**
      * Inject a addressRepository to enable DI
@@ -71,9 +80,27 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
     public function injectAddressRepository(\WSR\Myleaflet\Domain\Repository\AddressRepository $addressRepository) {
         $this->addressRepository = $addressRepository;
     }
+
+
+
+	/**
+	 * TTAddressRepository
+	 *
+	 * @var \FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository
+	 */
+	protected $ttaddressRepository;
+
 	
-	
-	
+    /**
+     * Inject a ttaddressRepository to enable DI
+     *
+     * @param \FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository
+     * @return void
+     */
+    public function injectTtAddressRepository(\FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository) {
+        $this->ttaddressRepository = $ttaddressRepository;
+    }
+
 	/**
 	 * categoryRepository
 	 *
@@ -92,10 +119,6 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
     }
 	
 
-
-
-
-
 	/**
 	 * action ajaxPage
 	 * @return \string JSON
@@ -111,7 +134,8 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	 * @return \stdclass $latLon
 	 */
 	public function ajaxEidGeocodeAction() {
-		$requestArguments = $this->request->getArguments();
+		$requestArguments = $this->request->getParsedBody()['tx_myleaflet_ajax'];
+
 		$address = urlencode($requestArguments['address']);
 		$country = urlencode($requestArguments['country']);
 
@@ -120,11 +144,8 @@ https://nominatim.openstreetmap.org/search/elzstr.%2010%20rheinhausen?format=jso
 max 1 call/sec
 */
 
-
 		$apiURL = "https://nominatim.openstreetmap.org/search/$address,+$country?format=json&limit=1";
-
 		$addressData = $this->get_webpage($apiURL);
-
 		
 		$coordinates[1] = json_decode($addressData)[0]->lat;
 		$coordinates[0] = json_decode($addressData)[0]->lon;
@@ -154,9 +175,114 @@ max 1 call/sec
 	}
 
 
+	/**
+	 * @param \Psr\Http\Message\ServerRequestInterface $request
+	 * @param \Psr\Http\Message\ResponseInterface      $response
+	 */
+	public function indexAction(ServerRequestInterface $request)
+	{
+		switch ($request->getMethod()) {
+			case 'GET':
+				$this->processGetRequest($request, $response);
+				break;
+			case 'POST':
+				$this->processPostRequest($request, $response);
+				break;
+			default:
+				$response->withStatus(405, 'Method not allowed');
+		}
+	
+		return $response;
+	}
+
+	/**
+	 * @param \Psr\Http\Message\ServerRequestInterface $request
+	 * @param \Psr\Http\Message\ResponseInterface      $response
+	 */
+	protected function processGetRequest(ServerRequestInterface $request, ResponseInterface $response) {
+//		$view = $this->getView();
+	
+		$response->withHeader('Content-type', ['text/html; charset=UTF-8']);
+		$response->getBody()->write($view->render());
+	}
+
+	/**
+	 * @param \Psr\Http\Message\ServerRequestInterface $request
+	 * @param \Psr\Http\Message\ResponseInterface      $response
+	 */
+	protected function processPostRequest(ServerRequestInterface $request, $response)
+	{
+		$queryParams = $request->getQueryParams();
+	
+//		$queryParameters = $request->getParsedBody();
+//		$pid = (int)$queryParameters['pid'];
+//		$queryParams = $queryParameters;
+	
+		$frontend = $GLOBALS['TSFE'];
+//print_r($frontend->tmpl->setup['plugin.']['tx_myleaflet.']);
+
+		/** @var TypoScriptService $typoScriptService */
+		$typoScriptService = GeneralUtility::makeInstance('TYPO3\CMS\Core\TypoScript\TypoScriptService');
+		$this->configuration = $typoScriptService->convertTypoScriptArrayToPlainArray($frontend->tmpl->setup['plugin.']['tx_myleaflet.']);
+		$this->settings = $this->configuration['settings'];
+		$this->conf['storagePid'] = $this->configuration['persistence']['storagePid'];
+	
+		$this->request = $request;
+		$out = $this->ajaxEidAction();
+	
+		echo $out;
+		return $response;
+
+		//    $response->getBody()->write(json_encode($queryParams));
+		//    $response->getBody()->write($out);
+		
+		/** @var Response $response */
+		//$response = GeneralUtility::makeInstance(Response::class);
+		//$response->getBody()->write($out);
+		
+		//return $response;
+/*		
+		$view = $this->getView();
+		$hasErrors = false;
+		// ... some logic
+	
+		if ($hasErrors) {
+			$response->withHeader('Content-type', ['text/html; charset=UTF-8']);
+			$response->getBody()->write($view->render());
+		} else {
+			$response->withHeader('Content-type', ['application/json; charset=UTF-8']);
+			$response->getBody()->write(json_encode(['success' => true]));
+		}
+*/
+	}
 
 
-
+	/**
+	 * @return \TYPO3\CMS\Fluid\View\StandaloneView
+	 */
+	protected function getView() {
+	//    $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+		$templateService = GeneralUtility::makeInstance(TemplateService::class);
+		// get the rootline
+	//    $rootLine = $pageRepository->getRootLine($pageRepository->getDomainStartPage(GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY')));
+		$rootlineUtility = GeneralUtility::makeInstance(RootlineUtility::class, 0);
+	
+		$rootLine = $rootlineUtility->get();
+	
+		// initialize template service and generate typoscript configuration
+		$templateService->init();
+		$templateService->runThroughTemplates($rootLine);
+		$templateService->generateConfig();
+	
+		$fluidView = new StandaloneView();
+		$fluidView->setLayoutRootPaths($templateService->setup['plugin.']['tx_yourext.']['view.']['layoutRootPaths.']);
+		$fluidView->setTemplateRootPaths($templateService->setup['plugin.']['tx_yourext.']['view.']['templateRootPaths.']);
+		$fluidView->setPartialRootPaths($templateService->setup['plugin.']['tx_yourext.']['view.']['partialRootPaths.']);
+		$fluidView->getRequest()->setControllerExtensionName('YourExt');
+		$fluidView->setTemplate('index');
+	
+		return $fluidView;
+	}
 
 
 	/**
@@ -164,12 +290,13 @@ max 1 call/sec
 	 * @return \string html
 	 */
 	public function ajaxEidAction() {
-		
+/*		
       	$configuration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 		$this->configuration = $configuration;
 		$this->conf['storagePid'] = $configuration['persistence']['storagePid'];
-		
-		$requestArguments = $this->request->getArguments();
+*/		
+//		$requestArguments = $this->request->getArguments();
+		$requestArguments = $this->request->getParsedBody()['tx_myleaflet_ajax'];
 
 		if ($requestArguments['categories'])
 		$this->_GP['categories'] = @implode(',', $requestArguments['categories']);
@@ -180,10 +307,10 @@ max 1 call/sec
 		
 		$this->language = $requestArguments['language'];		
 		
-
 		$latLon = $this->ajaxEidGeocodeAction();
+
 		if ($latLon->status != 'OK') {
-			if ($latLon->status ==  '') $latLon->status = 'There was no status from geocoding returned. May be it helps to set "useCurl" in install tool.';
+			if ($latLon->status ==  '') $latLon->status = 'There was no status from geocoding returned.';
 
 			$out = '<div class="ajaxMessage">Geocoding Error: ' . $latLon->status . '</div>';
 			$out .= '<script	type="text/javascript">
@@ -192,7 +319,7 @@ max 1 call/sec
 			return $out;
 		} else {
 /*
- *			$out .= '<script	type="text/javascript">
+ 			$out .= '<script	type="text/javascript">
 				$("#tx_myleaflet_lat").val(' . $latLon->lat . ');
 				$("#tx_myleaflet_lon").val(' . $latLon->lon . ');
 			</script>';
@@ -220,27 +347,26 @@ max 1 call/sec
 		$locations = $this->addressRepository->findLocationsInRadius($latLon, $this->_GP['radius'], $this->_GP['categories'], $this->conf['storagePid'], $limit, $page, $orderBy, $categoryMode);
 		$allLocations = $this->addressRepository->findLocationsInRadius($latLon, $this->_GP['radius'], $this->_GP['categories'], $this->conf['storagePid'], 1000, 0, $orderBy, $categoryMode);
 
+
 		// field images
-		for ($i = 0; $i < count($locations); $i++) {
-			$locations[$i]['description'] = str_replace(array("\r\n", "\r", "\n"), '<br />', htmlspecialchars($locations[$i]['description'], ENT_QUOTES));
-			$locations[$i]['infoWindowDescription'] = str_replace(array("\r\n", "\r", "\n"), '<br />', $locations[$i]['description']);  
-			$address = $locations[$i]['address'];
-			$locations[$i]['address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', $locations[$i]['address']);  
-
-			$locations[$i]['infoWindowAddress'] = str_replace(array("\r\n", "\r", "\n"), '<br />', htmlspecialchars($address, ENT_QUOTES));
-
-			if ($locations[$i]['image'] > 0) {
-				$images = $this->addressRepository->findByUid($locations[$i]['uid'])->getImage();
-				$locations[$i]['images'] =	$images;				
+		if (is_array($locations)) {
+			for ($i = 0; $i < count($locations); $i++) {
+				$locations[$i]['description'] = str_replace(array("\r\n", "\r", "\n"), '<br />', htmlspecialchars($locations[$i]['description'], ENT_QUOTES));
+				$locations[$i]['infoWindowDescription'] = str_replace(array("\r\n", "\r", "\n"), '<br />', $locations[$i]['description']);  
+				$address = $locations[$i]['address'];
+				$locations[$i]['address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', $locations[$i]['address']);  
+	
+				$locations[$i]['infoWindowAddress'] = str_replace(array("\r\n", "\r", "\n"), '<br />', htmlspecialchars($address, ENT_QUOTES));
+	
+				if ($locations[$i]['image'] > 0) {
+					if ($this->ttaddressRepository->findByUid($locations[$i]['uid'])) {
+						$images = $this->ttaddressRepository->findByUid($locations[$i]['uid'])->getImage();
+					}
+					$locations[$i]['images'] =	$images;				
+				}
 			}
-
-/* test of mapIcon derived from category image */
-//			$locations[$i]['leafletmapicon'] = $this->addressRepository->getFirstCategoryImage($locations[$i]['uid'], $this->conf['storagePid']);
-
 		}
-
-
-		if (count($locations) == 0) {
+		if (!is_array($locations) || count($locations) == 0) {
 			$out = '<div class="ajaxMessage">' . \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('noLocationsFound', 'myleaflet') .'</div>';
 			$out .= '<script	type="text/javascript">';
 			// remove marker from map
@@ -251,13 +377,10 @@ max 1 call/sec
 			</script>';
 			return $out;
 		}
-
+	
 		$out .= $this->getMarkerJS($locations, $categories, $latLon, $this->_GP['radius']);
 		
 		// get  the loctions list
-
-		
-		
 		
 		if ($requestArguments['page'] != -1) { // do not show the list for page loading 
 			$labels = [
@@ -292,8 +415,6 @@ max 1 call/sec
 	}
 
 
-
-
 	protected function getMarkerJS($locations, $categories, $latLon, $radius) {
 
 		$out = '<script	type="text/javascript">';
@@ -316,30 +437,21 @@ max 1 call/sec
 			$out .= '
 		
 				var mapIcon' . $i . ' = L.icon({
-//					iconUrl: "/uploads/tx_myleaflet/icons/' . $locations[$i]['leafletmapicon'] .'",
-//					iconUrl: "/typo3conf/ext/myleaflet/Resources/Public/Icons/' . $locations[$i]['leafletmapicon'] .'",
 					iconUrl: "fileadmin/ext/myleaflet/Resources/Public/Icons/' . $locations[$i]['leafletmapicon'] .'",
-//					iconUrl: "' . $locations[$i]['leafletmapicon'] .'",
 					iconSize:     [25, 41], // size of the icon
 					iconAnchor:   [12, 41]
-				
 				});
 				marker[' . $i . '] = L.marker([' . $lat . ',' . $lon . '], {icon: mapIcon' . $i . '}).addTo(markerGroup);
-
 			';
-
 			
 			} else {
 				$out .= "marker[$i] = L.marker([$lat, $lon]).addTo(markerGroup);
 				";
-
 			}
-		
 
 			// infoWindows
 			$out .= $this->renderFluidTemplate('AjaxLocationListInfoWindow.html', array('location' => $locations[$i], 'categories' => $categories, 'i' => $i,
 																						'startingPoint' => $latLon, 'settings' => $this->settings));
-
 			
 		} // for
 

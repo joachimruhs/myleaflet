@@ -3,8 +3,10 @@ namespace WSR\Myleaflet\Tests\Unit\Controller;
 
 /**
  * Test case.
+ *
+ * @author Joachim Ruhs <postmaster@joachim-ruhs.de>
  */
-class AddressControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class AddressControllerTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
 {
     /**
      * @var \WSR\Myleaflet\Controller\AddressController

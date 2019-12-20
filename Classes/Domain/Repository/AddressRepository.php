@@ -33,7 +33,9 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  
- 
+//use TYPO3\CMS\Extbase\Persistence\Repository;
+
+
 /**
  * The repository for Addresses
  */
@@ -58,8 +60,9 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 		$radius = intval($radius);
 		$lat = $latLon->lat;
 		$lon =  $latLon->lon;
-		$query = $this->createQuery();
-
+//		$query = $this->createQuery();
+//		$query->getQuerySettings()->setRespectStoragePage(true);
+		
 		// categoryAndSelect
 		if ($categoryMode == 'AND')
 			$categorySelectMode = ' AND ';
@@ -91,14 +94,15 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 			$queryBuilder->expr()->in(
 				'a.pid',
 				$queryBuilder->createNamedParameter(
-				$query->getQuerySettings()->getStoragePageIds(),
+				$arrayOfPids,
+//				$query->getQuerySettings()->getStoragePageIds(),
 				\Doctrine\DBAL\Connection::PARAM_INT_ARRAY
 				)
 			)
 		)		
 		
 		->orderBy('distance');
-
+		
         $queryBuilder->having('`distance` <= ' . $queryBuilder->createNamedParameter($radius, \PDO::PARAM_INT));
 		$queryBuilder = $this->addCategoryQueryPart($categories, $categoryMode, $queryBuilder);
 
@@ -109,6 +113,9 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 		
 		$arrayOfCategories = \TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(',', $categories, TRUE);
 
+//print_r($queryBuilder->getSql());
+//print_r($queryBuilder->getParameters());
+//print_r($result);
 
 
 		if ($categorySelectMode == ' AND ' /*&& count($arrayOfCategories) */) {
@@ -117,7 +124,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 			for ($i = 0; $i < count($result); $i++) {
 				$checkOk = $this->testLocationCategories($result[$i]['uid'], $arrayOfCategories);
 				if ($checkOk) $j++;
-				//echo $result[$i]['name'] . ' ' . $checkOk . '$j= ' .$j . '<' . $page * $limit . '&&' . $j . '<=' . intval(($page + 1) * $limit) . '<br />';
+//				echo $result[$i]['name'] . ' CheckOk = ' . $checkOk . ' $j= ' .$j . '<' . $page * $limit . '&&' . $j . '<=' . intval(($page + 1) * $limit) . '<br />';
 				if (!($arrayOfCategories)) $checkOk = 1;
 
 				if ($checkOk && ($j >  $page * $limit && $j <= intval(($page + 1) * $limit))) {
@@ -153,16 +160,15 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 				$queryBuilder->expr()->in('a.uid_local', $queryBuilder->createNamedParameter($arrayOfCategories, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY))
 			)
 		);
-		
-		
+		$queryBuilder->orderBy('a.uid_foreign', 'asc');
 		$result = $queryBuilder->execute()->fetchAll();
-		
+
 		for ($i = 0; $i < count($result); $i++) {
 			for ($j = 0; $j < count($arrayOfCategories); $j++) {
 				if ($arrayOfCategories[$j] == $result[$i]['uid_local']) {
 					$f++;
-					$i++;
-					continue;
+//					$i++; have to be commented in old versions 
+//					continue;
 				}
 			}		
 		}
@@ -211,8 +217,6 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 		}
 		return $queryBuilder;
 	}
-
-
 
 
 	/**
@@ -290,7 +294,6 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 		
 		
 	}		
-
 
 
 
