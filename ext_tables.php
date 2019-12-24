@@ -4,43 +4,22 @@ defined('TYPO3_MODE') || die('Access denied.');
 call_user_func(
     function()
     {
+		/**
+		 * Register icons
+		 */
 
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-            'WSR.Myleaflet',
-            'Ajaxmap',
-            'MyLeaflet (AjaxMap)'
-        );
+		$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+		$iconRegistry->registerIcon(
+			'extension-myleaflet-content-element',
+			\TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+			['source' => 'EXT:myleaflet/Resources/Public/Icons/contentElementIcon.png']
+		);
 
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-			'WSR.Myleaflet',
-            'SingleView',
-            'MyLeaflet (SingleView)'
-        );
-		
-/**
- * Register icons
- */
+	    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_myleaflet_domain_model_address', 'EXT:myleaflet/Resources/Private/Language/locallang_csh_tx_myleaflet_domain_model_address.xlf');
+	    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_myleaflet_domain_model_address');
 
-$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-$iconRegistry->registerIcon(
-	'extension-myleaflet-content-element',
-	\TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-	['source' => 'EXT:myleaflet/Resources/Public/Icons/contentElementIcon.png']
-);
-
-		
-
-
-
-
-		
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('myleaflet', 'Configuration/TypoScript', 'MyLeaflet');
-
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_myleaflet_domain_model_address', 'EXT:myleaflet/Resources/Private/Language/locallang_csh_tx_myleaflet_domain_model_address.xlf');
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_myleaflet_domain_model_address');
-
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_myleaflet_domain_model_category', 'EXT:myleaflet/Resources/Private/Language/locallang_csh_tx_myleaflet_domain_model_category.xlf');
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_myleaflet_domain_model_category');
+	    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_myleaflet_domain_model_category', 'EXT:myleaflet/Resources/Private/Language/locallang_csh_tx_myleaflet_domain_model_category.xlf');
+	    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_myleaflet_domain_model_category');
 
     }
 );
