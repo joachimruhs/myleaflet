@@ -131,7 +131,7 @@ includejQueryCore
 .. container:: table-row
 
    Property
-        includejQeryCore
+        includejQueryCore
 
    Data type
          int
@@ -147,7 +147,7 @@ includejQueryCore
 
 
 plugin.tx\_myleaflet.settings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 detailsPageId

@@ -48,6 +48,8 @@ plugin.tx_myleaflet {
 		# cat=plugin.tx_myleaflet/leafletmaps; type=string; label=Category select mode: [AND|OR] Default OR
 		categorySelectMode = OR
 
+		# cat=plugin.tx_myleaflet/leafletmaps; type=boolean; label=Marker clusterer: Enables the marker clusterer
+		enableMarkerClusterer = 0
 	}
 
 

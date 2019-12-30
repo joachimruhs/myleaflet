@@ -53,6 +53,7 @@ plugin.tx_myleaflet {
 		initialMapCoordinates = {$plugin.tx_myleaflet.settings.initialMapCoordinates}
 
 		categorySelectMode = {$plugin.tx_myleaflet.settings.categorySelectMode}
+		enableMarkerClusterer = {$plugin.tx_myleaflet.settings.enableMarkerClusterer}
 	}
 
 

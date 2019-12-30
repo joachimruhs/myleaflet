@@ -370,11 +370,15 @@ max 1 call/sec
 			$out = '<div class="ajaxMessage">' . \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('noLocationsFound', 'myleaflet') .'</div>';
 			$out .= '<script	type="text/javascript">';
 			// remove marker from map
-			$out .= 'for (var i = 0; i < marker.length; i++) {
-				marker[i].setMap(null);
-			}
-			$(".ajaxMessage").fadeIn(2000);
-			</script>';
+			$out .= '
+				for (var i = 0; i < marker.length; i++) {
+					map.removeLayer(marker[i]);
+				}
+				marker = [];
+				map.removeLayer(markerClusterGroup);
+				markerClusterGroup = L.markerClusterGroup();
+				$(".ajaxMessage").fadeIn(2000);
+				</script>';
 			return $out;
 		}
 	
@@ -420,13 +424,15 @@ max 1 call/sec
 		$out = '<script	type="text/javascript">';
 
 		// remove marker from map
-		$out .= 'var markerGroup = L.featureGroup().addTo(map);
+		$out .= 'var markerGroup = L.featureGroup(); //.addTo(map);
 			for(i=0;i<marker.length;i++) {
 				map.removeLayer(marker[i]);
+				markerClusterGroup.removeLayer(marker[i]);
 			}
 			marker = [];
+			markerClusterGroup = L.markerClusterGroup();
 			';
-
+			
 		for ($i = 0; $i < count($locations); $i++) {
 			$lat = $locations[$i]['latitude'];
 			$lon = $locations[$i]['longitude'];
@@ -455,9 +461,22 @@ max 1 call/sec
 			
 		} // for
 
-		$out .= 'markerGroup = L.featureGroup(marker).addTo(map);
-				map.fitBounds(markerGroup.getBounds());';
-
+		if ($this->settings['enableMarkerClusterer'] == 1) {
+			$out .= '
+			markerClusterGroup = L.markerClusterGroup();
+			markerClusterGroup.clearLayers();
+			map.removeLayer(markerClusterGroup);
+			markerClusterGroup = L.markerClusterGroup();
+			for (var i = 0; i < marker.length; i++) {
+				markerClusterGroup.addLayer(marker[i]);
+			}
+			map.addLayer(markerClusterGroup);
+			map.fitBounds(markerClusterGroup.getBounds());
+			';				
+		} else {
+			$out .= 'markerGroup = L.featureGroup(marker).addTo(map);
+					map.fitBounds(markerGroup.getBounds());';
+		}
 		return $out . '</script>';
 	}
 	
