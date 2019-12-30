@@ -241,6 +241,23 @@ categorySelectMode
         OR
 
 
+enableMarkerCluster
+"""""""""""""""""""
+
+.. container:: table-row
+
+   Property
+        enableMarkerClusterer
+
+   Data type
+         boolean
+
+   Description
+         If set, enables the clustering of locations
+
+   Default
+        0
+
 
 
 
