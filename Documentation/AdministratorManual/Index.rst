@@ -241,8 +241,8 @@ categorySelectMode
         OR
 
 
-enableMarkerCluster
-"""""""""""""""""""
+enableMarkerClusterer
+"""""""""""""""""""""
 
 .. container:: table-row
 

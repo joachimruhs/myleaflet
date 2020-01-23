@@ -31,7 +31,9 @@
 			<div>{location.fax}</div>
 			
 			<div><f:format.raw>{location.description}</f:format.raw></div>
-			
+			<f:comment>
+				<div><f:format.raw>{location.infoWindowDescription}</f:format.raw></div>
+			</f:comment>
 			<div>{labels.distance}: <f:format.number decimals="2">{location.distance}</f:format.number> km</div>
 
 		</div>
