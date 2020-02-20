@@ -30,7 +30,7 @@
 			<div>{location.email}</div>
 			<div>{location.fax}</div>
 			
-			<div><f:format.raw>{location.description}</f:format.raw></div>
+			<div><f:format.htmlentitiesDecode>{location.description}</f:format.htmlentitiesDecode></div>
 			<f:comment>
 				<div><f:format.raw>{location.infoWindowDescription}</f:format.raw></div>
 			</f:comment>
