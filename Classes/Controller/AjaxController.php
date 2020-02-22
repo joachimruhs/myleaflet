@@ -290,12 +290,6 @@ max 1 call/sec
 	 * @return \string html
 	 */
 	public function ajaxEidAction() {
-/*		
-      	$configuration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-		$this->configuration = $configuration;
-		$this->conf['storagePid'] = $configuration['persistence']['storagePid'];
-*/		
-//		$requestArguments = $this->request->getArguments();
 		$requestArguments = $this->request->getParsedBody()['tx_myleaflet_ajax'];
 
 		if ($requestArguments['categories'])
