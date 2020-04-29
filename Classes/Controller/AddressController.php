@@ -127,11 +127,11 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
 		$this->_GP = $this->request->getArguments();
 		if ($this->_GP['locationUid']) {// called from list link
-			$address = $this->addressRepository->findByUid(intval($this->_GP['locationUid']));
+			$address = $this->ttaddressRepository->findByUid(intval($this->_GP['locationUid']));
 //			$address = $this->ttaddressRepository->findAll();
 		}
 		else {
-			$address = $this->addressRepository->findByUid(intval($this->settings['singleViewUid']));
+			$address = $this->ttaddressRepository->findByUid(intval($this->settings['singleViewUid']));
 		}
         $this->view->assign('address', $address);
     }
