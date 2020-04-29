@@ -216,7 +216,7 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		$querySettings->setRespectStoragePage(true);
 		$querySettings->setStoragePageIds(array($customStoragePid));
 
-		$addresses = $this->addressRepository->findAll();
+		$addresses = $this->ttaddressRepository->findAll();
 
 		/*
 		$this->categoryRepository->setDefaultQuerySettings($querySettings);

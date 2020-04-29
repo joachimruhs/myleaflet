@@ -15,7 +15,11 @@ $tmp_myleaflet_columns = array(
 			'fileFolder' => 'fileadmin/ext/myleaflet/Resources/Public/Icons/',
 			'fileFolder_extList' => 'png,jpg,jpeg,gif',
 			'fileFolder_recursions' => 0,
-			'showIconTable' => 1,
+			'fieldWizard' => [
+	            'selectIcons' => [
+	                'disabled' => false,
+	            ],
+	        ],
 		    'size' => 1,
 		    'minitems' => 0,
 		    'maxitems' => 1,
