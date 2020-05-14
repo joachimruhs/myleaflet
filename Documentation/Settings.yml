@@ -7,7 +7,7 @@ conf.py:
   copyright: 2020
   project: Myleaflet
   version: 0.7
-  release: 0.7.0
+  release: 0.7.1
   latex_documents:
   - - Index
     - myleaflet.tex
