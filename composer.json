@@ -1,5 +1,5 @@
 {
-  "name": "WSR/myleaflet",
+  "name": "wsr/myleaflet",
   "description": "Openstreetmap / leaflet maps with radial search and hierarchic categories.",
   "keywords": ["TYPO3", "Openstreet map", "extension", "radial search"],
   "homepage": "https://www.web-services-ruhs.de",
