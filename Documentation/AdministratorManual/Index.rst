@@ -18,7 +18,7 @@ Target group: **Administrators**
 
 Installation
 ^^^^^^^^^^^^
-Import the extension from TER (TYPO3 Extension Repository) like any other extension.
+Import the  extension from TER (TYPO3 Extension Repository) like any other extension.
 Create some pages as shown below.
 
 .. figure:: ../Images/AdministratorManual/InstallPages.png
