@@ -265,6 +265,8 @@ enableMarkerClusterer
 Known problems
 ^^^^^^^^^^^^^^
 
+No images are shown - if you use the fluid <f:image …> tag in the templates, make sure you have set a one level Slug.
+
 *No map loaded - ReferenceError: $ is not defined*
 
 Make sure, you have loaded the jQuery on top of the page. This can be done with the constant editor of TYPO3 and the myleaflet
