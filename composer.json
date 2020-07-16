@@ -16,7 +16,11 @@
 	"typo3/cms-frontend": "^9.5.17 || ^10.4.2"
   },
   "replace": {
+<<<<<<< HEAD
     "typo3-ter/myleaflet": "self.version"
+=======
+       "typo3-ter/myleaflet": "self.version"
+>>>>>>> d5bb576f69f2dd09b6b08f2a00c27a2da18c6ba1
   },
   "autoload": {
     "psr-4": {
