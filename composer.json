@@ -16,7 +16,6 @@
 	"typo3/cms-frontend": "^9.5.17 || ^10.4.2"
   },
   "replace": {
-    "myleaflet": "self.version",
     "typo3-ter/myleaflet": "self.version"
   },
   "autoload": {
