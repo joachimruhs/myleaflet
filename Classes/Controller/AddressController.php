@@ -239,7 +239,10 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		}
 		$categories = $this->buildTree($arr);
 
-		$this->view->assign('L', $GLOBALS['TSFE']->config['config']['language']);
+		$languageAspect = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class)->getAspect('language');
+		$sys_language_uid = $languageAspect->getId();
+		$this->view->assign('L', $sys_language_uid);
+
         $this->view->assign('id' , $GLOBALS['TSFE']->id);
         $this->view->assign('categories' , $categories);
         $this->view->assign('addresses' , $addresses);
