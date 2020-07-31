@@ -437,7 +437,7 @@ max 1 call/sec
 			$out .= '
 		
 				var mapIcon' . $i . ' = L.icon({
-					iconUrl: "fileadmin/ext/myleaflet/Resources/Public/Icons/' . $locations[$i]['leafletmapicon'] .'",
+					iconUrl: "/fileadmin/ext/myleaflet/Resources/Public/Icons/' . $locations[$i]['leafletmapicon'] .'",
 					iconSize:     [25, 41], // size of the icon
 					iconAnchor:   [12, 41]
 				});
