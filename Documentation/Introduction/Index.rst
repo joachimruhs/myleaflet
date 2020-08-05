@@ -26,6 +26,7 @@ in the constants of myleaflet with the constant editor of TYPO3.
 
 What's new?
 ^^^^^^^^^^^
+Localization of catgories and tt_address records implemented.
 New configuration option "categorySelectMode" implemented -> see administratormanual. 
 Mapicon handling changed. The directories fileadmin/ext/myleaflet/Resources/Public/Icons are created if they don't exist.
 Insert here your mapIcons. These icons can then be selected in the tt_address record (leafletmapicon).
