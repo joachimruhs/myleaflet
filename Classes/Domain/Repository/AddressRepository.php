@@ -56,7 +56,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 	 * 
 	 * @return QueryResultInterface|array of the locations
 	 */
-	public function findLocationsInRadius($latLon, $radius, $categories, $storagePid, $limit, $page, $orderBy = 'distance', $categoryMode = true) {
+	public function findLocationsInRadius($latLon, $radius, $categories, $storagePid, $language, $limit, $page, $orderBy = 'distance', $categoryMode = true) {
 		$radius = intval($radius);
 		$lat = $latLon->lat;
 		$lon =  $latLon->lon;
@@ -76,21 +76,38 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 		$arrayOfPids = \TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(',', $storagePid, TRUE);
 		$storagePidList = implode(',', $arrayOfPids);
 		
+		if ($language) {
 		$queryBuilder->selectLiteral(
 			'distinct a.*', '(acos(sin(' . floatval($lat * M_PI / 180) . ') * sin(latitude * ' . floatval(M_PI / 180) . ') + cos(' . floatval($lat * M_PI / 180) . ') *
 			cos(latitude * ' . floatval(M_PI / 180) . ') * cos((' . floatval($lon) . ' - longitude) * ' . floatval(M_PI / 180) . '))) * 6370 as `distance`,
 
 			(SELECT GROUP_CONCAT(e.title ORDER BY e.title SEPARATOR \', \') from tt_address d, sys_category 
-						e, sys_category_record_mm f
-						where f.uid_local = e.uid
-						AND f.uid_foreign= d.uid
+						e , sys_category_record_mm m
+						where  m.uid_foreign = d.uid
+						and e.sys_language_uid = ' . intval($language) . '
+						and e.l10n_parent = m.uid_local
 						and d.uid = a.uid
 						and e.pid in (' . $storagePidList  . ')
 					) as categories			
-			'
-		)
+			');
+		} else {
+		$queryBuilder->selectLiteral(
+			'distinct a.*', '(acos(sin(' . floatval($lat * M_PI / 180) . ') * sin(latitude * ' . floatval(M_PI / 180) . ') + cos(' . floatval($lat * M_PI / 180) . ') *
+			cos(latitude * ' . floatval(M_PI / 180) . ') * cos((' . floatval($lon) . ' - longitude) * ' . floatval(M_PI / 180) . '))) * 6370 as `distance`,
 
-		->where(
+			(SELECT GROUP_CONCAT(e.title ORDER BY e.title SEPARATOR \', \') from tt_address d, sys_category 
+						e , sys_category_record_mm m
+						where m.uid_local = e.uid
+						and m.uid_foreign = d.uid
+						and e.sys_language_uid = 0
+						and d.uid = a.uid
+						and e.pid in (' . $storagePidList  . ')
+					) as categories			
+			');
+			
+		}			
+
+		$queryBuilder->where(
 			$queryBuilder->expr()->in(
 				'a.pid',
 				$queryBuilder->createNamedParameter(
@@ -100,6 +117,9 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 				)
 			)
 		)		
+		->andWhere(
+			$queryBuilder->expr()->eq('a.sys_language_uid',	$queryBuilder->createNamedParameter($language,\PDO::PARAM_INT))
+		)
 		
 		->orderBy('distance');
 		
