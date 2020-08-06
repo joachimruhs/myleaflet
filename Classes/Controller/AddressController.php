@@ -218,9 +218,6 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
 		$addresses = $this->ttaddressRepository->findAll();
 
-		/*
-		$this->categoryRepository->setDefaultQuerySettings($querySettings);
-*/
 		$this->typo3CategoryRepository->setDefaultQuerySettings($querySettings);
 		$categories = $this->typo3CategoryRepository->findAll();
 
