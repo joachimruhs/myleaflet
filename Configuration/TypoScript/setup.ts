@@ -54,6 +54,8 @@ plugin.tx_myleaflet {
 
 		categorySelectMode = {$plugin.tx_myleaflet.settings.categorySelectMode}
 		enableMarkerClusterer = {$plugin.tx_myleaflet.settings.enableMarkerClusterer}
+
+		defaultLanguageUid = {$plugin.tx_myleaflet.settings.defaultLanguageUid}
 	}
 
 

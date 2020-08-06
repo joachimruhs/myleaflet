@@ -299,8 +299,13 @@ max 1 call/sec
 			$this->_GP['categories'] = '';
 		}		
 		
-		$this->language = $requestArguments['language'];		
-		
+		if ($this->settings['defaultLanguageUid'] > '') {
+			$this->language = $this->settings['defaultLanguageUid'];
+		} else {
+			$this->language = $requestArguments['language'];		
+		}		
+
+
 		$latLon = $this->ajaxEidGeocodeAction();
 
 		if ($latLon->status != 'OK') {

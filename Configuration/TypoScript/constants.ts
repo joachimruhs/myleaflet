@@ -50,6 +50,9 @@ plugin.tx_myleaflet {
 
 		# cat=plugin.tx_myleaflet/leafletmaps; type=boolean; label=Marker clusterer: Enables the marker clusterer
 		enableMarkerClusterer = 0
+
+		# cat=plugin.tx_myleaflet/leafletmaps; type=string; label=Default languageUid: Use 0 in multi language sites to override selected language in Frontend and if tt_adress record are not localized. Leave it blank to use TYPO3 localization.
+		defaultLanguageUid = 
 	}
 
 

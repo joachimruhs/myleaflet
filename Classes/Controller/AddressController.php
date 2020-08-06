@@ -218,6 +218,10 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
 		$addresses = $this->ttaddressRepository->findAll();
 
+		if ($this->settings['defaultLanguageUid'] > '') {
+			$querySettings->setLanguageUid($this->settings['defaultLanguageUid']);
+		}
+
 		$this->typo3CategoryRepository->setDefaultQuerySettings($querySettings);
 		$categories = $this->typo3CategoryRepository->findAll();
 
@@ -234,6 +238,12 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 				
 			$arr[$i]['title'] = $categories[$i]->getTitle();
 		}
+		if (!$arr) {
+			$this->addFlashMessage('Please insert some sys_categories first!', 'Myleaflet', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+			return;
+		}
+		
+
 		$categories = $this->buildTree($arr);
 
 		$languageAspect = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class)->getAspect('language');
