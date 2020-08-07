@@ -2,7 +2,7 @@
 
 #### Openstreetmap for your TYPO3 website
 
-![Icon](/ext_icon.gif "Extension icon")
+![Icon](/Resources/Public/Icons/Extension.svg "Extension icon")
 
 
 What does it do
