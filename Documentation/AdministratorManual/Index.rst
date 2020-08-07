@@ -271,7 +271,7 @@ defaultLanguageUid
          string
 
    Description
-         Use 0 in multi language sites to override selected language in Frontend and if tt_adress record are not localized. Leave it blank to use TYPO3 localization.
+         Use 0 in multi language sites to override selected language in Frontend and if tt_address record are not localized. Leave it blank to use TYPO3 localization.
 
    Default
         
