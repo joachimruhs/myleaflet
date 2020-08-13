@@ -1,4 +1,4 @@
-
+	
 plugin.tx_myleaflet {
   view {
     # cat=plugin.tx_myleaflet/file; type=string; label=Path to template root (FE)
