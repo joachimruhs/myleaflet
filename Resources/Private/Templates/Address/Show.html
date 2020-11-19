@@ -107,12 +107,13 @@ Otherwise your changes will be overwritten the next time you save the extension 
 			'imperial': false
 		}).addTo(map);
 		
-
-      var addressName = "{address.name}";
-      var icon = "{address.leafletmapicon}";
-      var lat = {address.latitude};
-      var lon = {address.longitude};
-      
+		<f:format.raw>
+			var addressName = "{address.name}";
+			var icon = "{address.leafletmapicon}";
+			var lat = {address.latitude};
+			var lon = {address.longitude};
+		</f:format.raw>
+		
 		if (icon > '0') {
           var mapIcon = L.icon({
 				iconUrl: "fileadmin/ext/myleaflet/Resources/Public/Icons/" + icon,
