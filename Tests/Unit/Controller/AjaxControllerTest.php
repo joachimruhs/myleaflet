@@ -34,7 +34,7 @@ class AjaxControllerTest extends \Nimut\TestingFramework\TestCase\UnitTestCase  
         parent::setUp();
 
         $this->subject = $this->getMockBuilder(\WSR\Myleaflet\Controller\AddressController::class)
-            ->setMethods(['redirect', 'forward', 'addFlashMessage'])
+            ->setMethods(['ajaxEidGeocodeAction', 'redirect', 'forward', 'addFlashMessage'])
             ->disableOriginalConstructor()
             ->getMock();
    }
@@ -77,6 +77,7 @@ class AjaxControllerTest extends \Nimut\TestingFramework\TestCase\UnitTestCase  
      * 
      * @var string $address
      * @var string $country
+     * @return \stdClass
      */
     public function ajaxEidGeocodeAction($address, $country)
     {
@@ -95,8 +96,20 @@ class AjaxControllerTest extends \Nimut\TestingFramework\TestCase\UnitTestCase  
 			$latLon->status = 'NOT FOUND';
 		return $latLon;
 	}
+
 	
-
-
+    /**
+     * @test
+     * 
+	 * example stub method overriding
+     */
+    public function overriding()
+    {
+		$this->subject->expects($this->once())
+		    ->method('ajaxEidGeocodeAction')
+		    ->will($this->returnValue('RETURN VALUE HERE!'));	
+		$result = $this->subject->ajaxEidGeocodeAction();
+		$this->assertEquals($result, 'RETURN VALUE HERE!');
+	}
 
 }
