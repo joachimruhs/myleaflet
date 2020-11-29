@@ -64,50 +64,6 @@ class AddressControllerTest extends \Nimut\TestingFramework\TestCase\UnitTestCas
 	}
 
 
-    /**
-     * location data for getCoordinatesFromAddress
-     * 
-	 * @dataProvider providerGetCoordinatesFromAddress
-     */
-	public function providerGetCoordinatesFromAddress()
-	{
-	    return [
-	        ['Rust', 'DE'],
-	        ['Freiburg', 'DE'],
-	        ['Freiburg', 'CH'],
-	    ];
-	}
-
-    /**
-     * @test
-     * 
-	 * @dataProvider providerGetCoordinatesFromAddress
-     */
-    public function getCoordinatesFromAddress($address, $country)
-    {
-		$latLon = $this->geocodeAddress($address, $country);
-		$this->assertEquals('OK', $latLon->status);
-		echo PHP_EOL . 'address=' . $address . ' lat=' . $latLon->lat . ' latLon->status = ' . $latLon->status . PHP_EOL;
-	}
-
-
-    public function geocodeAddress($address, $country)
-    {
-		$apiURL = "https://nominatim.openstreetmap.org/search/$address,+$country?format=json&limit=1";
-		$addressData = $this->subject->get_webpage($apiURL); // call of function get_webpage in \WSR\Myleaflet\Controller\AddressController
-		
-		$coordinates[1] = json_decode($addressData)[0]->lat;
-		$coordinates[0] = json_decode($addressData)[0]->lon;
-
-		$latLon = new \stdClass();
-		$latLon->lat = (float) $coordinates[1];
-		$latLon->lon = (float) $coordinates[0];
-		if ($latLon->lat) 
-			$latLon->status = 'OK';
-		else 
-			$latLon->status = 'NOT FOUND';
-		return $latLon;
-	}
 
     /**
      * @test
