@@ -58,7 +58,7 @@ call_user_func(
 		$iconRegistry->registerIcon(
 			'myleaflet-plugin-ajaxmap',
 			\TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-			['source' => 'EXT:myleaflet/Resources/Public/Icons/pointergreen.png']
+			['source' => 'EXT:myleaflet/Resources/Public/Icons/pointerGreen.png']
 		);
 
 
