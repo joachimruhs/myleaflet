@@ -6,13 +6,13 @@ defined('TYPO3_MODE') or die();
  */
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	'WSR.Myleaflet',
+	'Myleaflet',
     'Ajaxmap',
     'MyLeaflet (AjaxMap)'
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	'WSR.Myleaflet',
+	'Myleaflet',
     'SingleView',
     'MyLeaflet (SingleView)'
 );

@@ -5,29 +5,16 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-/***************************************************************
- *  Copyright notice
+/***
  *
- *  (c) Joachim Ruhs 2018
- *  
- *  All rights reserved
+ * This file is part of the "Myleaflet" Extension for TYPO3 CMS.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
+ *  (c) 2018 - 2021 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
  *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ ***/
 
 /**
  * AddressController
@@ -223,8 +210,8 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		}
 
 		$this->typo3CategoryRepository->setDefaultQuerySettings($querySettings);
+		$this->typo3CategoryRepository->setDefaultOrderings(array('sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
 		$categories = $this->typo3CategoryRepository->findAll();
-
 
 		for($i = 0; $i < count($categories); $i++) {
 
@@ -242,15 +229,13 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 			$this->addFlashMessage('Please insert some sys_categories first!', 'Myleaflet', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
 			return;
 		}
-		
-
 		$categories = $this->buildTree($arr);
 
 		$languageAspect = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class)->getAspect('language');
 		$sys_language_uid = $languageAspect->getId();
 		$this->view->assign('L', $sys_language_uid);
 
-        $this->view->assign('id' , $GLOBALS['TSFE']->id);
+        $this->view->assign('id' , $GLOBALS['TSFE']->page['uid']);
         $this->view->assign('categories' , $categories);
         $this->view->assign('addresses' , $addresses);
 		$this->view->assign('locationsCount', count($addresses));

@@ -6,27 +6,27 @@ call_user_func(
     {
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'WSR.Myleaflet',
+            'Myleaflet',
             'Ajaxmap',
             [
-                'Address' => 'ajaxSearch'
+                \WSR\Myleaflet\Controller\AddressController::class => 'ajaxSearch'
             ],
             // non-cacheable actions
             [
-                'Address' => 'ajaxSearch'
+                \WSR\Myleaflet\Controller\AddressController::class => 'ajaxSearch'
             ]
         );
 
 		
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-			'WSR.Myleaflet',
+			'Myleaflet',
             'SingleView',
             [
-                'Address' => 'show'
+                \WSR\Myleaflet\Controller\AddressController::class => 'show'
             ],
             // non-cacheable actions
             [
-                'Address' => 'show'
+                \WSR\Myleaflet\Controller\AddressController::class => 'show'
             ]
         );
 		
@@ -39,7 +39,7 @@ call_user_func(
             wizards.newContentElement.wizardItems.plugins {
                 elements {
                     ajaxmap {
-                        iconIdentifier = myleaflet-plugin-ajaxmap
+                        iconIdentifier = extension-myleaflet-content-element
                         title = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.name
                         description = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.description
                         tt_content_defValues {
@@ -53,15 +53,29 @@ call_user_func(
        }'
     );
 
-		$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-		
-		$iconRegistry->registerIcon(
-			'myleaflet-plugin-ajaxmap',
-			\TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-			['source' => 'EXT:myleaflet/Resources/Public/Icons/pointerGreen.png']
-		);
-
-
+	
+	// wizards
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+		'mod {
+			wizards.newContentElement.wizardItems.plugins {
+				elements {
+					ajaxsearch {
+						iconIdentifier = extension-myttaddressmap-content-element
+						title = LLL:EXT:myttaddressmap/Resources/Private/Language/locallang_db.xlf:tx_myttaddressmap_domain_model_ajaxsearch
+						description = LLL:EXT:myttaddressmap/Resources/Private/Language/locallang_db.xlf:tx_myttaddressmap_domain_model_ajaxsearch.description
+						tt_content_defValues {
+							CType = list
+							list_type = myleaflet_ajaxmap
+						}
+					}
+				}
+				show = *
+			}
+	   }'
+	);
+	
+	
+	
 		
     }
 );

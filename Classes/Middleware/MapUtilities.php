@@ -12,9 +12,20 @@ use \TYPO3\CMS\Extbase\Service\TypoScriptService;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\Response;
 
+/***
+ *
+ * This file is part of the "Myleaflet" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ *  (c) 2018 - 2021 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
+ *
+ ***/
+
 
 class MapUtilities implements MiddlewareInterface {
-		
+  
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
@@ -32,41 +43,17 @@ class MapUtilities implements MiddlewareInterface {
 		// continue only if action is ajaxPsr of extension myleaflet
 		if ($requestArguments['action'] != 'ajaxPsr') return $handler->handle($request);
 
-		//print_r ($normalizedParams);
-//		print_r($requestArguments);
-//		print_r($GLOBALS['TSFE']);
-
-//echo 'xxx';
-//print_r($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_myleaflet.']);
-
-//echo 'Test:' .($GLOBALS['TSFE'] instanceof TypoScriptFrontendController);
-//exit;
-
 		$objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');		
 		$ajaxController = $objectManager->get('WSR\Myleaflet\Controller\AjaxController');
 
+		$response = GeneralUtility::makeInstance(Response::class);
+		$response->withHeader('Content-type', ['text/html; charset=UTF-8']);
 
-//print_r($frontend->tmpl->setup['plugin.']['tx_myrental.']);
+		$out = $ajaxController->indexAction($request, $response);
 
-//exit;
-		$ajaxController->indexAction($request);
-		// when this exit is missing an infinite loop will result
+		$response->getBody()->write($out);
 
-		exit;
-//$out .= '5555';
-	
-//		$response = GeneralUtility::makeInstance(Response::class);
-//		$response->getBody()->write($out);
-	
-		// the following code never reached!
-        //$response = $handler->handle($request);
- 
-		// Set caching header for cache servers (like NGINX) in seconds
-//        $response = $response->withHeader('X-Accel-Expires', '60');
-//		$response = $response->withHeader('Content-Type', 'application/json; charset=utf-8');
- 
-//		$response->getBody()->write('I\'m content fetched via AJAX.' . json_encode($requestArguments));
-//        return $response;
+        return $response;
 
     }
 
