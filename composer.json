@@ -12,8 +12,8 @@
   "license": "MIT",
   "type": "typo3-cms-extension",
   "require": {
-	"typo3/cms-core": "^10.4 || ^11.1 || ^11.2",
-	"typo3/cms-frontend": "^10.4 || ^11.1 || ^11.2"
+	"typo3/cms-core": "^10.4 || >=11.1.1 || ^11.2",
+	"typo3/cms-frontend": "^10.4 || >=11.1.1 || ^11.2"
   },
   "replace": {
     "wsr/myleaflet": "self.version",
@@ -22,6 +22,11 @@
   "autoload": {
     "psr-4": {
       "WSR\\Myleaflet\\": "Classes/"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+       "extension-key": "myleaflet"
     }
   }
 }
