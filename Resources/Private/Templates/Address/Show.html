@@ -18,8 +18,7 @@ in /Configuration/ExtensionBuilder/settings.yaml:
 Otherwise your changes will be overwritten the next time you save the extension in the extension builder
 
 <f:section name="main">
-
-
+<div data-name="other-5">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
@@ -153,6 +152,8 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	    $('#map').width(mapContainerWidth - 10);
 	    $('#map').height(mapContainerWidth/4*3);
 
+		if (map) map.invalidateSize();      
+      
 		if (group.getBounds) {
 			map.fitBounds(group.getBounds());
 		}
@@ -164,7 +165,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	resizeMap();
 
 </script>
-
+  </div> <!-- data-name="other-5" -->
 
 </f:section>
 </html>
