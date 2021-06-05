@@ -287,10 +287,11 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	    $('#map').height(mapContainerWidth/4*3);
 
 		if (map) map.invalidateSize();      
-      
 		if (group.getBounds) {
 			map.fitBounds(group.getBounds());
-		}
+		} else {
+			if (map) map.setZoom(4);          
+        }
 	}
 
 	$(window).resize(resizeMap);
