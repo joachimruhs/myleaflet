@@ -17,8 +17,8 @@ info = '<div class="infoWindow">';
 
 	info += "<div class='categories'>{location.categories}</div>";
 
-	info += "<div>{location.www}</div>";
-	
+	info += '<div><f:link.typolink parameter="{location.www}"></f:link.typolink></div>';
+
 	info += "<div><f:format.raw>{location.infoWindowAddress}</f:format.raw></div>";
 
 	info += "<div>{location.zip} {location.city}</div>";
