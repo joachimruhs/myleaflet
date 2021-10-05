@@ -298,8 +298,8 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
 		if ($fileObjects[0])
 			return $fileObjects[0]->getOriginalFile()->getPublicUrl();
-		
-		
+
+
 	}		
 
 

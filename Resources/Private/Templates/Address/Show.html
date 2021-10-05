@@ -105,7 +105,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		L.control.scale({
 			'imperial': false
 		}).addTo(map);
-		
+
 		<f:format.raw>
 			var addressName = "{address.name}";
 			var icon = "{address.leafletmapicon}";
@@ -115,7 +115,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		
 		if (icon > '0') {
           var mapIcon = L.icon({
-				iconUrl: "fileadmin/ext/myleaflet/Resources/Public/Icons/" + icon,
+				iconUrl: "/fileadmin/ext/myleaflet/Resources/Public/Icons/" + icon,
 				iconSize:     [25, 41], // size of the icon
 				iconAnchor:   [12, 41]
 			});
