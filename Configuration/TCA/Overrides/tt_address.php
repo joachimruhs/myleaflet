@@ -40,7 +40,5 @@ $tmp_myleaflet_columns = array(
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tt_address', 'leafletmapicon,mapgeocode;;,', '', 'after:title');
 
-$GLOBALS['TCA']['tt_address']['types']['Tx_Myleaflet_Address']['showitem'] = $TCA['tt_address']['types']['0']['showitem'];
-$GLOBALS['TCA']['tt_address']['types']['Tx_Myleaflet_Address']['showitem'] .= ',--div--;LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_address,';
         
 

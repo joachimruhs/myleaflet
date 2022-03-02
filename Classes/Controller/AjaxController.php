@@ -283,7 +283,7 @@ max 1 call/sec
 		if ($requestArguments['categories'])
 		$this->_GP['categories'] = @implode(',', $requestArguments['categories']);
 		// sanitizing categories						 
-		if ($this->_GP['categories'] && preg_match('/^[0-9,]*$/', @implode(',', $this->_GP['categories'])) != 1) {
+		if ($this->_GP['categories'] && preg_match('/^[0-9,]*$/', $this->_GP['categories']) != 1) {
 			$this->_GP['categories'] = '';
 		}		
 		
