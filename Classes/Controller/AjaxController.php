@@ -280,8 +280,10 @@ max 1 call/sec
 	public function ajaxEidAction() {
 		$requestArguments = $this->request->getParsedBody()['tx_myleaflet_ajax'];
 
+        $this->_GP['categories'] = '';
+        $requestArguments['categories'] = $requestArguments['categories'] ?? '';
 		if ($requestArguments['categories'])
-		$this->_GP['categories'] = @implode(',', $requestArguments['categories']);
+    		$this->_GP['categories'] = @implode(',', $requestArguments['categories']);
 		// sanitizing categories						 
 		if ($this->_GP['categories'] && preg_match('/^[0-9,]*$/', $this->_GP['categories']) != 1) {
 			$this->_GP['categories'] = '';
@@ -368,7 +370,8 @@ max 1 call/sec
 				</script>';
 			return $out;
 		}
-	
+        $out = '';
+        $categories = '';
 		$out .= $this->getMarkerJS($locations, $categories, $latLon, $this->_GP['radius']);
 		
 		// get  the loctions list
