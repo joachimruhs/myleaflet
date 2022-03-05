@@ -35,13 +35,13 @@ class MapUtilities implements MiddlewareInterface {
 		$normalizedParams = $request->getAttribute('normalizedParams');
 		$typo3SiteUrl = $normalizedParams->getSiteUrl(); // Same as GeneralUtility::getIndpEnv('TYPO3_SITE_URL')
 
-		$requestArguments = $request->getParsedBody()['tx_myleaflet_ajax'];
+		$requestArguments = $request->getParsedBody()['tx_myleaflet_ajax'] ?? [];
 
 		// Remove any output produced until now
 		ob_clean();
 
 		// continue only if action is ajaxPsr of extension myleaflet
-		if ($requestArguments['action'] != 'ajaxPsr') return $handler->handle($request);
+		if (!isset($requestArguments['action']) || $requestArguments['action'] != 'ajaxPsr') return $handler->handle($request);
 
 		$objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');		
 		$ajaxController = $objectManager->get('WSR\Myleaflet\Controller\AjaxController');
