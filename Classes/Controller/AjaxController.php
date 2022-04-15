@@ -472,7 +472,7 @@ max 1 call/sec
 	
 
 	function getLocationsList($locations, $categories, $allLocations, $labels) {
-		$out .= $this->renderFluidTemplate('AjaxLocationList.html', array('locations' => $locations, 'categories' => $categories, 'labels' => $labels,
+		$out = $this->renderFluidTemplate('AjaxLocationList.html', array('locations' => $locations, 'categories' => $categories, 'labels' => $labels,
 											  'settings' => $this->settings, 'locationsCount' => count($allLocations)));
 		return $out;
 	}

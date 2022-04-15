@@ -170,6 +170,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 		$queryBuilder->orderBy('a.uid_foreign', 'asc');
 		$result = $queryBuilder->execute()->fetchAll();
 
+        $f = 0;
 		for ($i = 0; $i < count($result); $i++) {
 			for ($j = 0; $j < count($arrayOfCategories); $j++) {
 				if ($arrayOfCategories[$j] == $result[$i]['uid_local']) {
