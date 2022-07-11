@@ -56,7 +56,7 @@ When everything is ok - test it...
 Inserting data
 ^^^^^^^^^^^^^^
 In TYPO3 list module select page Data. First insert some sys_categories.
-Then you can insert some tt_address data records. You have not to insert the coordinates. If you don't insert some icon, the extension uses a default icon for the 
+Then you can insert some tt_address data records. You have to insert the coordinates. If you don't insert some icon, the extension uses a default icon for the 
 POI's.
 
 When everything is done you can start a search in frontend.
