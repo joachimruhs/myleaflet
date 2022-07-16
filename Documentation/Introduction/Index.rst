@@ -27,6 +27,7 @@ in the constants of myleaflet with the constant editor of TYPO3.
 What's new?
 ^^^^^^^^^^^
 
+Marker icon sizes can be set with the constant editor.
 Categories are sorted by field sorting.
 Localization of catgories and tt_address records implemented.
 New configuration option "categorySelectMode" implemented -> see administratormanual. 

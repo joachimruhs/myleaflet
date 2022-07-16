@@ -53,6 +53,13 @@ plugin.tx_myleaflet {
 
 		# cat=plugin.tx_myleaflet/leafletmaps; type=string; label=Default languageUid: Use 0 in multi language sites to override selected language in Frontend and if tt_adress record are not localized. Leave it blank to use TYPO3 localization.
 		defaultLanguageUid = 
+
+		# cat=plugin.tx_myleaflet/leafletmaps; type=int; label=Marker icon width: Width of the marker icon
+		markerIconWidth = 25
+
+		# cat=plugin.tx_myleaflet/leafletmaps; type=int; label=Marker icon height: Height of the marker icon
+		markerIconHeight = 41
+
 	}
 
 

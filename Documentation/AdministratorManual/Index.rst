@@ -276,7 +276,39 @@ defaultLanguageUid
    Default
         
 
+markerIconWidth
+"""""""""""""""
 
+.. container:: table-row
+
+   Property
+        markerIconWidth
+
+   Data type
+         int
+
+   Description
+         The width of the marker icon
+
+   Default
+        25
+
+markerIconHeight
+""""""""""""""""
+
+.. container:: table-row
+
+   Property
+        markerIconHeight
+
+   Data type
+         int
+
+   Description
+         The height of the marker icon
+
+   Default
+        41
 
 
 Known problems

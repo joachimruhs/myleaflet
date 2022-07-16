@@ -56,6 +56,9 @@ plugin.tx_myleaflet {
 		enableMarkerClusterer = {$plugin.tx_myleaflet.settings.enableMarkerClusterer}
 
 		defaultLanguageUid = {$plugin.tx_myleaflet.settings.defaultLanguageUid}
+
+		markerIconWidth = {$plugin.tx_myleaflet.settings.markerIconWidth}
+		markerIconHeight = {$plugin.tx_myleaflet.settings.markerIconHeight}
 	}
 
 

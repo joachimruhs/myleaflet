@@ -410,7 +410,6 @@ max 1 call/sec
 
 
 	protected function getMarkerJS($locations, $categories, $latLon, $radius) {
-
 		$out = '<script	type="text/javascript">';
 
 		// remove marker from map
@@ -434,8 +433,8 @@ max 1 call/sec
 		
 				var mapIcon' . $i . ' = L.icon({
 					iconUrl: "/fileadmin/ext/myleaflet/Resources/Public/Icons/' . $locations[$i]['leafletmapicon'] .'",
-					iconSize:     [25, 41], // size of the icon
-					iconAnchor:   [12, 41]
+					iconSize:     [' . $this->settings["markerIconWidth"] . ' , ' . $this->settings["markerIconHeight"] . ' ], // size of the icon
+					iconAnchor:   [' . intval($this->settings["markerIconWidth"] / 2) . ' , ' . $this->settings["markerIconHeight"] . ' ]
 				});
 				marker[' . $i . '] = L.marker([' . $lat . ',' . $lon . '], {icon: mapIcon' . $i . '}).addTo(markerGroup);
 			';
