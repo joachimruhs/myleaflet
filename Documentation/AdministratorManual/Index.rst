@@ -291,7 +291,7 @@ markerIconWidth
          The width of the marker icon
 
    Default
-        25
+        12
 
 markerIconHeight
 """"""""""""""""
@@ -308,7 +308,7 @@ markerIconHeight
          The height of the marker icon
 
    Default
-        41
+        20
 
 
 Known problems

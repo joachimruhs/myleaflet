@@ -55,10 +55,10 @@ plugin.tx_myleaflet {
 		defaultLanguageUid = 
 
 		# cat=plugin.tx_myleaflet/leafletmaps; type=int; label=Marker icon width: Width of the marker icon
-		markerIconWidth = 25
+		markerIconWidth = 12
 
 		# cat=plugin.tx_myleaflet/leafletmaps; type=int; label=Marker icon height: Height of the marker icon
-		markerIconHeight = 41
+		markerIconHeight = 20
 
 	}
 
