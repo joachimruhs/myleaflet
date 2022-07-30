@@ -12,7 +12,7 @@ namespace WSR\Myleaflet\Tests\Unit\Controller;
 use FriendsOfTYPO3\TtAddress\Domain\Model\Address;
 
 /* call it from console in Document Root from a composer TYPO3 installation
- * vendor\bin\phpunit -c vendor\nimut\testing-framework\res\Configuration\UnitTests.xml Public\typo3conf\ext\myleaflet\Tests\Unit\Controller\AddressControllerTest
+ * vendor\bin\phpunit -c vendor\nimut\testing-framework\res\Configuration\UnitTests.xml .\Public\typo3conf\ext\myleaflet\Tests\Unit\Controller\AddressControllerTest
  *
  */
 
