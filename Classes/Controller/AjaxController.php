@@ -332,7 +332,7 @@ max 1 call/sec
 		}			
 
 		$categoryMode = $this->settings['categorySelectMode'];
-		
+
 		$locations = $this->addressRepository->findLocationsInRadius($latLon, $this->_GP['radius'], $this->_GP['categories'], $this->conf['storagePid'], $this->language, $limit, $page, $orderBy, $categoryMode);
 		$allLocations = $this->addressRepository->findLocationsInRadius($latLon, $this->_GP['radius'], $this->_GP['categories'], $this->conf['storagePid'], $this->language, 1000, 0, $orderBy, $categoryMode);
 
