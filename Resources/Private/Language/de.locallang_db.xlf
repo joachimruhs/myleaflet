@@ -3,29 +3,29 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet" target-language="de">
     <header/>
     <body>
-      <trans-unit id="tx_myleaflet_domain_model_ajaxmap">
+      <trans-unit id="tx_myleaflet_domain_model_ajaxmap" approved="yes">
         <source>MyLeaflet (AjaxMap)</source>
-        <target state="translated">MyLeaflet (AjaxMap)</target>
+        <target state="final">MyLeaflet (AjaxMap)</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_domain_model_ajaxmap.description">
+      <trans-unit id="tx_myleaflet_domain_model_ajaxmap.description" approved="yes">
         <source>Leaflet maps for tt_address data</source>
-        <target state="translated">Leaflet maps für tt_address Daten</target>
+        <target state="final">Leaflet maps für tt_address Daten</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_domain_model_address">
+      <trans-unit id="tx_myleaflet_domain_model_address" approved="yes">
         <source>Address</source>
-        <target state="translated">Adresse</target>
+        <target state="final">Adresse</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_domain_model_address.name">
+      <trans-unit id="tx_myleaflet_domain_model_address.name" approved="yes">
         <source>Name</source>
-        <target state="translated">Name</target>
+        <target state="final">Name</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_domain_model_address.leafletmapicon">
+      <trans-unit id="tx_myleaflet_domain_model_address.leafletmapicon" approved="yes">
         <source>Leaflet Mapicon</source>
-        <target state="translated">Leaflet Map Icon</target>
+        <target state="final">Leaflet Map Icon</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_domain_model_address.geocode">
+      <trans-unit id="tx_myleaflet_domain_model_address.geocode" approved="yes">
         <source>Geocode</source>
-        <target state="translated">Geocode</target>
+        <target state="final">Geocode</target>
       </trans-unit>
     </body>
   </file>
