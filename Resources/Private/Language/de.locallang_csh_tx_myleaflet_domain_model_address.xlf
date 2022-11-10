@@ -5,15 +5,15 @@
     <body>
       <trans-unit id="tx_myleaflet_domain_model_ajaxmap">
         <source>MyLeaflet (AjaxMap)</source>
-        <target state="needs-translation">MyLeaflet (AjaxMap)</target>
+        <target state="translated">MyLeaflet (AjaxMap)</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_domain_model_ajaxmap.description">
         <source>Leaflet maps for tt_address data</source>
-        <target state="needs-translation">Leaflet maps for tt_address data</target>
+        <target state="translated">Leaflet Maps für tt_address Daten</target>
       </trans-unit>
       <trans-unit id="name.description">
         <source>name</source>
-        <target state="needs-translation">name</target>
+        <target state="translated">Name</target>
       </trans-unit>
     </body>
   </file>
