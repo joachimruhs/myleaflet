@@ -5,7 +5,7 @@
     <body>
       <trans-unit id="name.description">
         <source>name</source>
-        <target state="needs-translation">name</target>
+        <target state="translated">Name</target>
       </trans-unit>
     </body>
   </file>
