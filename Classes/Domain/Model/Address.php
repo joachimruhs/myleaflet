@@ -72,22 +72,4 @@ class Address extends \FriendsOfTYPO3\TtAddress\Domain\Model\Address
 		$this->mapgeocode = $mapgeocode;
 	}
 
-
-    /**
-     * Get first category
-     *
-     * @return Category
-     */
-    public function getFirstCategory()
-    {
-        $categories = $this->getCategories();
-        if (!is_null($categories)) {
-            $categories->rewind();
-            return $categories->current();
-        } else {
-            return null;
-        }
-    }
-
-
 }

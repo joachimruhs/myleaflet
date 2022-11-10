@@ -10,11 +10,8 @@ info = '<div class="infoWindow">';
 		info += '<img src="/fileadmin/{image.originalResource.originalFile.identifier}"  width="50" alt=""/>';
 	</f:for>
 
-	info += '<f:link.action action="show" extensionName="myleaflet" pluginName="SingleView" controller="Address" pageUid="{settings.detailsPageId}" arguments="{locationUid : location.uid}">' + "<strong><f:format.htmlentities>{location.name}</f:format.htmlentities></strong></f:link.action>";
-	
-	info += "<div>{location.name}</div>";
-
-
+	info += '<a href="?id={settings.detailsPageId}&tx_myleaflet_singleview[action]=show&tx_myleaflet_singleview[locationUid]={location.uid}"><strong>{location.name}</strong></a>';
+    
 	info += "<div class='categories'>{location.categories}</div>";
 
 	info += '<div><f:link.typolink parameter="{location.www}"></f:link.typolink></div>';

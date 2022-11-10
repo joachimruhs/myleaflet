@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2018 - 2021 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
+ *  (c) 2018 - 2022 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
  *
  ***/
 
@@ -67,25 +67,6 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->categoryRepository = $categoryRepository;
     }
 
-
-	/**
-	 * typo3CategoryRepository
-	 *
-	 * @var \TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository
-	 */
-	protected $typo3CategoryRepository;
-	
-    /**
-     * Inject a categoryRepository to enable DI
-     *
-     * @param \TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository $typo3CategoryRepository
-     * @return void
-     */
-    public function injectTypo3CategoryRepository(\TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository $typo3CategoryRepository) {
-        $this->typo3CategoryRepository = $typo3CategoryRepository;
-    }
-	
-
 	/**
 	 * TTAddressRepository
 	 *
@@ -121,6 +102,9 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 			$address = $this->ttaddressRepository->findByUid(intval($this->settings['singleViewUid']));
 		}
         $this->view->assign('address', $address);
+        return $this->responseFactory->createResponse()
+            ->withAddedHeader('Content-Type', 'text/html; charset=utf-8')
+            ->withBody($this->streamFactory->createStream($this->view->render()));
     }
 
     /**
@@ -198,8 +182,7 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		
 		// Get the default Settings
 		$customStoragePid = $this->conf['storagePid'];
-		$querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
-
+		$querySettings = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
 		$querySettings->setRespectStoragePage(true);
 		$querySettings->setStoragePageIds(array($customStoragePid));
 
@@ -209,22 +192,24 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 			$querySettings->setLanguageUid($this->settings['defaultLanguageUid']);
 		}
 
-		$this->typo3CategoryRepository->setDefaultQuerySettings($querySettings);
-		$this->typo3CategoryRepository->setDefaultOrderings(array('sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
-		$categories = $this->typo3CategoryRepository->findAll();
+//		$this->typo3CategoryRepository->setDefaultQuerySettings($querySettings);
+//		$this->typo3CategoryRepository->setDefaultOrderings(array('sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
 
-		for($i = 0; $i < count($categories); $i++) {
+		$context = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class);
+		$sys_language_uid = $context->getPropertyFromAspect('language', 'id'); 
 
-			// process only sys_categories of storagePid
-			if (! GeneralUtility::inList($customStoragePid, $categories[$i]->getPid())) continue;
+		$categories = $this->categoryRepository->findAllOverride($this->conf['storagePid'], $sys_language_uid);
 
-			$arr[$i]['uid']= $categories[$i]->getUid();
-			if ($categories[$i]->getParent()) {
-				$arr[$i]['parent'] = $categories[$i]->getParent()->getUid();
-			} else $arr[$i]['parent'] = 0;
-				
-			$arr[$i]['title'] = $categories[$i]->getTitle();
-		}
+        if ($categories) {
+            for($i = 0; $i < count($categories); $i++) {
+                $arr[$i]['uid']= $categories[$i]['uid'];
+                if ($categories[$i]['parent']) {
+                    $arr[$i]['parent'] = $categories[$i]['parent'];
+                } else $arr[$i]['parent'] = 0;
+                    
+                $arr[$i]['title'] = $categories[$i]['title'];
+            }
+        }
 		if (!$arr) {
 			$this->addFlashMessage('Please insert some sys_categories first!', 'Myleaflet', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
 			return;
@@ -239,6 +224,10 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
         $this->view->assign('categories' , $categories);
         $this->view->assign('addresses' , $addresses);
 		$this->view->assign('locationsCount', count($addresses));
+
+        return $this->responseFactory->createResponse()
+            ->withAddedHeader('Content-Type', 'text/html; charset=utf-8')
+            ->withBody($this->streamFactory->createStream($this->view->render()));
     
     }
 

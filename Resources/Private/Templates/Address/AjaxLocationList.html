@@ -15,12 +15,10 @@
 			</f:for>
 
 			<div>
-				<f:link.action action="show" extensionName="myleaflet" pluginName="SingleView" controller="Address" pageUid="{settings.detailsPageId}" arguments="{locationUid : location.uid}"><strong>{location.name}</strong>
-				</f:link.action>
+				<a href="?id={settings.detailsPageId}&tx_myleaflet_singleview[action]=show&tx_myleaflet_singleview[locationUid]={location.uid}"><strong>{location.name}</strong></a>
 			</div>
 	
 			<div class="categories">{location.categories}</div>
-
 		
 			<div><f:format.raw>{location.address}</f:format.raw></div>
 			<div>{location.zip}</div>

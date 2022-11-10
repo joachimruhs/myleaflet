@@ -2,18 +2,18 @@
 
 namespace WSR\Myleaflet\Controller;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Core\Environment;
-
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-//use Psr\Http\Server\MiddlewareInterface;
-//use Psr\Http\Server\RequestHandlerInterface;
-
-use FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository;
-
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 //use TYPO3\CMS\Core\Http\NullResponse;
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\Response;
+
+use WSR\Myleaflet\Domain\Repository\AddressRepository;
+
 
 /***
  *
@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Http\Response;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2018 - 2021 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
+ *  (c) 2018 - 2022 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
  *
  ***/
 
@@ -46,29 +46,25 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	public function __construct()
 	{
 		/** @var LanguageService $this->languageService */
-		$this->languageService = GeneralUtility::makeInstance('TYPO3\CMS\Core\Localization\LanguageService');
-		$this->languageService->init(trim($_POST['tx_myleaflet_ajax']['language']));
+         $this->languageService = $GLOBALS['LANG'];
 	}
-
-
+	
 	/**
 	 * AddressRepository
 	 *
-	 * @var \WSR\Myleaflet\Domain\Repository\AddressRepository
+	 * @var AddressRepository
 	 */
 	protected $addressRepository;
-	
+
     /**
      * Inject a addressRepository to enable DI
      *
-     * @param \WSR\Myleaflet\Domain\Repository\AddressRepository $addressRepository
+     * @param AddressRepository $addressRepository
      * @return void
      */
-    public function injectAddressRepository(\WSR\Myleaflet\Domain\Repository\AddressRepository $addressRepository) {
+    public function injectAddressRepository(AddressRepository $addressRepository) {
         $this->addressRepository = $addressRepository;
     }
-
-
 
 	/**
 	 * TTAddressRepository
@@ -84,6 +80,7 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
      * @param \FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository
      * @return void
      */
+
     public function injectTtAddressRepository(\FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository) {
         $this->ttaddressRepository = $ttaddressRepository;
     }
@@ -112,7 +109,7 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	 */
 	public function ajaxPageAction() {
 		// not used yet 
-		$requestArguments = $this->request->getArguments();
+		$requestArguments = $this->request1->getArguments();
 		return json_encode($requestArguments);
 	}
 	
@@ -121,7 +118,7 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	 * @return \stdclass $latLon
 	 */
 	public function ajaxEidGeocodeAction() {
-		$requestArguments = $this->request->getParsedBody()['tx_myleaflet_ajax'];
+		$requestArguments = $this->request1->getParsedBody()['tx_myleaflet_ajax'];
 
 		$address = urlencode($requestArguments['address']);
 		$country = urlencode($requestArguments['country']);
@@ -205,7 +202,7 @@ max 1 call/sec
 //		$queryParameters = $request->getParsedBody();
 //		$pid = (int)$queryParameters['pid'];
 //		$queryParams = $queryParameters;
-	
+
 		$frontend = $GLOBALS['TSFE'];
 
 		/** @var TypoScriptService $typoScriptService */
@@ -213,10 +210,10 @@ max 1 call/sec
 		$this->configuration = $typoScriptService->convertTypoScriptArrayToPlainArray($frontend->tmpl->setup['plugin.']['tx_myleaflet.']);
 		$this->settings = $this->configuration['settings'];
 		$this->conf['storagePid'] = $this->configuration['persistence']['storagePid'];
-	
-		$this->request = $request;
+
+		$this->request1 = $request;
 		$out = $this->ajaxEidAction();
-	
+
 	    $response->getBody()->write($out);
 		return;	
 
@@ -278,8 +275,16 @@ max 1 call/sec
 	 * @return \string html
 	 */
 	public function ajaxEidAction() {
-		$requestArguments = $this->request->getParsedBody()['tx_myleaflet_ajax'];
+		$requestArguments = $this->request1->getParsedBody()['tx_myleaflet_ajax'];
 
+        // fetching correct language for locallang labels
+        $siteConfiguration = $this->request1->getAttribute('site')->getConfiguration();
+        for ($i = 0; $i < count($siteConfiguration['languages']); $i++) {
+            if ($siteConfiguration['languages'][$i]['typo3Language'] == $requestArguments['language']) {
+                $this->language = $siteConfiguration['languages'][$i]['typo3Language'];
+            }
+        }
+        
         $this->_GP['categories'] = '';
         $requestArguments['categories'] = $requestArguments['categories'] ?? '';
 		if ($requestArguments['categories'])
@@ -288,13 +293,15 @@ max 1 call/sec
 		if ($this->_GP['categories'] && preg_match('/^[0-9,]*$/', $this->_GP['categories']) != 1) {
 			$this->_GP['categories'] = '';
 		}		
+
+        $this->_GP['categories'] = $this->categoryRepository->getCategoryList($this->_GP['categories'], $this->conf['storagePid']);
+
 		
 		if ($this->settings['defaultLanguageUid'] > '') {
 			$this->language = $this->settings['defaultLanguageUid'];
 		} else {
 			$this->language = $requestArguments['language'];		
 		}		
-
 
 		$latLon = $this->ajaxEidGeocodeAction();
 
@@ -353,6 +360,7 @@ max 1 call/sec
 					}
 					$locations[$i]['images'] =	$images;				
 				}
+
 			}
 		}
 		if (!is_array($locations) || count($locations) == 0) {
@@ -507,7 +515,8 @@ max 1 call/sec
 	 */
 	protected function translate($key)
 	{
-		return $this->languageService->sL('LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:' . $key);
+        $this->languageService->lang = $this->language;
+        return \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($key, 'myleaflet', []);
 	}
 
 	

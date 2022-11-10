@@ -11,7 +11,7 @@ plugin.tx_myleaflet {
   persistence {
     storagePid = {$plugin.tx_myleaflet.persistence.storagePid}
     #recursive = 1
-    
+ /*   
      classes {
 
             WSR\Myleaflet\Domain\Model\Address {
@@ -30,7 +30,7 @@ plugin.tx_myleaflet {
 			}
 
     	}
-
+*/
 
   }
   
