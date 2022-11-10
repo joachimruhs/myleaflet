@@ -3,62 +3,62 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet" target-language="de">
     <header/>
     <body>
-      <trans-unit id="tx_myleaflet_ajaxmap.name">
+      <trans-unit id="tx_myleaflet_ajaxmap.name" approved="yes">
         <source>MyLeaflet (AjaxMap)</source>
-        <target state="translated">MyLeaflet(AjaxMap)</target>
+        <target state="final">MyLeaflet(AjaxMap)</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_ajaxmap.description">
+      <trans-unit id="tx_myleaflet_ajaxmap.description" approved="yes">
         <source>Leaflet maps for tt_address data</source>
-        <target state="translated">Leaflet Maps für tt_address Daten</target>
+        <target state="final">Leaflet Maps für tt_address Daten</target>
       </trans-unit>
       <!-- messages -->
-      <trans-unit id="noLocationsFound">
+      <trans-unit id="noLocationsFound" approved="yes">
         <source>No locations found!</source>
-        <target state="translated">Keine Lokationen gefunden!</target>
+        <target state="final">Keine Lokationen gefunden!</target>
       </trans-unit>
-      <trans-unit id="errorInCategories">
+      <trans-unit id="errorInCategories" approved="yes">
         <source>Error in categories!</source>
-        <target state="translated">Kategoriefehler!</target>
+        <target state="final">Kategoriefehler!</target>
       </trans-unit>
-      <trans-unit id="address">
+      <trans-unit id="address" approved="yes">
         <source>Address</source>
-        <target state="translated">Adresse</target>
+        <target state="final">Adresse</target>
       </trans-unit>
-      <trans-unit id="zip">
+      <trans-unit id="zip" approved="yes">
         <source>Zip</source>
-        <target state="translated">Plz</target>
+        <target state="final">Plz</target>
       </trans-unit>
-      <trans-unit id="city">
+      <trans-unit id="city" approved="yes">
         <source>City</source>
-        <target state="translated">Stadt</target>
+        <target state="final">Stadt</target>
       </trans-unit>
-      <trans-unit id="country">
+      <trans-unit id="country" approved="yes">
         <source>Country</source>
-        <target state="translated">Land</target>
+        <target state="final">Land</target>
       </trans-unit>
-      <trans-unit id="search">
+      <trans-unit id="search" approved="yes">
         <source>Search</source>
-        <target state="translated">Suchen</target>
+        <target state="final">Suchen</target>
       </trans-unit>
-      <trans-unit id="noStartingPointCoordinatesFound">
+      <trans-unit id="noStartingPointCoordinatesFound" approved="yes">
         <source>No starting point coordinates found!</source>
-        <target state="translated">Keine Ausgangspunkt Koordinaten gefunden!</target>
+        <target state="final">Keine Ausgangspunkt Koordinaten gefunden!</target>
       </trans-unit>
-      <trans-unit id="distance">
+      <trans-unit id="distance" approved="yes">
         <source>Distance</source>
-        <target state="translated">Entfernung</target>
+        <target state="final">Entfernung</target>
       </trans-unit>
-      <trans-unit id="youAreHere">
+      <trans-unit id="youAreHere" approved="yes">
         <source>You are here</source>
-        <target state="translated">Sie befinden sich hier</target>
+        <target state="final">Sie befinden sich hier</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_domain_model_address.name">
+      <trans-unit id="tx_myleaflet_domain_model_address.name" approved="yes">
         <source>Name</source>
-        <target state="translated">Name</target>
+        <target state="final">Name</target>
       </trans-unit>
-      <trans-unit id="showMore">
+      <trans-unit id="showMore" approved="yes">
         <source>Show more</source>
-        <target state="translated">Mehr anzeigen</target>
+        <target state="final">Mehr anzeigen</target>
       </trans-unit>
     </body>
   </file>
