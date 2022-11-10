@@ -3,9 +3,9 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2019-12-06T07:08:31Z" product-name="myleaflet" target-language="de">
     <header/>
     <body>
-      <trans-unit id="name.description">
+      <trans-unit id="name.description" approved="yes">
         <source>name</source>
-        <target state="translated">Name</target>
+        <target state="final">Name</target>
       </trans-unit>
     </body>
   </file>
