@@ -5,27 +5,27 @@
     <body>
       <trans-unit id="tx_myleaflet_domain_model_ajaxmap">
         <source>MyLeaflet (AjaxMap)</source>
-        <target state="needs-translation">MyLeaflet (AjaxMap)</target>
+        <target state="translated">MyLeaflet (AjaxMap)</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_domain_model_ajaxmap.description">
         <source>Leaflet maps for tt_address data</source>
-        <target state="needs-translation">Leaflet maps for tt_address data</target>
+        <target state="translated">Leaflet maps für tt_address Daten</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_domain_model_address">
         <source>Address</source>
-        <target state="needs-translation">Address</target>
+        <target state="translated">Adresse</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_domain_model_address.name">
         <source>Name</source>
-        <target state="needs-translation">Name</target>
+        <target state="translated">Name</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_domain_model_address.leafletmapicon">
         <source>Leaflet Mapicon</source>
-        <target state="needs-translation">Leaflet Mapicon</target>
+        <target state="translated">Leaflet Map Icon</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_domain_model_address.geocode">
         <source>Geocode</source>
-        <target state="needs-translation">Geocode</target>
+        <target state="translated">Geocode</target>
       </trans-unit>
     </body>
   </file>
