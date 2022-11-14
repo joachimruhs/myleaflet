@@ -45,8 +45,6 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	 */
 	public function __construct()
 	{
-		/** @var LanguageService $this->languageService */
-         $this->languageService = $GLOBALS['LANG'];
 	}
 	
 	/**
@@ -293,9 +291,9 @@ max 1 call/sec
 		if ($this->_GP['categories'] && preg_match('/^[0-9,]*$/', $this->_GP['categories']) != 1) {
 			$this->_GP['categories'] = '';
 		}		
-
-        $this->_GP['categories'] = $this->categoryRepository->getCategoryList($this->_GP['categories'], $this->conf['storagePid']);
-
+        if ($this->_GP['categories']) {
+            $this->_GP['categories'] = $this->categoryRepository->getCategoryList($this->_GP['categories'], $this->conf['storagePid']);
+        }
 		
 		if ($this->settings['defaultLanguageUid'] > '') {
 			$this->language = $this->settings['defaultLanguageUid'];
@@ -515,7 +513,6 @@ max 1 call/sec
 	 */
 	protected function translate($key)
 	{
-        $this->languageService->lang = $this->language;
         return \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($key, 'myleaflet', []);
 	}
 

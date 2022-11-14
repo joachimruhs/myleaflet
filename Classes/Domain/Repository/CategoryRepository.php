@@ -130,12 +130,10 @@ protected $defaultOrderings = array('sorting' => \TYPO3\CMS\Extbase\Persistence\
                 )
             );
             $result = $queryBuilder->execute()->fetchAll();
-            if ($result) {
-                if ($result[0]['l10n_parent'] > 0) {
-                    $list .= $result[0]['l10n_parent'] .',';
-                } else {
-                    $list .= $categories[$i] . ',';
-                }
+            if ($result[0]['l10n_parent'] > 0) {
+                $list .= $result[0]['l10n_parent'] .',';
+            } else {
+                $list .= $categories[$i] . ',';
             }
         }
         return $list;

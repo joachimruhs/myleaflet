@@ -94,7 +94,7 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function showAction()
     {
 		$this->_GP = $this->request->getArguments();
-		if ($this->_GP['locationUid']) {// called from list link
+		if ($this->_GP['locationUid'] = $this->_GP['locationUid'] ?? 0) {// called from list link
 			$address = $this->ttaddressRepository->findByUid(intval($this->_GP['locationUid']));
 //			$address = $this->ttaddressRepository->findAll();
 		}
