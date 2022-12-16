@@ -60,9 +60,9 @@ call_user_func(
 			wizards.newContentElement.wizardItems.plugins {
 				elements {
 					ajaxsearch {
-						iconIdentifier = extension-myttaddressmap-content-element
-						title = LLL:EXT:myttaddressmap/Resources/Private/Language/locallang_db.xlf:tx_myttaddressmap_domain_model_ajaxsearch
-						description = LLL:EXT:myttaddressmap/Resources/Private/Language/locallang_db.xlf:tx_myttaddressmap_domain_model_ajaxsearch.description
+						iconIdentifier = extension-myleaflet-content-element
+						title = LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_ajaxsearch
+						description = LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_ajaxsearch.description
 						tt_content_defValues {
 							CType = list
 							list_type = myleaflet_ajaxmap

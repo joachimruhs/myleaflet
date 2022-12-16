@@ -56,7 +56,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 		else $categorySelectMode = ' OR ';
 
 		$queryBuilder = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Database\ConnectionPool::class)
-			->getQueryBuilderForTable('tx_myttaddressmap_domain_model_address');
+			->getQueryBuilderForTable('tx_myleaflet_domain_model_address');
 
 		$queryBuilder->from('tt_address', 'a');
 

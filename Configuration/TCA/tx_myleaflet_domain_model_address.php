@@ -1,7 +1,7 @@
 <?php
 return [
     'ctrl' => [
-        'title'	=> 'LLL:EXT:myttaddressmap/Resources/Private/Language/locallang_db.xlf:tx_myttaddressmap_domain_model_address',
+        'title'	=> 'LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_address',
         'label' => 'name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -16,7 +16,7 @@ return [
             'endtime' => 'endtime',
         ],
 		'searchFields' => 'name',
-        'iconfile' => 'EXT:myttaddressmap/Resources/Public/Icons/tx_myttaddressmap_domain_model_address.gif'
+        'iconfile' => 'EXT:myleaflet/Resources/Public/Icons/tx_myleaflet_domain_model_address.gif'
     ],
     'interface' => [
     ],
@@ -50,8 +50,8 @@ return [
                 'items' => [
                     ['', 0],
                 ],
-                'foreign_table' => 'tx_myttaddressmap_domain_model_address',
-                'foreign_table_where' => 'AND tx_myttaddressmap_domain_model_address.pid=###CURRENT_PID### AND tx_myttaddressmap_domain_model_address.sys_language_uid IN (-1,0)',
+                'foreign_table' => 'tx_myleaflet_domain_model_address',
+                'foreign_table_where' => 'AND tx_myleaflet_domain_model_address.pid=###CURRENT_PID### AND tx_myleaflet_domain_model_address.sys_language_uid IN (-1,0)',
             ],
         ],
         'l10n_diffsource' => [
@@ -98,7 +98,7 @@ return [
         ],
         'name' => [
 	        'exclude' => true,
-	        'label' => 'LLL:EXT:myttaddressmap/Resources/Private/Language/locallang_db.xlf:tx_myttaddressmap_domain_model_address.name',
+	        'label' => 'LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_address.name',
 	        'config' => [
 			    'type' => 'input',
 			    'size' => 30,
