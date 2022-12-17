@@ -53,30 +53,6 @@ call_user_func(
        }'
     );
 
-	
-	// wizards
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-		'mod {
-			wizards.newContentElement.wizardItems.plugins {
-				elements {
-					ajaxsearch {
-						iconIdentifier = extension-myleaflet-content-element
-						title = LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_ajaxsearch
-						description = LLL:EXT:myleaflet/Resources/Private/Language/locallang_db.xlf:tx_myleaflet_domain_model_ajaxsearch.description
-						tt_content_defValues {
-							CType = list
-							list_type = myleaflet_ajaxmap
-						}
-					}
-				}
-				show = *
-			}
-	   }'
-	);
-	
-	
-	
-		
     }
 );
 
