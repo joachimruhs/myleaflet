@@ -210,9 +210,13 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
                 $arr[$i]['title'] = $categories[$i]['title'];
             }
         }
-		if (!$arr) {
+
+        $arr = $arr ?? [];
+		if (count($arr) == 0) {
 			$this->addFlashMessage('Please insert some sys_categories first!', 'Myleaflet', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
-			return;
+            return $this->responseFactory->createResponse()
+                ->withAddedHeader('Content-Type', 'text/html; charset=utf-8')
+                ->withBody($this->streamFactory->createStream($this->view->render()));
 		}
 		$categories = $this->buildTree($arr);
 
