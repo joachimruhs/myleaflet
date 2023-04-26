@@ -212,8 +212,7 @@ max 1 call/sec
 		$this->request1 = $request;
 		$out = $this->ajaxEidAction();
 
-	    $response->getBody()->write($out);
-		return;	
+		return $out;	
 
 
 		//    $response->getBody()->write(json_encode($queryParams));
