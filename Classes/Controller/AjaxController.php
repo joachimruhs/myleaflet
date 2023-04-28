@@ -14,6 +14,10 @@ use TYPO3\CMS\Core\Http\Response;
 
 use WSR\Myleaflet\Domain\Repository\AddressRepository;
 
+use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Core\TypoScript\TemplateService;
+use TYPO3\CMS\Core\Utility\RootlineUtility;
+
 
 /***
  *
@@ -22,7 +26,7 @@ use WSR\Myleaflet\Domain\Repository\AddressRepository;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2018 - 2022 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
+ *  (c) 2018 - 2023 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
  *
  ***/
 
@@ -183,7 +187,7 @@ max 1 call/sec
 	 * @param TYPO3\CMS\Core\Http\Response      $response
 	 */
 	protected function processGetRequest(ServerRequestInterface $request, ResponseInterface $response) {
-//		$view = $this->getView();
+		$view = $this->getView();
 	
 		$response->withHeader('Content-type', ['text/html; charset=UTF-8']);
 		$response->getBody()->write($view->render());
@@ -211,31 +215,7 @@ max 1 call/sec
 
 		$this->request1 = $request;
 		$out = $this->ajaxEidAction();
-
 		return $out;	
-
-
-		//    $response->getBody()->write(json_encode($queryParams));
-		//    $response->getBody()->write($out);
-		
-		/** @var Response $response */
-		//$response = GeneralUtility::makeInstance(Response::class);
-		//$response->getBody()->write($out);
-		
-		//return $response;
-/*		
-		$view = $this->getView();
-		$hasErrors = false;
-		// ... some logic
-	
-		if ($hasErrors) {
-			$response->withHeader('Content-type', ['text/html; charset=UTF-8']);
-			$response->getBody()->write($view->render());
-		} else {
-			$response->withHeader('Content-type', ['application/json; charset=UTF-8']);
-			$response->getBody()->write(json_encode(['success' => true]));
-		}
-*/
 	}
 
 
@@ -256,7 +236,8 @@ max 1 call/sec
 		$templateService->runThroughTemplates($rootLine);
 		$templateService->generateConfig();
 	
-		$fluidView = new StandaloneView();
+//		$fluidView = new StandaloneView();
+        $fluidView = GeneralUtility::makeInstance(StandaloneView::class);
 		$fluidView->setLayoutRootPaths($templateService->setup['plugin.']['tx_yourext.']['view.']['layoutRootPaths.']);
 		$fluidView->setTemplateRootPaths($templateService->setup['plugin.']['tx_yourext.']['view.']['templateRootPaths.']);
 		$fluidView->setPartialRootPaths($templateService->setup['plugin.']['tx_yourext.']['view.']['partialRootPaths.']);
