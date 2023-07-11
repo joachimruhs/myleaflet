@@ -3,62 +3,62 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet" target-language="da">
     <header/>
     <body>
-      <trans-unit id="tx_myleaflet_ajaxmap.name">
+      <trans-unit id="tx_myleaflet_ajaxmap.name" approved="yes">
         <source>MyLeaflet (AjaxMap)</source>
-        <target state="needs-translation">MyLeaflet (AjaxMap)</target>
+        <target state="final">MyLeaflet (AjaxMap)</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_ajaxmap.description">
+      <trans-unit id="tx_myleaflet_ajaxmap.description" approved="yes">
         <source>Leaflet maps for tt_address data</source>
-        <target state="needs-translation">Leaflet maps for tt_address data</target>
+        <target state="final">Leaflet-kort til tt_address data</target>
       </trans-unit>
       <!-- messages -->
-      <trans-unit id="noLocationsFound">
+      <trans-unit id="noLocationsFound" approved="yes">
         <source>No locations found!</source>
-        <target state="needs-translation">No locations found!</target>
+        <target state="final">Ingen steder fundet!</target>
       </trans-unit>
-      <trans-unit id="errorInCategories">
+      <trans-unit id="errorInCategories" approved="yes">
         <source>Error in categories!</source>
-        <target state="needs-translation">Error in categories!</target>
+        <target state="final">Fejl i kategorier!</target>
       </trans-unit>
-      <trans-unit id="address">
+      <trans-unit id="address" approved="yes">
         <source>Address</source>
-        <target state="needs-translation">Address</target>
+        <target state="final">Adresse</target>
       </trans-unit>
-      <trans-unit id="zip">
+      <trans-unit id="zip" approved="yes">
         <source>Zip</source>
-        <target state="needs-translation">Zip</target>
+        <target state="final">Postnummer</target>
       </trans-unit>
-      <trans-unit id="city">
+      <trans-unit id="city" approved="yes">
         <source>City</source>
-        <target state="needs-translation">City</target>
+        <target state="final">By</target>
       </trans-unit>
-      <trans-unit id="country">
+      <trans-unit id="country" approved="yes">
         <source>Country</source>
-        <target state="needs-translation">Country</target>
+        <target state="final">Land</target>
       </trans-unit>
-      <trans-unit id="search">
+      <trans-unit id="search" approved="yes">
         <source>Search</source>
-        <target state="needs-translation">Search</target>
+        <target state="final">Søg</target>
       </trans-unit>
-      <trans-unit id="noStartingPointCoordinatesFound">
+      <trans-unit id="noStartingPointCoordinatesFound" approved="yes">
         <source>No starting point coordinates found!</source>
-        <target state="needs-translation">No starting point coordinates found!</target>
+        <target state="final">Intet udgangspunkt for koordinater fundet!</target>
       </trans-unit>
-      <trans-unit id="distance">
+      <trans-unit id="distance" approved="yes">
         <source>Distance</source>
-        <target state="needs-translation">Distance</target>
+        <target state="final">Afstand</target>
       </trans-unit>
-      <trans-unit id="youAreHere">
+      <trans-unit id="youAreHere" approved="yes">
         <source>You are here</source>
-        <target state="needs-translation">You are here</target>
+        <target state="final">Du er her</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_domain_model_address.name">
+      <trans-unit id="tx_myleaflet_domain_model_address.name" approved="yes">
         <source>Name</source>
-        <target state="needs-translation">Name</target>
+        <target state="final">Navn</target>
       </trans-unit>
-      <trans-unit id="showMore">
+      <trans-unit id="showMore" approved="yes">
         <source>Show more</source>
-        <target state="needs-translation">Show more</target>
+        <target state="final">Vis mere</target>
       </trans-unit>
     </body>
   </file>
