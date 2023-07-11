@@ -3,17 +3,17 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet" target-language="da">
     <header/>
     <body>
-      <trans-unit id="tx_myleaflet_domain_model_ajaxmap">
+      <trans-unit id="tx_myleaflet_domain_model_ajaxmap" approved="yes">
         <source>MyLeaflet (AjaxMap)</source>
-        <target state="needs-translation">MyLeaflet (AjaxMap)</target>
+        <target state="final">MyLeaflet (AjaxMap)</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_domain_model_ajaxmap.description">
+      <trans-unit id="tx_myleaflet_domain_model_ajaxmap.description" approved="yes">
         <source>Leaflet maps for tt_address data</source>
-        <target state="needs-translation">Leaflet maps for tt_address data</target>
+        <target state="final">Leaflet-kort til tt_address data</target>
       </trans-unit>
-      <trans-unit id="name.description">
+      <trans-unit id="name.description" approved="yes">
         <source>name</source>
-        <target state="needs-translation">name</target>
+        <target state="final">navn</target>
       </trans-unit>
     </body>
   </file>
