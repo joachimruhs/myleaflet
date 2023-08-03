@@ -126,13 +126,13 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 		$country = urlencode($requestArguments['country']);
 
 /*
-https://nominatim.openstreetmap.org/search/elzstr.%2010%20rheinhausen?format=json&addressdetails=1&limit=1&polygon_svg=1
+https://nominatim.openstreetmap.org/search?q=elzstr.%2010%20rheinhausen?format=json&addressdetails=1&limit=1&polygon_svg=1
 max 1 call/sec
 */
 
-		$apiURL = "https://nominatim.openstreetmap.org/search/$address,+$country?format=json&limit=1";
+		$apiURL = "https://nominatim.openstreetmap.org/search?q=$address,$country&format=json&limit=1";
 		$addressData = $this->get_webpage($apiURL);
-		
+
 		$coordinates[1] = json_decode($addressData)[0]->lat;
 		$coordinates[0] = json_decode($addressData)[0]->lon;
 
