@@ -14,3 +14,9 @@
 .tx-myleaflet .hidden {
 	display: none;
 }
+
+.tx-myleaflet .submitButton {
+    font-weight: bold;
+    color:#000;border:0px #000 solid;
+    background-color:#fff;
+}

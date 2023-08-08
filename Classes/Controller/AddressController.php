@@ -4,6 +4,8 @@ namespace WSR\Myleaflet\Controller;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 
 /***
  *
@@ -12,7 +14,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2018 - 2022 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
+ *  (c) 2018 - 2023 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
  *
  ***/
 
@@ -169,6 +171,19 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		$categories = $this->categoryRepository->findAll();
 */
 		$iconPath = 'fileadmin/ext/myleaflet/Resources/Public/Icons/';
+   		if (!is_dir(Environment::getPublicPath() . '/' . $iconPath)) {
+            $fileSystem = new FileSystem();
+            if (Environment::getPublicPath() != Environment::getProjectPath()) {
+                //  we are in composerMode
+    			$sourceDir = Environment::getProjectPath() . '/vendor/wsr/myleaflet/Resources/Public/';
+            } else {
+                $sourceDir = 'typo3conf/ext/myleaflet/Resources/Public/';
+            }
+            $fileSystem->mirror($sourceDir, 'fileadmin/ext/myleaflet/Resources/Public/');
+			$this->addFlashMessage('Directory ' . $iconPath . ' created for use with own mapIcons!', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
+        }
+
+/*
 		if (!is_dir(Environment::getPublicPath() . '/' . $iconPath)) {
 			$this->addFlashMessage('Directory ' . $iconPath . ' created for use with own mapIcons!', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
 			GeneralUtility::mkdir_deep(Environment::getPublicPath() . '/' . $iconPath);
@@ -178,7 +193,7 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 				copy($sourceDir . $file, $iconPath . $file);
 			}
 		}
-		
+*/		
 		
 		// Get the default Settings
 		$customStoragePid = $this->conf['storagePid'];

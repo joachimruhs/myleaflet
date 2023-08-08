@@ -12,7 +12,7 @@ $tmp_myleaflet_columns = array(
 		    'items' => [
 		        [ '', 0 ],
 			],
-			'fileFolder' => 'fileadmin/ext/myleaflet/Resources/Public/Icons/',
+			'fileFolder' => 'fileadmin/ext/myleaflet/Resources/Public/MapIcons/',
 			'fileFolder_extList' => 'png,jpg,jpeg,gif',
 			'fileFolder_recursions' => 0,
 			'fieldWizard' => [

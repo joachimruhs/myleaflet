@@ -10,8 +10,16 @@ info = '<div class="infoWindow">';
 		info += '<img src="/fileadmin/{image.originalResource.originalFile.identifier}"  width="50" alt=""/>';
 	</f:for>
 
-	info += '<a href="?id={settings.detailsPageId}&tx_myleaflet_singleview[action]=show&tx_myleaflet_singleview[locationUid]={location.uid}"><strong>{location.name}</strong></a>';
-    
+<f:comment>
+    info += '<f:link.page pageUid="{settings.detailsPageId}" additionalParams="{tx_myleaflet_singleview: {action: 'show', locationUid: '{location.uid}'}}" >{location.first_name} {location.name}</f:link.page>';
+</f:comment>
+    info += '<form  action="/?id={settings.detailsPageId}" method="POST">';
+    info += '<input class="hidden" name="tx_myleaflet_singleview[locationUid]" value="{location.uid}">';
+    info += '<button class="submitButton" type="submit">{location.first_name} {location.name}</button>';
+    info += '<form>';
+
+
+
 	info += "<div class='categories'>{location.categories}</div>";
 
 	info += '<div><f:link.typolink parameter="{location.www}"></f:link.typolink></div>';
