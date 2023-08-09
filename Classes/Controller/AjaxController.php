@@ -481,6 +481,7 @@ max 1 call/sec
 		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
 		$view->setTemplatePathAndFilename($templatePath);
 		$view->assignMultiple($assign);
+        $view->setRequest($this->request1);
 		return $view->render();
 	}
 
