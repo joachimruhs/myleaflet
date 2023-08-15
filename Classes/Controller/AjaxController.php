@@ -144,7 +144,8 @@ https://nominatim.openstreetmap.org/search/elzstr.%2010%20rheinhausen?format=jso
 max 1 call/sec
 */
 
-		$apiURL = "https://nominatim.openstreetmap.org/search/$address,+$country?format=json&limit=1";
+		$apiURL = "https://nominatim.openstreetmap.org/search?q=$address,$country&format=json&limit=1";
+		
 		$addressData = $this->get_webpage($apiURL);
 		
 		$coordinates[1] = json_decode($addressData)[0]->lat;
