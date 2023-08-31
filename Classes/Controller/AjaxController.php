@@ -481,6 +481,7 @@ max 1 call/sec
 		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
 		$view->setTemplatePathAndFilename($templatePath);
 		$view->assignMultiple($assign);
+        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() > 11)
         $view->setRequest($this->request1);
 		return $view->render();
 	}
