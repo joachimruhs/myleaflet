@@ -69,25 +69,6 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
     }
 
 	/**
-	 * TTAddressRepository
-	 *
-	 * @var \FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository
-	 */
-	protected $ttaddressRepository;
-
-	
-    /**
-     * Inject a ttaddressRepository to enable DI
-     *
-     * @param \FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository
-     * @return void
-     */
-
-    public function injectTtAddressRepository(\FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository) {
-        $this->ttaddressRepository = $ttaddressRepository;
-    }
-
-	/**
 	 * categoryRepository
 	 *
 	 * @var \WSR\Myleaflet\Domain\Repository\CategoryRepository
@@ -333,8 +314,8 @@ max 1 call/sec
 				$locations[$i]['infoWindowAddress'] = str_replace(array("\r\n", "\r", "\n"), '<br />', htmlspecialchars($address, ENT_QUOTES));
 	
 				if ($locations[$i]['image'] > 0) {
-					if ($this->ttaddressRepository->findByUid($locations[$i]['uid'])) {
-						$images = $this->ttaddressRepository->findByUid($locations[$i]['uid'])->getImage();
+					if ($this->addressRepository->findByUid($locations[$i]['uid'])) {
+						$images = $this->addressRepository->findByUid($locations[$i]['uid'])->getImage();
 					}
 					$locations[$i]['images'] =	$images;				
 				}

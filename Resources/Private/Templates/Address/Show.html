@@ -57,15 +57,13 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <f:debug>{_all}</f:debug>
 </f:comment>
 
-
-
-
 <script>
 
 	var map = '';
 	var group = '';
-	
+
 	$(document).ready(function () {
+
 //		map = L.map('map').setView([48.2, 7.7], 13);	
 		var markerArray = [];
 		
@@ -113,11 +111,13 @@ Otherwise your changes will be overwritten the next time you save the extension 
 			var lon = {address.longitude};
 		</f:format.raw>
 		
+        var icon = "<f:format.raw>{address.leafletmapicon}</f:format.raw>";
+
 		if (icon > '0') {
           var mapIcon = L.icon({
-				iconUrl: "/fileadmin/ext/myleaflet/Resources/Public/Icons/" + icon,
-				iconSize:     [25, 41], // size of the icon
-				iconAnchor:   [12, 41]
+				iconUrl: "/fileadmin/ext/myleaflet/Resources/Public/MapIcons/" + icon,
+				iconSize:     [' . {settings["markerIconWidth"]} . ' , ' . {settings["markerIconHeight"]} . ' ], // size of the icon
+				iconAnchor:   [' . intval({settings["markerIconWidth"]} / 2) . ' , ' . {settings["markerIconHeight"]} . ' ]
 			});
 
           markerArray.push(L.marker([lat, lon], {icon: mapIcon}));

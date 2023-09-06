@@ -69,24 +69,6 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->categoryRepository = $categoryRepository;
     }
 
-	/**
-	 * TTAddressRepository
-	 *
-	 * @var \FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository
-	 */
-	protected $ttaddressRepository;
-
-	
-    /**
-     * Inject a ttaddressRepository to enable DI
-     *
-     * @param \FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository
-     * @return void
-     */
-    public function injectTtAddressRepository(\FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository $ttaddressRepository) {
-        $this->ttaddressRepository = $ttaddressRepository;
-    }
-
 
     /**
      * action show
@@ -97,11 +79,11 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
 		$this->_GP = $this->request->getArguments();
 		if ($this->_GP['locationUid'] = $this->_GP['locationUid'] ?? 0) {// called from list link
-			$address = $this->ttaddressRepository->findByUid(intval($this->_GP['locationUid']));
+			$address = $this->addressRepository->findByUid(intval($this->_GP['locationUid']));
 //			$address = $this->ttaddressRepository->findAll();
 		}
 		else {
-			$address = $this->ttaddressRepository->findByUid(intval($this->settings['singleViewUid']));
+			$address = $this->addressRepository->findByUid(intval($this->settings['singleViewUid']));
 		}
         $this->view->assign('address', $address);
         return $this->responseFactory->createResponse()
@@ -201,7 +183,7 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		$querySettings->setRespectStoragePage(true);
 		$querySettings->setStoragePageIds(array($customStoragePid));
 
-		$addresses = $this->ttaddressRepository->findAll();
+		$addresses = $this->addressRepository->findAll();
 
 		if ($this->settings['defaultLanguageUid'] > '') {
 			$querySettings->setLanguageUid($this->settings['defaultLanguageUid']);
