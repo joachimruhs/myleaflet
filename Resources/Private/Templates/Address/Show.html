@@ -116,8 +116,8 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		if (icon > '0') {
           var mapIcon = L.icon({
 				iconUrl: "/fileadmin/ext/myleaflet/Resources/Public/MapIcons/" + icon,
-				iconSize:     [' . {settings["markerIconWidth"]} . ' , ' . {settings["markerIconHeight"]} . ' ], // size of the icon
-				iconAnchor:   [' . intval({settings["markerIconWidth"]} / 2) . ' , ' . {settings["markerIconHeight"]} . ' ]
+				iconSize:     [  <f:format.raw>{settings.markerIconWidth} , {settings.markerIconHeight}</f:format.raw>], // size of the icon
+				iconAnchor:   [  <f:format.raw>{settings.markerIconWidth} / 2 , {settings.markerIconHeight}</f:format.raw>]
 			});
 
           markerArray.push(L.marker([lat, lon], {icon: mapIcon}));
