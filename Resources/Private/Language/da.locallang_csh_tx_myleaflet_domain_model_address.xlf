@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet" target-language="da">
+    <header/>
+    <body>
+      <trans-unit id="tx_myleaflet_domain_model_ajaxmap" approved="yes">
+        <source>MyLeaflet (AjaxMap)</source>
+        <target state="final">MyLeaflet (AjaxMap)</target>
+      </trans-unit>
+      <trans-unit id="tx_myleaflet_domain_model_ajaxmap.description" approved="yes">
+        <source>Leaflet maps for tt_address data</source>
+        <target state="final">Leaflet-kort til tt_address data</target>
+      </trans-unit>
+      <trans-unit id="name.description" approved="yes">
+        <source>name</source>
+        <target state="final">navn</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <xliff version="1.0">
-  <file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet" target-language="de">
+  <file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet" target-language="da">
     <header/>
     <body>
       <trans-unit id="tx_myleaflet_ajaxmap.name" approved="yes">
         <source>MyLeaflet (AjaxMap)</source>
-        <target state="final">MyLeaflet(AjaxMap)</target>
+        <target state="final">MyLeaflet (AjaxMap)</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_ajaxmap.description" approved="yes">
         <source>Leaflet maps for tt_address data</source>
-        <target state="final">Leaflet Maps für tt_address Daten</target>
+        <target state="final">Leaflet-kort til tt_address data</target>
       </trans-unit>
       <!-- messages -->
       <trans-unit id="noLocationsFound" approved="yes">
         <source>No locations found!</source>
-        <target state="final">Keine Lokationen gefunden!</target>
+        <target state="final">Ingen steder fundet!</target>
       </trans-unit>
       <trans-unit id="errorInCategories" approved="yes">
         <source>Error in categories!</source>
-        <target state="final">Kategoriefehler!</target>
+        <target state="final">Fejl i kategorier!</target>
       </trans-unit>
       <trans-unit id="address" approved="yes">
         <source>Address</source>
@@ -26,11 +26,11 @@
       </trans-unit>
       <trans-unit id="zip" approved="yes">
         <source>Zip</source>
-        <target state="final">Plz</target>
+        <target state="final">Postnummer</target>
       </trans-unit>
       <trans-unit id="city" approved="yes">
         <source>City</source>
-        <target state="final">Stadt</target>
+        <target state="final">By</target>
       </trans-unit>
       <trans-unit id="country" approved="yes">
         <source>Country</source>
@@ -38,27 +38,27 @@
       </trans-unit>
       <trans-unit id="search" approved="yes">
         <source>Search</source>
-        <target state="final">Suchen</target>
+        <target state="final">Søg</target>
       </trans-unit>
       <trans-unit id="noStartingPointCoordinatesFound" approved="yes">
         <source>No starting point coordinates found!</source>
-        <target state="final">Keine Ausgangspunkt Koordinaten gefunden!</target>
+        <target state="final">Intet udgangspunkt for koordinater fundet!</target>
       </trans-unit>
       <trans-unit id="distance" approved="yes">
         <source>Distance</source>
-        <target state="final">Entfernung</target>
+        <target state="final">Afstand</target>
       </trans-unit>
       <trans-unit id="youAreHere" approved="yes">
         <source>You are here</source>
-        <target state="final">Sie befinden sich hier</target>
+        <target state="final">Du er her</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_domain_model_address.name" approved="yes">
         <source>Name</source>
-        <target state="final">Name</target>
+        <target state="final">Navn</target>
       </trans-unit>
       <trans-unit id="showMore" approved="yes">
         <source>Show more</source>
-        <target state="final">Mehr anzeigen</target>
+        <target state="final">Vis mere</target>
       </trans-unit>
     </body>
   </file>
