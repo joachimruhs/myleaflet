@@ -19,6 +19,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Core\Database\Connection;
  
 //use TYPO3\CMS\Extbase\Persistence\Repository;
 
@@ -100,23 +101,23 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 				$queryBuilder->createNamedParameter(
 				$arrayOfPids,
 //				$query->getQuerySettings()->getStoragePageIds(),
-				\Doctrine\DBAL\Connection::PARAM_INT_ARRAY
+				Connection::PARAM_INT_ARRAY
 				)
 			)
 		)		
 		->andWhere(
-			$queryBuilder->expr()->eq('a.sys_language_uid',	$queryBuilder->createNamedParameter($language,\PDO::PARAM_INT))
+			$queryBuilder->expr()->eq('a.sys_language_uid',	$queryBuilder->createNamedParameter($language, Connection::PARAM_INT))
 		)
 		
 		->orderBy('distance');
 		
-        $queryBuilder->having('`distance` <= ' . $queryBuilder->createNamedParameter($radius, \PDO::PARAM_INT));
+        $queryBuilder->having('`distance` <= ' . $queryBuilder->createNamedParameter($radius, Connection::PARAM_INT));
 		$queryBuilder = $this->addCategoryQueryPart($categories, $categoryMode, $queryBuilder);
 
 		if ($categorySelectMode == ' OR ')
 			$queryBuilder->setMaxResults(intval($limit))->setFirstResult(intval($page * $limit));
 
-		$result =  $queryBuilder->execute()->fetchAll();
+		$result =  $queryBuilder->executeQuery()->fetchAllAssociative();
 		
 		$arrayOfCategories = \TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(',', $categories, TRUE);
 
@@ -160,15 +161,15 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 		$queryBuilder->from('sys_category_record_mm', 'a');
 		$queryBuilder->select('*');
 		$queryBuilder->where(
-			$queryBuilder->expr()->andX(
-				$queryBuilder->expr()->eq('a.uid_foreign', $queryBuilder->createNamedParameter($locationUid, \PDO::PARAM_INT)),
+			$queryBuilder->expr()->and(
+				$queryBuilder->expr()->eq('a.uid_foreign', $queryBuilder->createNamedParameter($locationUid, Connection::PARAM_INT)),
 				$queryBuilder->expr()->eq('a.tablenames', $queryBuilder->createNamedParameter('tt_address')),
 				$queryBuilder->expr()->eq('a.fieldname', $queryBuilder->createNamedParameter('categories')),
-				$queryBuilder->expr()->in('a.uid_local', $queryBuilder->createNamedParameter($arrayOfCategories, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY))
+				$queryBuilder->expr()->in('a.uid_local', $queryBuilder->createNamedParameter($arrayOfCategories, Connection::PARAM_INT_ARRAY))
 			)
 		);
 		$queryBuilder->orderBy('a.uid_foreign', 'asc');
-		$result = $queryBuilder->execute()->fetchAll();
+		$result = $queryBuilder->executeQuery()->fetchAllAssociative();
 
         $f = 0;
 		for ($i = 0; $i < count($result); $i++) {
@@ -203,7 +204,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 				'a',
 				'sys_category_record_mm',
 				'c',
-                $expression->andX(
+                $expression->and(
                     $expression->eq('a.uid', $queryBuilder->quoteIdentifier('c.uid_foreign')),
                     $expression->eq(
 						'c.tablenames',
@@ -219,7 +220,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 				$queryBuilder->andWhere(
 					$expression->in(
 						'c.uid_local',
-						$queryBuilder->createNamedParameter($arrayOfCategories, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+						$queryBuilder->createNamedParameter($arrayOfCategories, Connection::PARAM_INT_ARRAY)
 					)
 				);
 		}
@@ -249,7 +250,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 				'c',
 				'sys_category_record_mm',
 				'm',
-                $expression->andX(
+                $expression->and(
                     $expression->eq('c.uid', 'm.uid_local'),
   
                     $expression->eq(
@@ -272,7 +273,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 			$queryBuilder->andWhere(
 				$expression->eq(
 					'm.uid_foreign',
-					$queryBuilder->createNamedParameter($locationUid, \PDO::PARAM_INT)
+					$queryBuilder->createNamedParameter($locationUid, Connection::PARAM_INT)
 				)
 			);
 

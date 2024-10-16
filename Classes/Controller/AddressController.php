@@ -162,7 +162,7 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
                 $sourceDir = 'typo3conf/ext/myleaflet/Resources/Public/';
             }
             $fileSystem->mirror($sourceDir, 'fileadmin/ext/myleaflet/Resources/Public/');
-			$this->addFlashMessage('Directory ' . $iconPath . ' created for use with own mapIcons!', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
+			$this->addFlashMessage('Directory ' . $iconPath . ' created for use with own mapIcons!', '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO);
         }
 
 /*
@@ -210,7 +210,7 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
         $arr = $arr ?? [];
 		if (count($arr) == 0) {
-			$this->addFlashMessage('Please insert some sys_categories first!', 'Myleaflet', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+			$this->addFlashMessage('Please insert some sys_categories first!', 'Myleaflet', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
             return $this->responseFactory->createResponse()
                 ->withAddedHeader('Content-Type', 'text/html; charset=utf-8')
                 ->withBody($this->streamFactory->createStream($this->view->render()));
@@ -221,7 +221,10 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		$sys_language_uid = $languageAspect->getId();
 		$this->view->assign('L', $sys_language_uid);
 
-        $this->view->assign('id' , $GLOBALS['TSFE']->page['uid']);
+        $pageArguments = $this->request->getAttribute('routing');
+        $pageId = $pageArguments->getPageId();
+
+        $this->view->assign('id' , $pageId);
         $this->view->assign('categories' , $categories);
         $this->view->assign('addresses' , $addresses);
 		$this->view->assign('locationsCount', count($addresses));

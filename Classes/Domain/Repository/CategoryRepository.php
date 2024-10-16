@@ -2,6 +2,7 @@
 namespace WSR\Myleaflet\Domain\Repository;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Database\Connection;
 
 /***
  *
@@ -40,23 +41,23 @@ protected $defaultOrderings = array('sorting' => \TYPO3\CMS\Extbase\Persistence\
 		->where(
 			$queryBuilder->expr()->eq(
 				'pid',
-				$queryBuilder->createNamedParameter($storagePid, \PDO::PARAM_INT)
+				$queryBuilder->createNamedParameter($storagePid, Connection::PARAM_INT)
 			)
 		)			
-		->andWhere($queryBuilder->expr()->andX(
-				$queryBuilder->expr()->andX(
-					$queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($sys_language_uid, \PDO::PARAM_INT))
+		->andWhere($queryBuilder->expr()->and(
+				$queryBuilder->expr()->and(
+					$queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($sys_language_uid, Connection::PARAM_INT))
 				),
-				$queryBuilder->expr()->andX(
-					$queryBuilder->expr()->eq('hidden', $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT))
+				$queryBuilder->expr()->and(
+					$queryBuilder->expr()->eq('hidden', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
 				),
-				$queryBuilder->expr()->andX(
-					$queryBuilder->expr()->gte('deleted', $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT))
+				$queryBuilder->expr()->and(
+					$queryBuilder->expr()->gte('deleted', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
 				)
 			)
 		)
         ->orderBy('sorting');
-		$result = $queryBuilder->execute()->fetchAll();
+		$result = $queryBuilder->executeQuery()->fetchAllAssociative();
         return $result;		
     }
 
@@ -79,19 +80,19 @@ protected $defaultOrderings = array('sorting' => \TYPO3\CMS\Extbase\Persistence\
 		->where(
 			$queryBuilder->expr()->eq(
 				'pid',
-				$queryBuilder->createNamedParameter($storagePid, \PDO::PARAM_INT)
+				$queryBuilder->createNamedParameter($storagePid, Connection::PARAM_INT)
 			)
 		)			
-		->andWhere($queryBuilder->expr()->andX(
-				$queryBuilder->expr()->andX(
-					$queryBuilder->expr()->eq('hidden', $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT))
+		->andWhere($queryBuilder->expr()->and(
+				$queryBuilder->expr()->and(
+					$queryBuilder->expr()->eq('hidden', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
 				),
-				$queryBuilder->expr()->andX(
-					$queryBuilder->expr()->gte('deleted', $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT))
+				$queryBuilder->expr()->and(
+					$queryBuilder->expr()->gte('deleted', $queryBuilder->createNamedParameter(0, Connection::PARAM_INT))
 				)
 			)
 		);
-		$result = $queryBuilder->execute()->fetchAll();
+		$result = $queryBuilder->executeQuery()->fetchAllAssociative();
 		return $result;		
     }
 
@@ -112,12 +113,12 @@ protected $defaultOrderings = array('sorting' => \TYPO3\CMS\Extbase\Persistence\
             ->where(
                 $queryBuilder->expr()->eq(
                     'pid',
-                    $queryBuilder->createNamedParameter($storagePid, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($storagePid, Connection::PARAM_INT)
                 )
             )			
-            ->andWhere($queryBuilder->expr()->andX(
-                    $queryBuilder->expr()->andX(
-                        $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($categories[$i], \PDO::PARAM_INT))
+            ->andWhere($queryBuilder->expr()->and(
+                    $queryBuilder->expr()->and(
+                        $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($categories[$i], Connection::PARAM_INT))
                     )
 /*
                     $queryBuilder->expr()->andX(
@@ -129,7 +130,7 @@ protected $defaultOrderings = array('sorting' => \TYPO3\CMS\Extbase\Persistence\
 */  
                 )
             );
-            $result = $queryBuilder->execute()->fetchAll();
+            $result = $queryBuilder->executeQuery()->fetchAllAssociative();
             if ($result[0]['l10n_parent'] > 0) {
                 $list .= $result[0]['l10n_parent'] .',';
             } else {

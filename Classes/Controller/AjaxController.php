@@ -15,7 +15,7 @@ use TYPO3\CMS\Core\Http\Response;
 use WSR\Myleaflet\Domain\Repository\AddressRepository;
 
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Core\TypoScript\TemplateService;
+//use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 
 
@@ -186,14 +186,13 @@ max 1 call/sec
 //		$pid = (int)$queryParameters['pid'];
 //		$queryParams = $queryParameters;
 
-		$frontend = $GLOBALS['TSFE'];
+        $fullTypoScript = $request->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_myleaflet.'] ;
+	    $this->configuration = $request->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_myleaflet.'];
 
-		/** @var TypoScriptService $typoScriptService */
-		$typoScriptService = GeneralUtility::makeInstance('TYPO3\CMS\Core\TypoScript\TypoScriptService');
-		$this->configuration = $typoScriptService->convertTypoScriptArrayToPlainArray($frontend->tmpl->setup['plugin.']['tx_myleaflet.']);
-		$this->settings = $this->configuration['settings'];
-		$this->conf['storagePid'] = $this->configuration['persistence']['storagePid'];
-
+		$this->settings = $this->configuration['settings.'];
+		$this->conf['storagePid'] = $this->configuration['persistence.']['storagePid'];
+        
+        
 		$this->request1 = $request;
 		$out = $this->ajaxEidAction();
 		return $out;	
@@ -213,7 +212,7 @@ max 1 call/sec
 		$rootLine = $rootlineUtility->get();
 	
 		// initialize template service and generate typoscript configuration
-		$templateService->init();
+//		$templateService->init();
 		$templateService->runThroughTemplates($rootLine);
 		$templateService->generateConfig();
 	
@@ -453,10 +452,10 @@ max 1 call/sec
 	public function renderFluidTemplate($template, Array $assign = array()) {
       	$configuration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 
-		$templateRootPath = $this->configuration['view']['templateRootPaths'][1];
+		$templateRootPath = $this->configuration['view.']['templateRootPaths.'][1];
 
 		if (!$templateRootPath) 	
-		$templateRootPath = $this->configuration['view']['templateRootPath'][0];
+		$templateRootPath = $this->configuration['view.']['templateRootPath.'][0];
 		
 		$templatePath = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($templateRootPath . 'Address/' . $template);
 		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');

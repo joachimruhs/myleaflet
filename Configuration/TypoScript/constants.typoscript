@@ -17,7 +17,7 @@ plugin.tx_myleaflet {
 		cssFile = EXT:myleaflet/Resources/Public/CSS/myleaflet.css
 
 		# cat=plugin.tx_myleaflet/javascript; type=string; label=jQuery library
-		jQueryFile = EXT:myleaflet/Resources/Public/JavaScript/jquery-3.3.1.min.js
+		jQueryFile = EXT:myleaflet/Resources/Public/JavaScript/jquery-3.5.1.min.js
 
 		# cat=plugin.tx_myleaflet/javascript; type=string; label=Javascript file
 		javascriptFile = EXT:myleaflet/Resources/Public/JavaScript/myleaflet.js
