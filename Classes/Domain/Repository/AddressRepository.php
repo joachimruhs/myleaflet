@@ -135,6 +135,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 //				echo $result[$i]['name'] . ' CheckOk = ' . $checkOk . ' $j= ' .$j . '<' . $page * $limit . '&&' . $j . '<=' . intval(($page + 1) * $limit) . '<br />';
 				if (!($arrayOfCategories)) $checkOk = 1;
 
+                $newResult = [];
 				if ($checkOk && ($j >  $page * $limit && $j <= intval(($page + 1) * $limit))) {
 					$newResult[] = $result[$i];
 				}

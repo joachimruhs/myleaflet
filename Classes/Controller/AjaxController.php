@@ -238,9 +238,12 @@ max 1 call/sec
         // fetching correct language for locallang labels
         $siteConfiguration = $this->request1->getAttribute('site')->getConfiguration();
         for ($i = 0; $i < count($siteConfiguration['languages']); $i++) {
-            if ($siteConfiguration['languages'][$i]['typo3Language'] == $requestArguments['language']) {
-                $this->language = $siteConfiguration['languages'][$i]['typo3Language'];
+           if ($siteConfiguration['languages'][$i]['languageId'] == $requestArguments['language']) {
+                $this->locale = $siteConfiguration['languages'][$i]['locale'];
+                $this->language = explode('_', $this->locale)[0];
+//                $this->languageService = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create($this->language);
             }
+ 
         }
         
         $this->_GP['categories'] = '';
