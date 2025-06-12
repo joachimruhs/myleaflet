@@ -114,18 +114,23 @@ max 1 call/sec
 		$apiURL = "https://nominatim.openstreetmap.org/search?q=$address,$country&format=json&limit=1";
 		$addressData = $this->get_webpage($apiURL);
 
-		$coordinates[1] = json_decode($addressData)[0]->lat;
-		$coordinates[0] = json_decode($addressData)[0]->lon;
+        if (!empty($addressData) && array_key_exists(0, json_decode($addressData))) {
+            $coordinates[1] = json_decode($addressData)[0]->lat;
+    		$coordinates[0] = json_decode($addressData)[0]->lon;
+    		$latLon = new \stdClass();
+    		$latLon->lat = (float) $coordinates[1];
+    		$latLon->lon = (float) $coordinates[0];
+    		if ($latLon->lat) 
+    			$latLon->status = 'OK';
+    		else 
+    			$latLon->status = 'NOT FOUND';
 
-		$latLon = new \stdClass();
-		$latLon->lat = (float) $coordinates[1];
-		$latLon->lon = (float) $coordinates[0];
-		if ($latLon->lat) 
-			$latLon->status = 'OK';
-		else 
+    		return $latLon;
+        } else {
+    		$latLon = new \stdClass();
 			$latLon->status = 'NOT FOUND';
-
-		return $latLon;
+    		return $latLon;
+        }
 	}
 
 
