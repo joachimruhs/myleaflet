@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2018-05-04T17:02:23Z" product-name="myleaflet" target-language="sr">
+    <header/>
+    <body>
+      <trans-unit id="tx_myleaflet_ajaxmap.name">
+        <source>MyLeaflet (AjaxMap)</source>
+        <target state="needs-translation">MyLeaflet (AjaxMap)</target>
+      </trans-unit>
+      <trans-unit id="tx_myleaflet_ajaxmap.description">
+        <source>Leaflet maps for tt_address data</source>
+        <target state="needs-translation">Leaflet maps for tt_address data</target>
+      </trans-unit>
+      <!-- messages -->
+      <trans-unit id="noLocationsFound">
+        <source>No locations found!</source>
+        <target state="needs-translation">No locations found!</target>
+      </trans-unit>
+      <trans-unit id="errorInCategories">
+        <source>Error in categories!</source>
+        <target state="needs-translation">Error in categories!</target>
+      </trans-unit>
+      <trans-unit id="address">
+        <source>Address</source>
+        <target state="needs-translation">Address</target>
+      </trans-unit>
+      <trans-unit id="zip">
+        <source>Zip</source>
+        <target state="needs-translation">Zip</target>
+      </trans-unit>
+      <trans-unit id="city">
+        <source>City</source>
+        <target state="needs-translation">City</target>
+      </trans-unit>
+      <trans-unit id="country">
+        <source>Country</source>
+        <target state="needs-translation">Country</target>
+      </trans-unit>
+      <trans-unit id="search">
+        <source>Search</source>
+        <target state="needs-translation">Search</target>
+      </trans-unit>
+      <trans-unit id="noStartingPointCoordinatesFound">
+        <source>No starting point coordinates found!</source>
+        <target state="needs-translation">No starting point coordinates found!</target>
+      </trans-unit>
+      <trans-unit id="distance">
+        <source>Distance</source>
+        <target state="needs-translation">Distance</target>
+      </trans-unit>
+      <trans-unit id="youAreHere">
+        <source>You are here</source>
+        <target state="needs-translation">You are here</target>
+      </trans-unit>
+      <trans-unit id="tx_myleaflet_domain_model_address.name">
+        <source>Name</source>
+        <target state="needs-translation">Name</target>
+      </trans-unit>
+      <trans-unit id="showMore">
+        <source>Show more</source>
+        <target state="needs-translation">Show more</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
