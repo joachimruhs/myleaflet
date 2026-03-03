@@ -33,20 +33,16 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class GetStatusViewHelper extends AbstractViewHelper {
 
-	public function initializeArguments()
+	public function initializeArguments(): void
 	{
 		$this->registerArgument('addressUid', 'integer', 'The uid of the address', true);
 	}
 
-	public static function renderStatic(
-		array $arguments,
-       \Closure $renderChildrenClosure,
-       RenderingContextInterface $renderingContext
-	) {
+	public function render() {
 //		$ttaddressRepository = GeneralUtility::makeInstance(\FriendsOfTYPO3\TtAddress\Domain\Repository\AddressRepository::class);
 		$ttaddressRepository = GeneralUtility::makeInstance(\WSR\Myleaflet\Domain\Repository\AddressRepository::class);
 
-		$name = $ttaddressRepository->findByUid((int)$arguments['addressUid'])->getLeafletmapicon();	 
+		$name = $ttaddressRepository->findByUid((int)$this->arguments['addressUid'])->getLeafletmapicon();	 
 		return 'World' . ' ' . $name;
 	}
 

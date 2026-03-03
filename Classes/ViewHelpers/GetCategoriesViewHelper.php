@@ -22,8 +22,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  *
  */
 
+//class GetCategoriesViewHelper extends AbstractViewHelper {
 
-class GetCategoriesViewHelper extends AbstractViewHelper {
+class GetCategoriesViewHelper {
 	protected $categoryRepository;
 	
 	public function initializeArguments() {

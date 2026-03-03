@@ -29,29 +29,6 @@ call_user_func(
                 \WSR\Myleaflet\Controller\AddressController::class => 'show'
             ]
         );
-		
-
-		
-		
-    // wizards
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        'mod {
-            wizards.newContentElement.wizardItems.plugins {
-                elements {
-                    ajaxmap {
-                        iconIdentifier = extension-myleaflet-content-element
-                        title = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.name
-                        description = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.description
-                        tt_content_defValues {
-                            CType = list
-                            list_type = myleaflet_ajaxmap
-                        }
-                    }
-                }
-                show = *
-            }
-       }'
-    );
 
     }
 );

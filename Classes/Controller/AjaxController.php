@@ -14,6 +14,10 @@ use TYPO3\CMS\Core\Http\Response;
 
 use WSR\Myleaflet\Domain\Repository\AddressRepository;
 
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+
+
 use TYPO3\CMS\Fluid\View\StandaloneView;
 //use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
@@ -45,11 +49,21 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	public $languageService;
 	
 	/**
-	 * AjaxController constructor.
+	 * CustomerServerAssignment constructor.
 	 */
-	public function __construct()
-	{
-	}
+	public function __construct(
+        private ViewFactoryInterface $viewFactory
+    ) {}
+
+    /**
+     * Inject a ViewFactoryInterface
+     *
+     * @param \TYPO3\CMS\Core\View\ViewFactoryInterface
+     * @return void
+     */
+    public function injectViewFactoryInterface(\TYPO3\CMS\Core\View\ViewFactoryInterface $viewFactoryInterface) {
+        $this->viewFactory = $viewFactoryInterface;
+    }
 	
 	/**
 	 * AddressRepository
@@ -136,11 +150,13 @@ max 1 call/sec
 
 
 	function get_webpage($url) {
+		$agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)';
 		$sessions = curl_init();
 		curl_setopt($sessions, CURLOPT_URL, $url);
 		curl_setopt($sessions, CURLOPT_HEADER, 0);
 		curl_setopt($sessions, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($sessions, CURLOPT_REFERER, $_SERVER['HTTP_HOST']);
+		curl_setopt($sessions, CURLOPT_USERAGENT, $agent);
 		$data = curl_exec($sessions);
 		curl_close($sessions);
 		return $data;
@@ -173,7 +189,7 @@ max 1 call/sec
 	 * @param TYPO3\CMS\Core\Http\Response      $response
 	 */
 	protected function processGetRequest(ServerRequestInterface $request, ResponseInterface $response) {
-		$view = $this->getView();
+//		$view = $this->getView();
 	
 		$response->withHeader('Content-type', ['text/html; charset=UTF-8']);
 		$response->getBody()->write($view->render());
@@ -207,7 +223,7 @@ max 1 call/sec
 	/**
 	 * @return \TYPO3\CMS\Fluid\View\StandaloneView
 	 */
-	protected function getView() {
+/*	protected function getView() {
 	//    $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
 		$templateService = GeneralUtility::makeInstance(TemplateService::class);
 		// get the rootline
@@ -231,7 +247,7 @@ max 1 call/sec
 	
 		return $fluidView;
 	}
-
+*/
 
 	/**
 	 * action ajaxEid
@@ -462,16 +478,26 @@ max 1 call/sec
 
 		$templateRootPath = $this->configuration['view.']['templateRootPaths.'][1];
 
+/*		
 		if (!$templateRootPath) 	
 		$templateRootPath = $this->configuration['view.']['templateRootPath.'][0];
 		
 		$templatePath = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($templateRootPath . 'Address/' . $template);
+
 		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
 		$view->setTemplatePathAndFilename($templatePath);
+*/
+		$viewFactoryData = new ViewFactoryData(
+		    templateRootPaths: $this->configuration['view.']['templateRootPaths.'],
+       	    partialRootPaths: ['EXT:myttaddressmap/Resources/Private/Partials'],
+       	    layoutRootPaths: ['EXT:myttaddressmap/Resources/Private/Layouts'],
+        );
+        $view = $this->viewFactory->create($viewFactoryData);
+
 		$view->assignMultiple($assign);
         if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() > 11)
         $view->setRequest($this->request1);
-		return $view->render();
+		return $view->render('Address/' . $template);
 	}
 
 
