@@ -127,8 +127,7 @@ max 1 call/sec
 
 		$apiURL = "https://nominatim.openstreetmap.org/search?q=$address,$country&format=json&limit=1";
 		$addressData = $this->get_webpage($apiURL);
-
-        if (!empty($addressData) && array_key_exists(0, json_decode($addressData))) {
+        if (!empty($addressData) && strpos($addressData, 'Forbidden') == false && array_key_exists(0, json_decode($addressData))) {
             $coordinates[1] = json_decode($addressData)[0]->lat;
     		$coordinates[0] = json_decode($addressData)[0]->lon;
     		$latLon = new \stdClass();
@@ -288,7 +287,7 @@ max 1 call/sec
 		$latLon = $this->ajaxEidGeocodeAction();
 
 		if ($latLon->status != 'OK') {
-			if ($latLon->status ==  '') $latLon->status = 'There was no status from geocoding returned.';
+			if ($latLon->status !=  '') $latLon->status = 'There was no status from geocoding returned.';
 
 			$out = '<div class="ajaxMessage">Geocoding Error: ' . $latLon->status . '</div>';
 			$out .= '<script	type="text/javascript">
