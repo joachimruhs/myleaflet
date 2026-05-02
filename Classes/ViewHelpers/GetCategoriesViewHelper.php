@@ -27,7 +27,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 class GetCategoriesViewHelper {
 	protected $categoryRepository;
 	
-	public function initializeArguments() {
+	public function initializeArguments(): void {
 		$this->registerArgument('parentCategory', 'integer', 'The parent category', true, 0);
 		$this->registerArgument('excludeCategories', 'string', 'Exclude categories', false);
 		$this->registerArgument('as', 'string', 'Name of the template variable that will contain the categories', true);

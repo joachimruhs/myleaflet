@@ -85,8 +85,12 @@ class AddressController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 		else {
 			$address = $this->addressRepository->findByUid(intval($this->settings['singleViewUid']));
 		}
+		$street = str_replace(array("\r\n", "\r", "\n"), '<br />', $address->getAddress());  
+
+        $this->view->assign('street', $street);
         $this->view->assign('address', $address);
-        return $this->responseFactory->createResponse()
+
+		return $this->responseFactory->createResponse()
             ->withAddedHeader('Content-Type', 'text/html; charset=utf-8')
             ->withBody($this->streamFactory->createStream($this->view->render()));
     }
@@ -176,6 +180,7 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 			}
 		}
 */		
+
 		
 		// Get the default Settings
 		$customStoragePid = $this->conf['storagePid'];
@@ -185,6 +190,7 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
 		$addresses = $this->addressRepository->findAll();
 
+		$this->settings['defaultLanguageUid'] = $this->settings['defaultLanguageUid'] ?? 0;
 		if ($this->settings['defaultLanguageUid'] > '') {
 			$querySettings->setLanguageUid($this->settings['defaultLanguageUid']);
 		}
@@ -196,6 +202,8 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 		$sys_language_uid = $context->getPropertyFromAspect('language', 'id'); 
 
 		$categories = $this->categoryRepository->findAllOverride($this->conf['storagePid'], $sys_language_uid);
+
+
 
         if ($categories) {
             for($i = 0; $i < count($categories); $i++) {
@@ -228,6 +236,11 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
         $this->view->assign('categories' , $categories);
         $this->view->assign('addresses' , $addresses);
 		$this->view->assign('locationsCount', count($addresses));
+
+
+//$renderingContext = $this->view->getRenderingContext();
+//krexx($renderingContext);
+//$this->view->assign('renderingContext', $renderingContext);
 
         return $this->responseFactory->createResponse()
             ->withAddedHeader('Content-Type', 'text/html; charset=utf-8')

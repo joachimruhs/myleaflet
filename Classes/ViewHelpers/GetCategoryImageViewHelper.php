@@ -30,7 +30,7 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 class GetCategoryImageViewHelper extends AbstractViewHelper {
 	protected $categoryRepository;
 	
-	public function initializeArguments() {
+	public function initializeArguments(): void {
 		$this->registerArgument('categoryUid', 'integer', 'The category', true, 0);
 		$this->registerArgument('settings', 'array', 'The settings', true, null);
 	}

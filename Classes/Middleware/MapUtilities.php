@@ -7,6 +7,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use Psr\Http\Message\ResponseFactoryInterface;
+
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Extbase\Service\TypoScriptService;
 use TYPO3\CMS\Core\Http\NullResponse;
@@ -26,6 +28,16 @@ use TYPO3\CMS\Core\Http\Response;
 
 class MapUtilities implements MiddlewareInterface {
   
+    /** @var ResponseFactoryInterface */
+
+	private $responseFactory;
+
+    public function __construct(ResponseFactoryInterface $responseFactory)
+    {
+        $this->responseFactory = $responseFactory;
+    }
+
+
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
@@ -43,13 +55,20 @@ class MapUtilities implements MiddlewareInterface {
 		// continue only if action is ajaxPsr of extension myleaflet
 		if (!isset($requestArguments['action']) || $requestArguments['action'] != 'ajaxPsr') return $handler->handle($request);
 
-		$ajaxController = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('WSR\Myleaflet\Controller\AjaxController');
+//		$ajaxController = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('WSR\Myleaflet\Controller\AjaxController');
+		$ajaxController = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('WSR\Myleaflet\Controller\AjaxController', 11, $request);
+
+//print_r($request);
 
 		$response = GeneralUtility::makeInstance(Response::class);
 		$response->withHeader('Content-type', ['text/html; charset=UTF-8']);
 
-		$out = $ajaxController->indexAction($request, $response);
+// das geht noch nicht!
+		//$data = ['status' => 'ok'];
+		//$response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+ 		//$response->getBody()->write(json_encode($data));
 
+		$out = $ajaxController->indexAction($request, $response);
 		$response->getBody()->write($out);
 
         return $response;

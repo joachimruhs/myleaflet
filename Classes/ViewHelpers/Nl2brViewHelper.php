@@ -25,7 +25,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class Nl2brViewHelper extends AbstractViewHelper {
 	
-	public function initializeArguments() {
+	public function initializeArguments(): void {
 		$this->registerArgument('text', 'string', 'text for nl2br', true, 0);
 		$this->registerArgument('htmlSpecialChars', 'integer', 'flag for htmlspecialchars', true, 0);
 	}

@@ -4,10 +4,10 @@
 
 ---
 conf.py:
-  copyright: 2020
+  copyright: 2026
   project: Myleaflet
-  version: 0.8
-  release: 0.8.4
+  version: 2.3
+  release: 2.3.1
   latex_documents:
   - - Index
     - myleaflet.tex

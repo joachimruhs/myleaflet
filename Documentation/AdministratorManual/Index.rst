@@ -321,6 +321,12 @@ No images are shown - if you use the fluid <f:image …> tag in the templates, m
 Make sure, you have loaded the jQuery on top of the page. This can be done with the constant editor of TYPO3 and the myleaflet
 category (plugin.tx_myleaflet.view.includejQueryCore).
 
+When the link to SingleView did not work, make sure to disable 
+the settings [FE][pageNotFoundOnCHashError] = false 
+because in the template AjaxLocationList there are no cHash generated.
+
+
+
 FAQ
 ^^^
 

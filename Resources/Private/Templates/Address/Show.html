@@ -75,7 +75,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
 //		L.tileLayer.provider('HERE.hybridDay').addTo(map);
 //		L.tileLayer.provider('OpenRailwayMap').addTo(map);
 
-
 		var osmMap = L.tileLayer.provider('OpenStreetMap.DE');
 		var hybridMap = L.tileLayer.provider('HERE.hybridDay');
 		var mtbMap = L.tileLayer.provider('MtbMap');
@@ -123,9 +122,17 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		} else { 
           markerArray.push(L.marker([lat, lon]));
 		}
+
+
 		info =  '';
+
+		<f:for each="{address.image}" as="image">
+			info += '<div><f:image src="fileadmin/{image.originalResource.originalFile.identifier}"  width="50" alt=""/></div>';			
+		</f:for>
+
 		info += addressName + "<br /> ";
-		info += "<div><f:format.raw><map:nl2br text="<f:format.raw>{address.address}</f:format.raw>" htmlSpecialChars="1"/></f:format.raw></div>";
+		
+		info += '<div><f:format.raw>{street}</f:format.raw></div>';
 		info += "{address.zip} {address.city}";
 		info += "<div>{address.phone}</div>";
 		info += "<div>{address.email}</div>";

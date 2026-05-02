@@ -6,6 +6,9 @@
 			<trans-unit id="tx_myleaflet_ajaxmap.name">
 				<source>MyLeaflet (AjaxMap)</source>
 			</trans-unit>
+			<trans-unit id="tx_myleaflet_singleview.name">
+				<source>MyLeaflet (SingleView)</source>
+			</trans-unit>
 			<trans-unit id="tx_myleaflet_ajaxmap.description">
 				<source>Leaflet maps for tt_address data</source>
 			</trans-unit>

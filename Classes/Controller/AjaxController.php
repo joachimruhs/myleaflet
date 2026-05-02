@@ -22,6 +22,7 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 //use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 
 /***
  *
@@ -52,7 +53,7 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	 * CustomerServerAssignment constructor.
 	 */
 	public function __construct(
-        private ViewFactoryInterface $viewFactory
+//        private ViewFactoryInterface $viewFactory
     ) {}
 
     /**
@@ -61,9 +62,9 @@ class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
      * @param \TYPO3\CMS\Core\View\ViewFactoryInterface
      * @return void
      */
-    public function injectViewFactoryInterface(\TYPO3\CMS\Core\View\ViewFactoryInterface $viewFactoryInterface) {
-        $this->viewFactory = $viewFactoryInterface;
-    }
+  //  public function injectViewFactoryInterface(\TYPO3\CMS\Core\View\ViewFactoryInterface $viewFactoryInterface) {
+  //      $this->viewFactory = $viewFactoryInterface;
+  //  }
 	
 	/**
 	 * AddressRepository
@@ -202,7 +203,14 @@ max 1 call/sec
 	{
 		$queryParams = $request->getQueryParams();
 	
-//		$queryParameters = $request->getParsedBody();
+		$this->categoryRepository = GeneralUtility::makeInstance("WSR\Myleaflet\Domain\Repository\CategoryRepository");
+		$this->addressRepository = GeneralUtility::makeInstance("WSR\Myleaflet\Domain\Repository\AddressRepository");
+		$this->viewFactory = GeneralUtility::makeInstance("TYPO3\CMS\Core\View\ViewFactoryInterface");
+
+//print_r($this->renderingContext);
+
+
+		//		$queryParameters = $request->getParsedBody();
 //		$pid = (int)$queryParameters['pid'];
 //		$queryParams = $queryParameters;
 
@@ -212,8 +220,8 @@ max 1 call/sec
 		$this->settings = $this->configuration['settings.'];
 		$this->conf['storagePid'] = $this->configuration['persistence.']['storagePid'];
         
-        
 		$this->request1 = $request;
+	
 		$out = $this->ajaxEidAction();
 		return $out;	
 	}
@@ -255,7 +263,7 @@ max 1 call/sec
 	public function ajaxEidAction() {
 		$requestArguments = $this->request1->getParsedBody()['tx_myleaflet_ajax'];
 
-        // fetching correct language for locallang labels
+		// fetching correct language for locallang labels
         $siteConfiguration = $this->request1->getAttribute('site')->getConfiguration();
         for ($i = 0; $i < count($siteConfiguration['languages']); $i++) {
            if ($siteConfiguration['languages'][$i]['languageId'] == $requestArguments['language']) {
@@ -265,7 +273,11 @@ max 1 call/sec
             }
  
         }
-        
+
+//print_r($this->categoryRepository);
+//exit;
+		
+
         $this->_GP['categories'] = '';
         $requestArguments['categories'] = $requestArguments['categories'] ?? '';
 		if ($requestArguments['categories'])
@@ -473,7 +485,7 @@ max 1 call/sec
 	 * @return string
 	 */
 	public function renderFluidTemplate($template, Array $assign = array()) {
-      	$configuration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+//      	$configuration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 
 		$templateRootPath = $this->configuration['view.']['templateRootPaths.'][1];
 
@@ -494,8 +506,14 @@ max 1 call/sec
         $view = $this->viewFactory->create($viewFactoryData);
 
 		$view->assignMultiple($assign);
-        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() > 11)
-        $view->setRequest($this->request1);
+//        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() > 11)
+
+//        $view->setRequest($this->request1);
+
+//$renderingContext = GeneralUtility::makeInstance(RenderingContext::class);
+//$view->setRenderingContext($renderingContext);
+//$request = $this->renderingContext->getAttribute(\Psr\Http\Message\ServerRequestInterface::class);
+
 		return $view->render('Address/' . $template);
 	}
 

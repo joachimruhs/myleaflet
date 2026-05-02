@@ -14,7 +14,7 @@ $EM_CONF[$_EXTKEY] = array (
   'title' => 'MyLeaflet',
   'description' => 'Leaflet / OpenStreetMap for tt_address data with radial search and categories. No registration and no API-keys necessary.',
   'category' => 'plugin',
-  'version' => '2.2.4',
+  'version' => '2.3.6',
   'state' => 'beta',
   'uploadfolder' => false,
   'clearcacheonload' => false,
@@ -25,8 +25,8 @@ $EM_CONF[$_EXTKEY] = array (
   array (
     'depends' => 
     array (
-      'typo3' => '13.4.0-14.0.99',
-      'tt_address' => '9.0.0-9.1.99',
+      'typo3' => '13.4.0-14.3.99',
+      'tt_address' => '9.0.0-10.1.99',
     ),
     'conflicts' => 
     array (

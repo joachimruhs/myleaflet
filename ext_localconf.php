@@ -1,6 +1,8 @@
 <?php
 defined('TYPO3') or die();
 
+use \TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
 call_user_func(
     function()
     {
@@ -14,7 +16,8 @@ call_user_func(
             // non-cacheable actions
             [
                 \WSR\Myleaflet\Controller\AddressController::class => 'ajaxSearch'
-            ]
+            ],
+            ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
         );
 
 		
@@ -22,12 +25,13 @@ call_user_func(
 			'Myleaflet',
             'SingleView',
             [
-                \WSR\Myleaflet\Controller\AddressController::class => 'show'
+                \WSR\Myleaflet\Controller\AddressController::class => 'show',
             ],
             // non-cacheable actions
             [
                 \WSR\Myleaflet\Controller\AddressController::class => 'show'
-            ]
+            ],
+            ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
         );
 
     }

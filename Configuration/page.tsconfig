@@ -7,9 +7,19 @@ mod {
                 description = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.description
                 tt_content_defValues {
                     CType = list
-                    list_type = myleaflet_ajaxmap
+#                    list_type = myleaflet_ajaxmap
+                }
+            },
+            singleview {
+                iconIdentifier = extension-myleaflet-content-element
+                title = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_singleview.name
+                description = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.description
+                tt_content_defValues {
+                    CType = myleaflet_singleview
+#                    list_type = myleaflet_singleview
                 }
             }
+
         }
         show = *
     }
