@@ -7,6 +7,10 @@
         <source>MyLeaflet (AjaxMap)</source>
         <target state="needs-translation">MyLeaflet (AjaxMap)</target>
       </trans-unit>
+      <trans-unit id="tx_myleaflet_singleview.name">
+        <source>MyLeaflet (SingleView)</source>
+        <target state="needs-translation">MyLeaflet (SingleView)</target>
+      </trans-unit>
       <trans-unit id="tx_myleaflet_ajaxmap.description">
         <source>Leaflet maps for tt_address data</source>
         <target state="needs-translation">Leaflet maps for tt_address data</target>
