@@ -441,7 +441,6 @@ max 1 call/sec
 		
 				var mapIcon' . $i . ' = L.icon({
 					iconUrl: "/fileadmin/ext/myleaflet/Resources/Public/MapIcons/' . $locations[$i]['leafletmapicon'] .'",
-//					iconUrl: "' . $iconPath .'",
 					iconSize:     [' . $this->settings["markerIconWidth"] . ' , ' . $this->settings["markerIconHeight"] . ' ], // size of the icon
 					iconAnchor:   [' . intval($this->settings["markerIconWidth"] / 2) . ' , ' . $this->settings["markerIconHeight"] . ' ]
 				});
