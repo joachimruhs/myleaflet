@@ -156,6 +156,8 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
 		$categories = $this->categoryRepository->findAll();
 */
+
+/* not used anymore 
 		$iconPath = 'fileadmin/ext/myleaflet/Resources/Public/Icons/';
    		if (!is_dir(Environment::getPublicPath() . '/' . $iconPath)) {
             $fileSystem = new FileSystem();
@@ -168,6 +170,8 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
             $fileSystem->mirror($sourceDir, 'fileadmin/ext/myleaflet/Resources/Public/');
 			$this->addFlashMessage('Directory ' . $iconPath . ' created for use with own mapIcons!', '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO);
         }
+*/
+
 
 /*
 		if (!is_dir(Environment::getPublicPath() . '/' . $iconPath)) {

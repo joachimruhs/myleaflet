@@ -428,12 +428,20 @@ max 1 call/sec
 			$lon = $locations[$i]['longitude'];
 			
 			if (!$lat) continue;
-
+/*
+            if (Environment::getPublicPath() != Environment::getProjectPath()) {
+                //  we are in composerMode
+				$iconPath = '/vendor/wsr/myleaflet/Resources/Public/MapIcons/'. $locations[$i]['leafletmapicon'] ; ;
+			} else {
+				$iconPath = '/typo3conf/ext/myleaflet/Resources/Public/MapIcons/' . $locations[$i]['leafletmapicon'] ;
+			}
+*/
 			if ($locations[$i]['leafletmapicon']) {
 			$out .= '
 		
 				var mapIcon' . $i . ' = L.icon({
 					iconUrl: "/fileadmin/ext/myleaflet/Resources/Public/MapIcons/' . $locations[$i]['leafletmapicon'] .'",
+//					iconUrl: "' . $iconPath .'",
 					iconSize:     [' . $this->settings["markerIconWidth"] . ' , ' . $this->settings["markerIconHeight"] . ' ], // size of the icon
 					iconAnchor:   [' . intval($this->settings["markerIconWidth"] / 2) . ' , ' . $this->settings["markerIconHeight"] . ' ]
 				});

@@ -6,7 +6,7 @@ mod {
                 title = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.name
                 description = LLL:EXT:myleaflet/Resources/Private/Language/locallang.xlf:tx_myleaflet_ajaxmap.description
                 tt_content_defValues {
-                    CType = list
+                    CType = myleaflet_ajaxmap
 #                    list_type = myleaflet_ajaxmap
                 }
             },
