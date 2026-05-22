@@ -7,9 +7,9 @@
         <source>MyLeaflet (AjaxMap)</source>
         <target state="final">MyLeaflet (AjaxMap)</target>
       </trans-unit>
-      <trans-unit id="tx_myleaflet_singleview.name">
+      <trans-unit id="tx_myleaflet_singleview.name" approved="yes">
         <source>MyLeaflet (SingleView)</source>
-        <target state="needs-translation">MyLeaflet (SingleView)</target>
+        <target state="final">MyLeaflet (EnkeltVisning)</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_ajaxmap.description" approved="yes">
         <source>Leaflet maps for tt_address data</source>
