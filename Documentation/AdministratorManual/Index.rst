@@ -27,7 +27,8 @@ Create some pages as shown below.
 
 On page 'Ajax Map' install plugin MyLeaflet (Map). Make sure you have installed jQuery on *top* of the page.
 
-On page 'myleaflet' or on your root page insert 'Typoscript Include static' (from extension) MyLeaflet (myleaflet).
+You can now insert a Set WSR myleaflet and set the desired settings or
+on page 'myleaflet' or on your root page insert 'Typoscript Include static' (from extension) MyLeaflet (myleaflet).
 With the constant editor insert the desired settings of the extension like storage Pid, your page ID's, 
 jQuery options, path to templates etc.
 

@@ -15,11 +15,13 @@ $tmp_myleaflet_columns = array(
 
 			'fileFolderConfig' => [
 //                    'folder' => 'fileadmin/ext/myttaddressmap/Resources/Public/Icons/',
-                    'folder' => 'EXT:myleaflet/Resources/Public/MapIcons/',
+                    'folder' => 'EXT:myleaflet/Resources/Public/Icons/',
                     'allowedExtensions' => 'png,jpg,jpeg,gif',
                     'depth' => 1,
                 ],
 
+//			'fileFolder' => 'fileadmin/ext/myleaflet/Resources/Public/MapIcons/',
+//			'fileFolder_extList' => 'png,jpg,jpeg,gif',
 //			'fileFolder_recursions' => 0,
 			'fieldWizard' => [
 	            'selectIcons' => [
