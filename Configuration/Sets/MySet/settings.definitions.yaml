@@ -102,11 +102,11 @@ settings:
     category: MySet.options
     description: 'default marker icon'
     type: string
-    default: ''
-  plugin.tx_myleaflet.settings.defaultLanguageUid:
-    label: 'default language uid'
-    category: MySet.options
-    description: 'Default language Uid'
-    type: string
-    default: ''
+    default: 'pointerRed.png'
+#  plugin.tx_myleaflet.settings.defaultLanguageUid:
+#    label: 'default language uid'
+#    category: MySet.options
+#    description: 'Default language Uid'
+#    type: string
+#    default: ''
 

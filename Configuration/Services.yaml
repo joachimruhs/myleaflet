@@ -6,4 +6,8 @@ services:
 
   WSR\Myleaflet\:
     resource: '../Classes/*'
-    exclude: '../Classes/Domain/Model/*'
+    exclude:
+      - '../Classes/Domain/Model/*'
+
+  WSR\Myleaflet\Controller\AjaxController:
+    public: true

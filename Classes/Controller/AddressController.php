@@ -194,14 +194,6 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
 		$addresses = $this->addressRepository->findAll();
 
-		$this->settings['defaultLanguageUid'] = $this->settings['defaultLanguageUid'] ?? 0;
-		if ($this->settings['defaultLanguageUid'] > '') {
-			$querySettings->setLanguageUid($this->settings['defaultLanguageUid']);
-		}
-
-//		$this->typo3CategoryRepository->setDefaultQuerySettings($querySettings);
-//		$this->typo3CategoryRepository->setDefaultOrderings(array('sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
-
 		$context = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class);
 		$sys_language_uid = $context->getPropertyFromAspect('language', 'id'); 
 

@@ -41,38 +41,27 @@ class MapUtilities implements MiddlewareInterface {
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
-    ): ResponseInterface {
-
-		/** @var NormalizedParams $normalizedParams */
-		$normalizedParams = $request->getAttribute('normalizedParams');
-		$typo3SiteUrl = $normalizedParams->getSiteUrl(); // Same as GeneralUtility::getIndpEnv('TYPO3_SITE_URL')
-
-		$requestArguments = $request->getParsedBody()['tx_myleaflet_ajax'] ?? [];
-
-		// Remove any output produced until now
-		ob_clean();
-
-		// continue only if action is ajaxPsr of extension myleaflet
-		if (!isset($requestArguments['action']) || $requestArguments['action'] != 'ajaxPsr') return $handler->handle($request);
-
-//		$ajaxController = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('WSR\Myleaflet\Controller\AjaxController');
-		$ajaxController = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('WSR\Myleaflet\Controller\AjaxController', 11, $request);
-
-//print_r($request);
-
-		$response = GeneralUtility::makeInstance(Response::class);
-		$response->withHeader('Content-type', ['text/html; charset=UTF-8']);
-
-// das geht noch nicht!
-		//$data = ['status' => 'ok'];
-		//$response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
- 		//$response->getBody()->write(json_encode($data));
-
-		$out = $ajaxController->indexAction($request, $response);
-		$response->getBody()->write($out);
-
-        return $response;
+        ): ResponseInterface {
+            $parsedBody = $request->getParsedBody();
+            
+            if (!is_array($parsedBody)) {
+                return $handler->handle($request);
+            }
+            
+            $requestArguments = $parsedBody['tx_myleaflet_ajax'] ?? [];
+            
+            if (
+                !is_array($requestArguments)
+                || ($requestArguments['action'] ?? '') !== 'ajaxPsr'
+                ) {
+                    return $handler->handle($request);
+                }
+                
+                $ajaxController = GeneralUtility::makeInstance(
+                    \WSR\Myleaflet\Controller\AjaxController::class
+                    );
+                
+                return $ajaxController->handleAjaxRequest($request);
     }
-
 
 }

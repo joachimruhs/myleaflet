@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "myleaflet".
  *
- * Auto generated 27-09-2025 12:48
+ * Auto generated 07-09-2026 10:20
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -14,7 +14,7 @@ $EM_CONF[$_EXTKEY] = array (
   'title' => 'MyLeaflet',
   'description' => 'Leaflet / OpenStreetMap for tt_address data with radial search and categories. No registration and no API-keys necessary.',
   'category' => 'plugin',
-  'version' => '2.3.12',
+  'version' => '2.3.14',
   'state' => 'beta',
   'uploadfolder' => false,
   'clearcacheonload' => false,

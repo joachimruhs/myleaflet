@@ -126,7 +126,7 @@ class AddressRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 //print_r($result);
 
 
-		if ($categorySelectMode == ' AND ' /*&& count($arrayOfCategories) */) {
+		if ($categorySelectMode == ' AND ' && count($arrayOfCategories) ) {
 			// we have to check the location for $arrayOfCategories
 			$j = 0;
 			for ($i = 0; $i < count($result); $i++) {

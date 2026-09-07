@@ -1,71 +1,109 @@
 <?php
+
+declare(strict_types=1);
+
 namespace WSR\Myleaflet\ViewHelpers;
 
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use WSR\Myleaflet\Domain\Repository\CategoryRepository;
 
-/***
- *
- * This file is part of the "Myleaflet" Extension for TYPO3 CMS.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- *  (c) 2018 - 2021 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
- *
- ***/
-
-/**
- *
- *
- * @package TYPO3
- * @subpackage myleaflet
- *
- */
-
-//class GetCategoriesViewHelper extends AbstractViewHelper {
-
-class GetCategoriesViewHelper {
-	protected $categoryRepository;
-	
-	public function initializeArguments(): void {
-		$this->registerArgument('parentCategory', 'integer', 'The parent category', true, 0);
-		$this->registerArgument('excludeCategories', 'string', 'Exclude categories', false);
-		$this->registerArgument('as', 'string', 'Name of the template variable that will contain the categories', true);
-	}
-
-	/**
-	 * Return child categories
-	 *
-	 * @return mixed 
-	 * @api
-	 */
-	public function render() {
-		$parent = $this->categoryRepository->findByUid($this->arguments['parentCategory']);
-		$excludeCategories = ($this->arguments['excludeCategories'] ? explode(',', $this->arguments['excludeCategories']) : array());
-		$children = $this->categoryRepository->findChildrenByParent($this->arguments['parentCategory'], $excludeCategories);
-		$as = (string)$this->arguments['as'];
-		$options = array(); // for dropdown select
-		
-		$options[0] = $parent->getTitle();
-		
-		foreach ($children as $child) {
-			$options[$child->getUid()] = $child->getTitle();
-		}
-			
-		$this->templateVariableContainer->add($as, array(
-			'parent' => $parent,
-			'children' => $children,
-			'options' => $options
-		));
-		
-		$output = $this->renderChildren();
-		$this->templateVariableContainer->remove($as);
-		
-		return $output;
-	}	 
-
-
-
-
+final class GetCategoriesViewHelper extends AbstractViewHelper
+{
+    public function __construct(
+        private readonly CategoryRepository $categoryRepository
+        ) {
+    }
+    
+    public function initializeArguments(): void
+    {
+        parent::initializeArguments();
+        
+        $this->registerArgument(
+            'parentCategory',
+            'int',
+            'The parent category',
+            true,
+            0
+            );
+        
+        $this->registerArgument(
+            'excludeCategories',
+            'string',
+            'Exclude categories',
+            false,
+            ''
+            );
+        
+        $this->registerArgument(
+            'as',
+            'string',
+            'Name of the template variable that will contain the categories',
+            true
+            );
+    }
+    
+    public function render(): string
+    {
+        $parentCategoryUid =
+        (int)$this->arguments['parentCategory'];
+        
+        $excludeCategoriesString =
+        trim((string)($this->arguments['excludeCategories'] ?? ''));
+        
+        $as =
+        (string)$this->arguments['as'];
+        
+        $excludeCategories = [];
+        
+        if ($excludeCategoriesString !== '') {
+            $excludeCategories = array_filter(
+                array_map(
+                    'intval',
+                    explode(',', $excludeCategoriesString)
+                    )
+                );
+        }
+        
+        $parent =
+        $this->categoryRepository->findByUid(
+            $parentCategoryUid
+            );
+        
+        if ($parent === null) {
+            return '';
+        }
+        
+        $children =
+        $this->categoryRepository->findChildrenByParent(
+            $parentCategoryUid,
+            $excludeCategories
+            );
+        
+        $options = [
+            0 => $parent->getTitle(),
+        ];
+        
+        foreach ($children as $child) {
+            $options[$child->getUid()] =
+            $child->getTitle();
+        }
+        
+        $variableProvider =
+        $this->renderingContext->getVariableProvider();
+        
+        $variableProvider->add(
+            $as,
+            [
+                'parent' => $parent,
+                'children' => $children,
+                'options' => $options,
+            ]
+            );
+        
+        try {
+            return (string)$this->renderChildren();
+        } finally {
+            $variableProvider->remove($as);
+        }
+    }
 }
-?>

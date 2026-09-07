@@ -1,542 +1,1066 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WSR\Myleaflet\Controller;
 
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-//use TYPO3\CMS\Core\Http\NullResponse;
-
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Http\Response;
-
-use WSR\Myleaflet\Domain\Repository\AddressRepository;
-
+use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
+use TYPO3\CMS\Core\Resource\FileRepository;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
-
-
-use TYPO3\CMS\Fluid\View\StandaloneView;
-//use TYPO3\CMS\Core\TypoScript\TemplateService;
-use TYPO3\CMS\Core\Utility\RootlineUtility;
-
-use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-
-/***
- *
- * This file is part of the "Myleaflet" Extension for TYPO3 CMS.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- *  (c) 2018 - 2023 Joachim Ruhs <postmaster@joachim-ruhs.de>, Web Services Ruhs
- *
- ***/
+use WSR\Myleaflet\Domain\Repository\AddressRepository;
+use WSR\Myleaflet\Domain\Repository\CategoryRepository;
 
 /**
+ * AJAX handler for myleaflet.
  *
- *
- * @package myleaflet
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * 
+ * This is intentionally NOT an Extbase ActionController.
+ * It is called directly by the PSR-15 middleware.
  */
-class AjaxController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+final class AjaxController
+{
+    private array $configuration = [];
 
-	/**
-	 * @var LanguageService
-	 */
-	public $languageService;
-	
-	/**
-	 * CustomerServerAssignment constructor.
-	 */
-	public function __construct(
-//        private ViewFactoryInterface $viewFactory
-    ) {}
+    private array $settings = [];
 
-    /**
-     * Inject a ViewFactoryInterface
-     *
-     * @param \TYPO3\CMS\Core\View\ViewFactoryInterface
-     * @return void
-     */
-  //  public function injectViewFactoryInterface(\TYPO3\CMS\Core\View\ViewFactoryInterface $viewFactoryInterface) {
-  //      $this->viewFactory = $viewFactoryInterface;
-  //  }
-	
-	/**
-	 * AddressRepository
-	 *
-	 * @var AddressRepository
-	 */
-	protected $addressRepository;
+    private int $storagePid = 0;
 
-    /**
-     * Inject a addressRepository to enable DI
-     *
-     * @param AddressRepository $addressRepository
-     * @return void
-     */
-    public function injectAddressRepository(AddressRepository $addressRepository) {
-        $this->addressRepository = $addressRepository;
+
+    public function __construct(
+        private readonly AddressRepository $addressRepository,
+        private readonly CategoryRepository $categoryRepository,
+        private readonly ViewFactoryInterface $viewFactory,
+        private readonly RequestFactory $requestFactory,
+        private readonly ResponseFactoryInterface $responseFactory,
+        private readonly LanguageServiceFactory $languageServiceFactory,
+    ) {
     }
 
-	/**
-	 * categoryRepository
-	 *
-	 * @var \WSR\Myleaflet\Domain\Repository\CategoryRepository
-	 */
-	protected $categoryRepository;
-	
+
     /**
-     * Inject a categoryRepository to enable DI
-     *
-     * @param \WSR\Myleaflet\Domain\Repository\CategoryRepository $categoryRepository
-     * @return void
+     * Main entry point used by the middleware.
      */
-    public function injectCategoryRepository(\WSR\Myleaflet\Domain\Repository\CategoryRepository $categoryRepository) {
-        $this->categoryRepository = $categoryRepository;
-    }
-	
-
-	/**
-	 * action ajaxPage
-	 * @return \string JSON
-	 */
-	public function ajaxPageAction() {
-		// not used yet 
-		$requestArguments = $this->request1->getArguments();
-		return json_encode($requestArguments);
-	}
-	
-	/**
-	 * action ajaxEidGeocode
-	 * @return \stdclass $latLon
-	 */
-	public function ajaxEidGeocodeAction() {
-		$requestArguments = $this->request1->getParsedBody()['tx_myleaflet_ajax'];
-
-		$address = urlencode($requestArguments['address']);
-		$country = urlencode($requestArguments['country']);
-
-/*
-https://nominatim.openstreetmap.org/search?q=elzstr.%2010%20rheinhausen?format=json&addressdetails=1&limit=1&polygon_svg=1
-max 1 call/sec
-*/
-
-		$apiURL = "https://nominatim.openstreetmap.org/search?q=$address,$country&format=json&limit=1";
-		$addressData = $this->get_webpage($apiURL);
-        if (!empty($addressData) && strpos($addressData, 'Forbidden') == false && array_key_exists(0, json_decode($addressData))) {
-            $coordinates[1] = json_decode($addressData)[0]->lat;
-    		$coordinates[0] = json_decode($addressData)[0]->lon;
-    		$latLon = new \stdClass();
-    		$latLon->lat = (float) $coordinates[1];
-    		$latLon->lon = (float) $coordinates[0];
-    		if ($latLon->lat) 
-    			$latLon->status = 'OK';
-    		else 
-    			$latLon->status = 'NOT FOUND';
-
-    		return $latLon;
-        } else {
-    		$latLon = new \stdClass();
-			$latLon->status = 'NOT FOUND';
-    		return $latLon;
-        }
-	}
-
-
-
-	function get_webpage($url) {
-		$agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)';
-		$sessions = curl_init();
-		curl_setopt($sessions, CURLOPT_URL, $url);
-		curl_setopt($sessions, CURLOPT_HEADER, 0);
-		curl_setopt($sessions, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($sessions, CURLOPT_REFERER, $_SERVER['HTTP_HOST']);
-		curl_setopt($sessions, CURLOPT_USERAGENT, $agent);
-		$data = curl_exec($sessions);
-		curl_close($sessions);
-		return $data;
-	}
-
-
-
-	/**
-	 * @param \Psr\Http\Message\ServerRequestInterface $request
-	 * @param TYPO3\CMS\Core\Http\Response      $response
-	 */
-	public function indexAction(ServerRequestInterface $request, Response $response)
-	{
-		switch ($request->getMethod()) {
-			case 'GET':
-				$response = $this->processGetRequest($request, $response);
-				break;
-			case 'POST':
-				$response = $this->processPostRequest($request, $response);
-				break;
-			default:
-				$response->withStatus(405, 'Method not allowed');
-		}
-	
-		return $response;
-	}
-
-	/**
-	 * @param \Psr\Http\Message\ServerRequestInterface $request
-	 * @param TYPO3\CMS\Core\Http\Response      $response
-	 */
-	protected function processGetRequest(ServerRequestInterface $request, ResponseInterface $response) {
-//		$view = $this->getView();
-	
-		$response->withHeader('Content-type', ['text/html; charset=UTF-8']);
-		$response->getBody()->write($view->render());
-	}
-
-	/**
-	 * @param \Psr\Http\Message\ServerRequestInterface $request
-	 * @param TYPO3\CMS\Core\Http\Response      $response
-	 */
-	protected function processPostRequest(ServerRequestInterface $request, $response)
-	{
-		$queryParams = $request->getQueryParams();
-	
-		$this->categoryRepository = GeneralUtility::makeInstance("WSR\Myleaflet\Domain\Repository\CategoryRepository");
-		$this->addressRepository = GeneralUtility::makeInstance("WSR\Myleaflet\Domain\Repository\AddressRepository");
-		$this->viewFactory = GeneralUtility::makeInstance("TYPO3\CMS\Core\View\ViewFactoryInterface");
-
-//print_r($this->renderingContext);
-
-
-		//		$queryParameters = $request->getParsedBody();
-//		$pid = (int)$queryParameters['pid'];
-//		$queryParams = $queryParameters;
-
-        $fullTypoScript = $request->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_myleaflet.'] ;
-	    $this->configuration = $request->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_myleaflet.'];
-
-		$this->settings = $this->configuration['settings.'];
-		$this->conf['storagePid'] = $this->configuration['persistence.']['storagePid'];
-        
-		$this->request1 = $request;
-	
-		$out = $this->ajaxEidAction();
-		return $out;	
-	}
-
-
-	/**
-	 * @return \TYPO3\CMS\Fluid\View\StandaloneView
-	 */
-/*	protected function getView() {
-	//    $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
-		$templateService = GeneralUtility::makeInstance(TemplateService::class);
-		// get the rootline
-	//    $rootLine = $pageRepository->getRootLine($pageRepository->getDomainStartPage(GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY')));
-		$rootlineUtility = GeneralUtility::makeInstance(RootlineUtility::class, 0);
-	
-		$rootLine = $rootlineUtility->get();
-	
-		// initialize template service and generate typoscript configuration
-//		$templateService->init();
-		$templateService->runThroughTemplates($rootLine);
-		$templateService->generateConfig();
-	
-//		$fluidView = new StandaloneView();
-        $fluidView = GeneralUtility::makeInstance(StandaloneView::class);
-		$fluidView->setLayoutRootPaths($templateService->setup['plugin.']['tx_yourext.']['view.']['layoutRootPaths.']);
-		$fluidView->setTemplateRootPaths($templateService->setup['plugin.']['tx_yourext.']['view.']['templateRootPaths.']);
-		$fluidView->setPartialRootPaths($templateService->setup['plugin.']['tx_yourext.']['view.']['partialRootPaths.']);
-		$fluidView->getRequest()->setControllerExtensionName('YourExt');
-		$fluidView->setTemplate('index');
-	
-		return $fluidView;
-	}
-*/
-
-	/**
-	 * action ajaxEid
-	 * @return \string html
-	 */
-	public function ajaxEidAction() {
-		$requestArguments = $this->request1->getParsedBody()['tx_myleaflet_ajax'];
-
-		// fetching correct language for locallang labels
-        $siteConfiguration = $this->request1->getAttribute('site')->getConfiguration();
-        for ($i = 0; $i < count($siteConfiguration['languages']); $i++) {
-           if ($siteConfiguration['languages'][$i]['languageId'] == $requestArguments['language']) {
-                $this->locale = $siteConfiguration['languages'][$i]['locale'];
-                $this->language = explode('_', $this->locale)[0];
-//                $this->languageService = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create($this->language);
-            }
- 
+    public function handleAjaxRequest(
+        ServerRequestInterface $request
+    ): ResponseInterface {
+        if ($request->getMethod() !== 'POST') {
+            return $this->createHtmlResponse(
+                '',
+                405,
+                [
+                    'Allow' => 'POST',
+                ]
+            );
         }
 
-//print_r($this->categoryRepository);
-//exit;
-		
+        $requestArguments = $this->getAjaxArguments($request);
 
-        $this->_GP['categories'] = '';
-        $requestArguments['categories'] = $requestArguments['categories'] ?? '';
-		if ($requestArguments['categories'])
-    		$this->_GP['categories'] = @implode(',', $requestArguments['categories']);
-		// sanitizing categories						 
-		if ($this->_GP['categories'] && preg_match('/^[0-9,]*$/', $this->_GP['categories']) != 1) {
-			$this->_GP['categories'] = '';
-		}		
-        if ($this->_GP['categories']) {
-            $this->_GP['categories'] = $this->categoryRepository->getCategoryList($this->_GP['categories'], $this->conf['storagePid']);
+        if ($requestArguments === []) {
+            return $this->createHtmlResponse(
+                '<div class="ajaxMessage">Invalid AJAX request.</div>',
+                400
+            );
         }
-		
-		if ($this->settings['defaultLanguageUid'] > '') {
-			$this->language = $this->settings['defaultLanguageUid'];
-		} else {
-			$this->language = $requestArguments['language'];		
-		}		
 
-		$latLon = $this->ajaxEidGeocodeAction();
+        $this->initializeConfiguration($request);
 
-		if ($latLon->status != 'OK') {
-			if ($latLon->status !=  '') $latLon->status = 'There was no status from geocoding returned.';
-
-			$out = '<div class="ajaxMessage">Geocoding Error: ' . $latLon->status . '</div>';
-			$out .= '<script	type="text/javascript">
-			$(".ajaxMessage").fadeIn(2000);
-			</script>';
-			return $out;
-		} else {
-/*
- 			$out .= '<script	type="text/javascript">
-				$("#tx_myleaflet_lat").val(' . $latLon->lat . ');
-				$("#tx_myleaflet_lon").val(' . $latLon->lon . ');
-			</script>';
-*/			
-		}
-
-		$this->_GP['radius'] = (float) $requestArguments['radius'];
-
-		$limit = $this->settings['resultLimit'];
-
-		$page = intval($requestArguments['page']);
-		if ($page == -1) {
-			$limit = 1000;
-			$page = 0;
-		}
-
-		if (!$requestArguments['address']) {
-			$orderBy = 'city';
-		} else {
-			$orderBy = 'distance';
-		}			
-
-		$categoryMode = $this->settings['categorySelectMode'];
-
-		$locations = $this->addressRepository->findLocationsInRadius($latLon, $this->_GP['radius'], $this->_GP['categories'], $this->conf['storagePid'], $this->language, $limit, $page, $orderBy, $categoryMode);
-		$allLocations = $this->addressRepository->findLocationsInRadius($latLon, $this->_GP['radius'], $this->_GP['categories'], $this->conf['storagePid'], $this->language, 1000, 0, $orderBy, $categoryMode);
-
-
-		// field images
-		if (is_array($locations)) {
-			for ($i = 0; $i < count($locations); $i++) {
-				$locations[$i]['infoWindowDescription'] = str_replace(array("\r\n", "\r", "\n"), '<br />', $locations[$i]['description']);  
-				$locations[$i]['description'] = str_replace(array("\r\n", "\r", "\n"), '<br />', htmlspecialchars($locations[$i]['description'], ENT_QUOTES));
-				$address = $locations[$i]['address'];
-				$locations[$i]['address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', $locations[$i]['address']);  
-	
-				$locations[$i]['infoWindowAddress'] = str_replace(array("\r\n", "\r", "\n"), '<br />', htmlspecialchars($address, ENT_QUOTES));
-	
-				if ($locations[$i]['image'] > 0) {
-					if ($this->addressRepository->findByUid($locations[$i]['uid'])) {
-						$images = $this->addressRepository->findByUid($locations[$i]['uid'])->getImage();
-					}
-					$locations[$i]['images'] =	$images;				
-				}
-
-			}
-		}
-		if (!is_array($locations) || count($locations) == 0) {
-			$out = '<div class="ajaxMessage">' . \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('noLocationsFound', 'myleaflet') .'</div>';
-			$out .= '<script	type="text/javascript">';
-			// remove marker from map
-			$out .= '
-				for (var i = 0; i < marker.length; i++) {
-					map.removeLayer(marker[i]);
-				}
-				marker = [];
-				map.removeLayer(markerClusterGroup);
-				markerClusterGroup = L.markerClusterGroup();
-				$(".ajaxMessage").fadeIn(2000);
-				</script>';
-			return $out;
-		}
-        $out = '';
-        $categories = '';
-		$out .= $this->getMarkerJS($locations, $categories, $latLon, $this->_GP['radius']);
-		
-		// get  the loctions list
-		
-		if ($requestArguments['page'] != -1) { // do not show the list for page loading 
-			$labels = [
-				'distance' => $this->translate('distance'),
-				'address' => $this->translate('address'),
-				'zip' => $this->translate('zip'),
-				'city' => $this->translate('city'),
-				'country' => $this->translate('country'),
-				'phone' => $this->translate('phone'),
-				'email' => $this->translate('email'),
-				'fax' => $this->translate('fax'),
-				'route' => $this->translate('route'),
-
-			];
-			$out .= $this->getLocationsList($locations, $categories, $allLocations, $labels);
-		}
-		
-		return $out;
-	}
-
-
-	function getChildren($arr, $id, $children) {
-		for ($i = 0; $i < count($arr); $i++) {
-			if ($arr[$i]['parent'] == $id) {
-//				$children .= ',' . $arr[$i]['uid'];
-				$children = $this->getChildren($arr, $arr[$i]['uid'], $children);
-			}
-		}
-		
-		return $id . ',' . $children;
-//		return $children;
-	}
-
-
-	protected function getMarkerJS($locations, $categories, $latLon, $radius) {
-		$out = '<script	type="text/javascript">';
-
-		// remove marker from map
-		$out .= 'var markerGroup = L.featureGroup(); //.addTo(map);
-			for(i=0;i<marker.length;i++) {
-				map.removeLayer(marker[i]);
-				markerClusterGroup.removeLayer(marker[i]);
-			}
-			marker = [];
-			markerClusterGroup = L.markerClusterGroup();
-			';
-			
-		for ($i = 0; $i < count($locations); $i++) {
-			$lat = $locations[$i]['latitude'];
-			$lon = $locations[$i]['longitude'];
-			
-			if (!$lat) continue;
-/*
-            if (Environment::getPublicPath() != Environment::getProjectPath()) {
-                //  we are in composerMode
-				$iconPath = '/vendor/wsr/myleaflet/Resources/Public/MapIcons/'. $locations[$i]['leafletmapicon'] ; ;
-			} else {
-				$iconPath = '/typo3conf/ext/myleaflet/Resources/Public/MapIcons/' . $locations[$i]['leafletmapicon'] ;
-			}
-*/
-			if ($locations[$i]['leafletmapicon']) {
-			$out .= '
-		
-				var mapIcon' . $i . ' = L.icon({
-					iconUrl: "/fileadmin/ext/myleaflet/Resources/Public/MapIcons/' . $locations[$i]['leafletmapicon'] .'",
-					iconSize:     [' . $this->settings["markerIconWidth"] . ' , ' . $this->settings["markerIconHeight"] . ' ], // size of the icon
-					iconAnchor:   [' . intval($this->settings["markerIconWidth"] / 2) . ' , ' . $this->settings["markerIconHeight"] . ' ]
-				});
-				marker[' . $i . '] = L.marker([' . $lat . ',' . $lon . '], {icon: mapIcon' . $i . '}).addTo(markerGroup);
-			';
-			
-			} else {
-				$out .= "marker[$i] = L.marker([$lat, $lon]).addTo(markerGroup);
-				";
-			}
-
-			// infoWindows
-			$out .= $this->renderFluidTemplate('AjaxLocationListInfoWindow.html', array('location' => $locations[$i], 'categories' => $categories, 'i' => $i,
-																						'startingPoint' => $latLon, 'settings' => $this->settings));
-			
-		} // for
-
-		if ($this->settings['enableMarkerClusterer'] == 1) {
-			$out .= '
-			markerClusterGroup = L.markerClusterGroup();
-			markerClusterGroup.clearLayers();
-			map.removeLayer(markerClusterGroup);
-			markerClusterGroup = L.markerClusterGroup();
-			for (var i = 0; i < marker.length; i++) {
-				markerClusterGroup.addLayer(marker[i]);
-			}
-			map.addLayer(markerClusterGroup);
-			map.fitBounds(markerClusterGroup.getBounds());
-			';				
-		} else {
-			$out .= 'markerGroup = L.featureGroup(marker).addTo(map);
-					map.fitBounds(markerGroup.getBounds());';
-		}
-		return $out . '</script>';
-	}
-	
-
-	function getLocationsList($locations, $categories, $allLocations, $labels) {
-		$out = $this->renderFluidTemplate('AjaxLocationList.html', array('locations' => $locations, 'categories' => $categories, 'labels' => $labels,
-											  'settings' => $this->settings, 'locationsCount' => count($allLocations)));
-		return $out;
-	}
-	
-	
-	/**
-	 * Renders the fluid template
-	 * @param string $template
-	 * @param array $assign
-	 * @return string
-	 */
-	public function renderFluidTemplate($template, Array $assign = array()) {
-//      	$configuration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-
-		$templateRootPath = $this->configuration['view.']['templateRootPaths.'][1];
-
-/*		
-		if (!$templateRootPath) 	
-		$templateRootPath = $this->configuration['view.']['templateRootPath.'][0];
-		
-		$templatePath = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($templateRootPath . 'Address/' . $template);
-
-		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-		$view->setTemplatePathAndFilename($templatePath);
-*/
-		$viewFactoryData = new ViewFactoryData(
-		    templateRootPaths: $this->configuration['view.']['templateRootPaths.'],
-       	    partialRootPaths: ['EXT:myttaddressmap/Resources/Private/Partials'],
-       	    layoutRootPaths: ['EXT:myttaddressmap/Resources/Private/Layouts'],
+        $output = $this->ajaxEid(
+            $request,
+            $requestArguments
         );
-        $view = $this->viewFactory->create($viewFactoryData);
 
-		$view->assignMultiple($assign);
-//        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() > 11)
-
-//        $view->setRequest($this->request1);
-
-//$renderingContext = GeneralUtility::makeInstance(RenderingContext::class);
-//$view->setRenderingContext($renderingContext);
-//$request = $this->renderingContext->getAttribute(\Psr\Http\Message\ServerRequestInterface::class);
-
-		return $view->render('Address/' . $template);
-	}
+        return $this->createHtmlResponse($output);
+    }
 
 
-	/**
-	 * Returns the translation of $key
-	 *
-	 * @param string $key
-	 * @return string
-	 */
-	protected function translate($key)
-	{
-        return \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($key, 'myleaflet', []);
-	}
+    /**
+     * Read AJAX arguments safely.
+     */
+    private function getAjaxArguments(
+        ServerRequestInterface $request
+    ): array {
+        $parsedBody = $request->getParsedBody();
 
-	
+        if (!is_array($parsedBody)) {
+            return [];
+        }
+
+        $arguments = $parsedBody['tx_myleaflet_ajax'] ?? [];
+
+        return is_array($arguments)
+            ? $arguments
+            : [];
+    }
+
+
+    /**
+     * Load TypoScript configuration from the PSR-7 request.
+     *
+     * No Extbase ConfigurationManager is required.
+     */
+    private function initializeConfiguration(
+        ServerRequestInterface $request
+    ): void {
+        $frontendTypoScript =
+            $request->getAttribute('frontend.typoscript');
+
+        if ($frontendTypoScript === null) {
+            $this->configuration = [];
+            $this->settings = [];
+            $this->storagePid = 0;
+
+            return;
+        }
+
+        $setup = $frontendTypoScript->getSetupArray();
+
+        $this->configuration =
+            $setup['plugin.']['tx_myleaflet.'] ?? [];
+
+        $this->settings =
+            $this->configuration['settings.'] ?? [];
+
+        $this->storagePid = (int)(
+            $this->configuration['persistence.']['storagePid']
+            ?? 0
+        );
+    }
+
+
+    /**
+     * Main AJAX processing.
+     */
+    private function ajaxEid(
+        ServerRequestInterface $request,
+        array $requestArguments
+    ): string {
+        /*
+         * Requested content language.
+         */
+        $requestedLanguageUid =
+            (int)($requestArguments['language'] ?? 0);
+
+        $defaultLanguageUid =
+            $this->settings['defaultLanguageUid'] ?? '';
+
+        if ($defaultLanguageUid !== '') {
+            $languageUid = (int)$defaultLanguageUid;
+        } else {
+            $languageUid = $requestedLanguageUid;
+        }
+
+
+        /*
+         * Categories.
+         */
+        $categoryList = '';
+
+        $categories =
+            $requestArguments['categories'] ?? [];
+
+        if (is_array($categories) && $categories !== []) {
+            $categoryIds = [];
+
+            foreach ($categories as $categoryUid) {
+                $categoryUid = (int)$categoryUid;
+
+                if ($categoryUid > 0) {
+                    $categoryIds[] = $categoryUid;
+                }
+            }
+
+            if ($categoryIds !== []) {
+                $categoryList = implode(
+                    ',',
+                    $categoryIds
+                );
+            }
+        }
+
+        if ($categoryList !== '') {
+            $categoryList =
+                $this->categoryRepository->getCategoryList(
+                    $categoryList,
+                    $this->storagePid
+                );
+        }
+
+
+        /*
+         * Geocoding.
+         */
+        $latLon = $this->geocode(
+            $request,
+            $requestArguments
+        );
+
+        if ($latLon->status !== 'OK') {
+            return
+                '<div class="ajaxMessage">'
+                . 'Geocoding Error: '
+                . htmlspecialchars(
+                    (string)$latLon->status,
+                    ENT_QUOTES | ENT_SUBSTITUTE,
+                    'UTF-8'
+                )
+                . '</div>'
+                . '<script type="text/javascript">'
+                . 'const ajaxMessage = document.querySelector(".ajaxMessage");'
+                . 'if (ajaxMessage) { ajaxMessage.style.display = "block"; }'
+                . '</script>';
+        }
+
+
+        /*
+         * Radius.
+         */
+        $radius =
+            (float)($requestArguments['radius'] ?? 0);
+
+
+        /*
+         * Result limit.
+         */
+        $limit =
+            (int)($this->settings['resultLimit'] ?? 100);
+
+        if ($limit <= 0) {
+            $limit = 100;
+        }
+
+
+        /*
+         * Page.
+         */
+        $page =
+            (int)($requestArguments['page'] ?? 0);
+
+        if ($page === -1) {
+            $limit = 1000;
+            $page = 0;
+        }
+
+
+        /*
+         * Sorting.
+         */
+        $address =
+            trim((string)($requestArguments['address'] ?? ''));
+
+        $orderBy =
+            $address === ''
+                ? 'city'
+                : 'distance';
+
+
+        /*
+         * Category selection mode.
+         */
+        $categoryMode =
+            $this->settings['categorySelectMode'] ?? '';
+
+
+        /*
+         * Find locations.
+         */
+        $locations =
+            $this->addressRepository->findLocationsInRadius(
+                $latLon,
+                $radius,
+                $categoryList,
+                $this->storagePid,
+                $languageUid,
+                $limit,
+                $page,
+                $orderBy,
+                $categoryMode
+            );
+
+        $allLocations =
+            $this->addressRepository->findLocationsInRadius(
+                $latLon,
+                $radius,
+                $categoryList,
+                $this->storagePid,
+                $languageUid,
+                1000,
+                0,
+                $orderBy,
+                $categoryMode
+            );
+
+
+        /*
+         * Prepare result data.
+         */
+        if (is_array($locations)) {
+            foreach ($locations as &$location) {
+                $description =
+                    (string)($location['description'] ?? '');
+
+                $address =
+                    (string)($location['address'] ?? '');
+
+                /*
+                 * Preserve former behaviour:
+                 * infoWindowDescription may contain HTML.
+                 */
+                $location['infoWindowDescription'] =
+                    str_replace(
+                        ["\r\n", "\r", "\n"],
+                        '<br />',
+                        $description
+                    );
+
+                $location['description'] =
+                    str_replace(
+                        ["\r\n", "\r", "\n"],
+                        '<br />',
+                        htmlspecialchars(
+                            $description,
+                            ENT_QUOTES | ENT_SUBSTITUTE,
+                            'UTF-8'
+                        )
+                    );
+
+                $location['address'] =
+                    str_replace(
+                        ["\r\n", "\r", "\n"],
+                        '<br />',
+                        $address
+                    );
+
+                $location['infoWindowAddress'] =
+                    str_replace(
+                        ["\r\n", "\r", "\n"],
+                        '<br />',
+                        htmlspecialchars(
+                            $address,
+                            ENT_QUOTES | ENT_SUBSTITUTE,
+                            'UTF-8'
+                        )
+                    );
+
+
+                /*
+                 * FAL images.
+                 */
+                if ((int)($location['image'] ?? 0) > 0) {
+                    $addressObject =
+                        $this->addressRepository->findByUid(
+                            (int)($location['uid'] ?? 0)
+                        );
+
+                    if ($addressObject !== null) {
+                        $location['images'] =
+                            $addressObject->getImage();
+                    }
+                }
+            }
+
+            unset($location);
+        }
+
+
+        /*
+         * No locations found.
+         */
+        if (
+            !is_array($locations)
+            || $locations === []
+        ) {
+            $message =
+                $this->translate(
+                    $request,
+                    'noLocationsFound'
+                );
+
+            return
+                '<div class="ajaxMessage">'
+                . htmlspecialchars(
+                    $message,
+                    ENT_QUOTES | ENT_SUBSTITUTE,
+                    'UTF-8'
+                )
+                . '</div>'
+                . '<script type="text/javascript">
+
+                    if (typeof marker !== "undefined") {
+                        for (var i = 0; i < marker.length; i++) {
+                            if (marker[i]) {
+                                map.removeLayer(marker[i]);
+                            }
+                        }
+                    }
+
+                    marker = [];
+
+                    if (
+                        typeof markerClusterGroup !== "undefined"
+                        && map.hasLayer(markerClusterGroup)
+                    ) {
+                        map.removeLayer(markerClusterGroup);
+                    }
+
+                    markerClusterGroup =
+                        L.markerClusterGroup();
+
+                    const ajaxMessage =
+                        document.querySelector(".ajaxMessage");
+
+                    if (ajaxMessage) {
+                        ajaxMessage.style.display = "block";
+                    }
+
+                </script>';
+        }
+
+
+        /*
+         * Marker JavaScript.
+         */
+        $output = $this->getMarkerJs(
+            $request,
+            $locations,
+            '',
+            $latLon,
+            $radius
+        );
+
+
+        /*
+         * Location list.
+         *
+         * page == -1 means: markers only.
+         */
+        if (
+            (int)($requestArguments['page'] ?? 0)
+            !== -1
+        ) {
+            $labels = [
+                'distance' =>
+                    $this->translate($request, 'distance'),
+
+                'address' =>
+                    $this->translate($request, 'address'),
+
+                'zip' =>
+                    $this->translate($request, 'zip'),
+
+                'city' =>
+                    $this->translate($request, 'city'),
+
+                'country' =>
+                    $this->translate($request, 'country'),
+
+                'phone' =>
+                    $this->translate($request, 'phone'),
+
+                'email' =>
+                    $this->translate($request, 'email'),
+
+                'fax' =>
+                    $this->translate($request, 'fax'),
+
+                'route' =>
+                    $this->translate($request, 'route'),
+            ];
+
+            $output .= $this->getLocationsList(
+                $request,
+                $locations,
+                '',
+                is_array($allLocations)
+                    ? $allLocations
+                    : [],
+                $labels
+            );
+        }
+
+        return $output;
+    }
+
+
+    /**
+     * Geocode an address using OpenStreetMap / Nominatim.
+     */
+    private function geocode(
+        ServerRequestInterface $request,
+        array $requestArguments
+    ): object {
+        $latLon = new \stdClass();
+
+        $latLon->lat = 0.0;
+        $latLon->lon = 0.0;
+        $latLon->status = 'NOT FOUND';
+
+        $address =
+            trim((string)($requestArguments['address'] ?? ''));
+
+        $country =
+            trim((string)($requestArguments['country'] ?? ''));
+
+        if ($address === '') {
+            return $latLon;
+        }
+
+        $query = $address;
+
+        if ($country !== '') {
+            $query .= ', ' . $country;
+        }
+
+        $apiUrl =
+            'https://nominatim.openstreetmap.org/search'
+            . '?q='
+            . rawurlencode($query)
+            . '&format=json'
+            . '&limit=1';
+
+        try {
+            $referer =
+                (string)$request
+                    ->getUri()
+                    ->withQuery('')
+                    ->withFragment('');
+
+            $response =
+                $this->requestFactory->request(
+                    $apiUrl,
+                    'GET',
+                    [
+                        'headers' => [
+                            'Accept' =>
+                                'application/json',
+
+                            'User-Agent' =>
+                                'TYPO3-myleaflet/1.0',
+
+                            'Referer' =>
+                                $referer,
+                        ],
+
+                        'timeout' => 10,
+                    ]
+                );
+
+            if ($response->getStatusCode() !== 200) {
+                return $latLon;
+            }
+
+            $data = json_decode(
+                (string)$response->getBody(),
+                true
+            );
+
+            if (
+                !is_array($data)
+                || !isset($data[0])
+                || !is_array($data[0])
+                || !isset(
+                    $data[0]['lat'],
+                    $data[0]['lon']
+                )
+            ) {
+                return $latLon;
+            }
+
+            $latLon->lat =
+                (float)$data[0]['lat'];
+
+            $latLon->lon =
+                (float)$data[0]['lon'];
+
+            $latLon->status = 'OK';
+
+        } catch (\Throwable) {
+            return $latLon;
+        }
+
+        return $latLon;
+    }
+
+
+    /**
+     * Build Leaflet marker JavaScript.
+     */
+    private function getMarkerJs(
+        ServerRequestInterface $request,
+        array $locations,
+        mixed $categories,
+        object $latLon,
+        float $radius
+    ): string {
+        $output = '<script type="text/javascript">';
+
+        $output .= '
+
+            var markerGroup = L.featureGroup();
+
+            if (typeof marker !== "undefined") {
+                for (var i = 0; i < marker.length; i++) {
+
+                    if (!marker[i]) {
+                        continue;
+                    }
+
+                    if (map.hasLayer(marker[i])) {
+                        map.removeLayer(marker[i]);
+                    }
+
+                    if (
+                        typeof markerClusterGroup !== "undefined"
+                    ) {
+                        markerClusterGroup.removeLayer(
+                            marker[i]
+                        );
+                    }
+                }
+            }
+
+            marker = [];
+
+            markerClusterGroup =
+                L.markerClusterGroup();
+
+        ';
+
+
+        foreach ($locations as $index => $location) {
+            $lat =
+                (float)($location['latitude'] ?? 0);
+
+            $lon =
+                (float)($location['longitude'] ?? 0);
+
+            if ($lat === 0.0) {
+                continue;
+            }
+
+
+            /*
+             * Custom map icon.
+             */
+            $leafletMapIcon =
+                (string)(
+                    $location['leafletmapicon']
+                    ?? ''
+                );
+
+            if ($leafletMapIcon == '0') $leafletMapIcon = $this->settings['defaultIcon'];                
+            if ($leafletMapIcon !== '') {
+                $iconUrl =
+                    '/fileadmin/ext/myleaflet/'
+                    . 'Resources/Public/MapIcons/'
+                    . rawurlencode($leafletMapIcon);
+
+                $iconWidth =
+                    (int)(
+                        $this->settings['markerIconWidth']
+                        ?? 25
+                    );
+
+                $iconHeight =
+                    (int)(
+                        $this->settings['markerIconHeight']
+                        ?? 41
+                    );
+
+                $iconAnchor =
+                    (int)($iconWidth / 2);
+
+                $output .= '
+
+                    var mapIcon' . $index . ' =
+                        L.icon({
+                            iconUrl: '
+                            . json_encode(
+                                $iconUrl,
+                                JSON_UNESCAPED_SLASHES
+                            )
+                            . ',
+                            iconSize: [
+                                ' . $iconWidth . ',
+                                ' . $iconHeight . '
+                            ],
+                            iconAnchor: [
+                                ' . $iconAnchor . ',
+                                ' . $iconHeight . '
+                            ]
+                        });
+
+                    marker[' . $index . '] =
+                        L.marker(
+                            [
+                                ' . $lat . ',
+                                ' . $lon . '
+                            ],
+                            {
+                                icon: mapIcon'
+                                . $index
+                                . '
+                            }
+                        ).addTo(markerGroup);
+
+                ';
+
+            } else {
+                $output .= '
+
+                    marker[' . $index . '] =
+                        L.marker(
+                            [
+                                ' . $lat . ',
+                                ' . $lon . '
+                            ]
+                        ).addTo(markerGroup);
+
+                ';
+            }
+
+
+            /*
+             * Info window.
+             *
+             * IMPORTANT:
+             * The current PSR-7 request is forwarded
+             * to renderFluidTemplate().
+             */
+            $output .= $this->renderFluidTemplate(
+                $request,
+                'AjaxLocationListInfoWindow',
+                [
+                    'location' =>
+                        $location,
+
+                    'categories' =>
+                        $categories,
+
+                    'i' =>
+                        $index,
+
+                    'startingPoint' =>
+                        $latLon,
+
+                    'settings' =>
+                        $this->settings,
+                ]
+            );
+        }
+
+
+        /*
+         * Marker clustering.
+         */
+        if (
+            (int)(
+                $this->settings['enableMarkerClusterer']
+                ?? 0
+            ) === 1
+        ) {
+            $output .= '
+
+                if (
+                    typeof markerClusterGroup !== "undefined"
+                    && map.hasLayer(markerClusterGroup)
+                ) {
+                    map.removeLayer(markerClusterGroup);
+                }
+
+                markerClusterGroup =
+                    L.markerClusterGroup();
+
+                for (
+                    var i = 0;
+                    i < marker.length;
+                    i++
+                ) {
+                    if (marker[i]) {
+                        markerClusterGroup.addLayer(
+                            marker[i]
+                        );
+                    }
+                }
+
+                map.addLayer(markerClusterGroup);
+
+                if (
+                    markerClusterGroup
+                        .getLayers()
+                        .length > 0
+                ) {
+                    map.fitBounds(
+                        markerClusterGroup.getBounds()
+                    );
+                }
+
+            ';
+
+        } else {
+            $output .= '
+
+                markerGroup =
+                    L.featureGroup(
+                        marker.filter(
+                            function(item) {
+                                return !!item;
+                            }
+                        )
+                    ).addTo(map);
+
+                if (
+                    markerGroup
+                        .getLayers()
+                        .length > 0
+                ) {
+                    map.fitBounds(
+                        markerGroup.getBounds()
+                    );
+                }
+
+            ';
+        }
+
+        return $output . '</script>';
+    }
+
+
+    /**
+     * Render the location list.
+     */
+    private function getLocationsList(
+        ServerRequestInterface $request,
+        array $locations,
+        mixed $categories,
+        array $allLocations,
+        array $labels
+    ): string {
+        return $this->renderFluidTemplate(
+            $request,
+            'AjaxLocationList',
+            [
+                'locations' =>
+                    $locations,
+
+                'categories' =>
+                    $categories,
+
+                'labels' =>
+                    $labels,
+
+                'settings' =>
+                    $this->settings,
+
+                'locationsCount' =>
+                    count($allLocations),
+            ]
+        );
+    }
+
+
+    /**
+     * Render an independent Fluid template.
+     *
+     * TYPO3 14:
+     * - no StandaloneView
+     * - ViewFactoryInterface
+     * - PSR-7 request passed to ViewFactoryData
+     * - render() without .html
+     */
+    private function renderFluidTemplate(
+        ServerRequestInterface $request,
+        string $template,
+        array $assign = []
+    ): string {
+        $templateRootPaths =
+            $this->configuration['view.']['templateRootPaths.']
+            ?? [
+                10 =>
+                    'EXT:myleaflet/'
+                    . 'Resources/Private/Templates/',
+            ];
+
+        $partialRootPaths =
+            $this->configuration['view.']['partialRootPaths.']
+            ?? [
+                10 =>
+                    'EXT:myleaflet/'
+                    . 'Resources/Private/Partials/',
+            ];
+
+        $layoutRootPaths =
+            $this->configuration['view.']['layoutRootPaths.']
+            ?? [
+                10 =>
+                    'EXT:myleaflet/'
+                    . 'Resources/Private/Layouts/',
+            ];
+
+
+        $viewFactoryData =
+            new ViewFactoryData(
+                templateRootPaths:
+                    $templateRootPaths,
+
+                partialRootPaths:
+                    $partialRootPaths,
+
+                layoutRootPaths:
+                    $layoutRootPaths,
+
+                /*
+                 * CRITICAL for TYPO3 14.3.
+                 */
+                request:
+                    $request,
+            );
+
+
+        $view =
+            $this->viewFactory->create(
+                $viewFactoryData
+            );
+
+
+        $view->assignMultiple($assign);
+
+
+        /*
+         * Be tolerant if a caller still passes .html.
+         */
+        $template =
+            preg_replace(
+                '/\.html$/i',
+                '',
+                $template
+            ) ?? $template;
+
+
+        return $view->render(
+            'Address/' . $template
+        );
+    }
+
+
+    /**
+     * Translate a locallang.xlf label.
+     *
+     * Intentionally does NOT use
+     * Extbase LocalizationUtility.
+     */
+    private function translate(
+        ServerRequestInterface $request,
+        string $key
+    ): string {
+        $siteLanguage =
+            $request->getAttribute('language');
+
+        if (!$siteLanguage instanceof SiteLanguage) {
+            /*
+             * Fallback:
+             * obtain default language from site.
+             */
+            $site =
+                $request->getAttribute('site');
+
+            if ($site !== null) {
+                try {
+                    $siteLanguage =
+                        $site->getDefaultLanguage();
+                } catch (\Throwable) {
+                    return $key;
+                }
+            }
+        }
+
+        if (!$siteLanguage instanceof SiteLanguage) {
+            return $key;
+        }
+
+        try {
+            $languageService =
+                $this->languageServiceFactory
+                    ->createFromSiteLanguage(
+                        $siteLanguage
+                    );
+
+            $label =
+                $languageService->sL(
+                    'LLL:EXT:myleaflet/'
+                    . 'Resources/Private/Language/'
+                    . 'locallang.xlf:'
+                    . $key
+                );
+
+            return $label !== ''
+                ? $label
+                : $key;
+
+        } catch (\Throwable) {
+            return $key;
+        }
+    }
+
+
+    /**
+     * Create an HTML PSR-7 response.
+     */
+    private function createHtmlResponse(
+        string $content,
+        int $statusCode = 200,
+        array $headers = []
+    ): ResponseInterface {
+        $response =
+            $this->responseFactory
+                ->createResponse($statusCode)
+                ->withHeader(
+                    'Content-Type',
+                    'text/html; charset=utf-8'
+                );
+
+        foreach ($headers as $name => $value) {
+            $response =
+                $response->withHeader(
+                    $name,
+                    $value
+                );
+        }
+
+        $response
+            ->getBody()
+            ->write($content);
+
+        return $response;
+    }
+
+
+    /**
+     * Kept for compatibility if it is called elsewhere.
+     */
+    public function getChildren(
+        array $items,
+        int $id,
+        string $children = ''
+    ): string {
+        foreach ($items as $item) {
+            if (
+                (int)($item['parent'] ?? 0)
+                === $id
+            ) {
+                $children =
+                    $this->getChildren(
+                        $items,
+                        (int)($item['uid'] ?? 0),
+                        $children
+                    );
+            }
+        }
+
+        return $id . ',' . $children;
+    }
 }
-
-?>
