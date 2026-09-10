@@ -46,7 +46,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	<div id="Lvar" class="hidden">{L}</div>
 	
 
-	<h1>Leaflet Ajax Search MyLeaflet</h1>
+	<h1>Leaflet Ajax Search MyLeaflet fileadmin</h1>
 
 
 
@@ -92,31 +92,30 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	<input id="tx_myleaflet_page" type="text" value="0" class="hidden"/>
 	<input id="tx_myleaflet_language" type="text" value="{L}" class="hidden"/>
 
-	<f:render section="categoryList" arguments="{categories: categories}" />
+	<f:render section="categoryList" arguments="{categories: categories, id: id}" />
 	<f:section name="categoryList">
+
+
 		<ul>
 			<f:for each="{categories}" as="category">
 				<li>
-					<input type="checkbox" id="{category.title}" name="tx_myleaflet_categories"  value="{category.uid}" onclick="$('#tx_myleaflet_page').val(0); geocodeByClient();"/>
+					<input type="checkbox" id="{category.title}" class="{id}" name="tx_myleaflet_categories"  value="{category.uid}" onclick="toggleCheckBox(this.id); $('#tx_myleaflet_page').val(0);"/>
 <f:comment>
 					<f:for each='<myutils:getCategoryImage categoryUid="{category.uid}" settings="{settings}"/>' as="image" > 	
-
-		<f:image src="{image.uid}" alt="{image.title}" width='20' treatIdAsReference="1"/> 	
-	    </f:for >                  
+                		<f:image src="{image.uid}" alt="{image.title}" width='20' treatIdAsReference="1"/> 	
+            	    </f:for >                  
 </f:comment>
 
 
 
 		<label for="{category.title}">{category.title}</label>
 					<f:if condition="{category.children}">
-						<f:render section="categoryList" arguments="{categories: category.children}" />
+						<f:render section="categoryList" arguments="{categories: category.children, id: category.title}" />
 					</f:if>
 				</li>
 			</f:for>
 		</ul>
 	</f:section>
-
-
 
 	<button id="ajaxSearchButton"><f:translate key="search" /></button>
 	<button id="tx_myleaflet_more" onclick="geocodeByClient(); scrollto('#map');"><f:translate key="showMore" /></button>
@@ -129,6 +128,16 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 
 <script>
+        function toggleCheckBox(id) {
+//          console.log(id);  
+          $('#'+id+'').on('change', function() {
+                $('.'+id+'').prop('checked', this.checked);
+            });
+        }
+
+
+
+
 	var maxPage = Math.ceil({locationsCount}/{settings.resultLimit});
 
 	function scrollto(element){
