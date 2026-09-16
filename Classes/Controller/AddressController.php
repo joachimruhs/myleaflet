@@ -199,13 +199,14 @@ $addresses = $this->addressRepository->findLocationsInRadius($latLon, $radius, $
 
 		$categories = $this->categoryRepository->findAllOverride($this->conf['storagePid'], $sys_language_uid);
 
-
-
         if ($categories) {
             for($i = 0; $i < count($categories); $i++) {
                 $arr[$i]['uid']= $categories[$i]['uid'];
                 if ($categories[$i]['parent']) {
                     $arr[$i]['parent'] = $categories[$i]['parent'];
+                    // get localizedUid
+                    $localizedUid = $this->categoryRepository->getLocalizedUid($categories[$i]['parent'], $sys_language_uid);
+                    $arr[$i]['parent'] = $localizedUid;
                 } else $arr[$i]['parent'] = 0;
                     
                 $arr[$i]['title'] = $categories[$i]['title'];

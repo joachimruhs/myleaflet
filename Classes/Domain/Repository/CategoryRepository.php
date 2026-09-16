@@ -141,6 +141,32 @@ protected $defaultOrderings = array('sorting' => \TYPO3\CMS\Extbase\Persistence\
 
     }
 
+       /**
+        * Get the localized categoryUid
+        *
+        * @param int $originalUid
+        * @param int $languageUid
+        *
+	* @return array of categories
+	*/
+
+
+        public function getLocalizedUid($originalUid, $languageUid) {
+            $queryBuilder = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Database\ConnectionPool::class)
+                ->getQueryBuilderForTable('sys_category');
+
+                $translatedCategory = $queryBuilder
+                    ->select('uid')
+                    ->from('sys_category')
+                    ->where(
+                        $queryBuilder->expr()->eq('l10n_parent', $queryBuilder->createNamedParameter($originalUid, Connection::PARAM_INT)),
+                        $queryBuilder->expr()->eq('sys_language_uid', $queryBuilder->createNamedParameter($languageUid, Connection::PARAM_INT))
+                    )
+                    ->executeQuery()->fetchAllAssociative();
+                $localizedUid = $translatedCategory[0]['uid'] ?? $originalUid;
+                return $localizedUid;
+        }
+
 
 
 
