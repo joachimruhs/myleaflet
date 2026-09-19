@@ -1,0 +1,4 @@
+name: wsr/myleaflet
+label: WSR myleaflet
+
+#@import 'EXT:myttaddressmap/Configuration/TypoScript/*.typoscript'
