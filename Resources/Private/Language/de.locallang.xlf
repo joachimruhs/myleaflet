@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="tx_myleaflet_singleview.name">
         <source>MyLeaflet (SingleView)</source>
-        <target state="needs-translation">MyLeaflet (SingleView)</target>
+        <target state="translated">MyBlatt (SingleView)</target>
       </trans-unit>
       <trans-unit id="tx_myleaflet_ajaxmap.description" approved="yes">
         <source>Leaflet maps for tt_address data</source>
