@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2019-12-06T07:08:31Z" product-name="myleaflet" target-language="nl">
+    <header/>
+    <body>
+      <trans-unit id="name.description">
+        <source>name</source>
+        <target state="needs-translation">name</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
